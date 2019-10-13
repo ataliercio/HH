@@ -1,0 +1,23 @@
+histos:
+  mass_Z1:
+    name_histo: 'hMZ_3'
+    Nbins: 200
+    Xmin: -0.5
+    Xmax: 199.5
+    labelX: 'm_{ll}'
+    labelY: 'Events / 2 GeV'
+    rebin: 2
+    frame_Nbins: 200
+    frame_Xmin: 20
+    frame_Xmax: 120
+  metcontrol:
+    name_histo: 'metcontrol'
+    Nbins: 200
+    Xmin: 0
+    Xmax: 200
+    labelX: 'MET'
+    labelY: 'Events / 2	GeV'
+    rebin: 2
+    frame_Nbins: 200
+    frame_Xmin: 0
+    frame_Xmax: 200

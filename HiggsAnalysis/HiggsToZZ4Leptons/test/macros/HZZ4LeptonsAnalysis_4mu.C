@@ -2464,15 +2464,19 @@ float newweight=1.;
 	  Double_t Pt = RECOMU_PT[ z1lept[i] ]; 
 	  Double_t Eta = RECOMU_ETA[ z1lept[i] ]; 
 	  
-	  if( (MC_type == "Spring16" || MC_type == "Moriond17")  && DATA_type == "NO"){
-	    Int_t biny = mu_scale_2017->GetYaxis()->FindBin(Pt);
+	  double_t Tmp_Pt = Pt;
+	  if (Pt>200) Tmp_Pt = 199;  //overflow
+
+	  //if( (MC_type == "Spring16" || MC_type == "Moriond17")  && DATA_type == "NO"){
+	  if(  MC_type == "Fall17"  && DATA_type == "NO"){  
+	    Int_t biny = mu_scale_2017->GetYaxis()->FindBin(Tmp_Pt);
 	    Int_t binx = mu_scale_2017->GetXaxis()->FindBin(Eta);
 	    if (mu_scale_2017->GetBinContent(binx,biny)>0.) eff_weight_3*=mu_scale_2017->GetBinContent(binx,biny); 
 	  }
 	}
 	
 	// Changing the weight for pileup and efficiency
-	if (DATA_type == "2016") eff_weight_3=1.; 
+	if (DATA_type == "2017") eff_weight_3=1.; 
 	if (eff_weight_3>0.) newweight=weight*pu_weight*weight_kfactor*eff_weight_3;
 	else newweight=weight*pu_weight*weight_kfactor;
 
@@ -3587,14 +3591,15 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
        	Double_t Pt = RECOMU_PT[ iL_4L[i] ]; 
        	Double_t Eta = RECOMU_ETA[ iL_4L[i] ];         
 	
-	if( (MC_type == "Spring16" || MC_type == "Moriond17" ) && DATA_type == "NO"){
+	//if( (MC_type == "Spring16" || MC_type == "Moriond17" ) && DATA_type == "NO"){
+	if(  MC_type == "Fall17"  && DATA_type == "NO"){	  
 	  Int_t biny = mu_scale_2017->GetYaxis()->FindBin(Pt);
 	  Int_t binx = mu_scale_2017->GetXaxis()->FindBin(Eta);
 	  if (mu_scale_2017->GetBinContent(binx,biny)>0.) eff_weight*=mu_scale_2017->GetBinContent(binx,biny); 
 	}	        
       }
             
-      if (DATA_type == "2016") eff_weight=1.; 
+      if (DATA_type == "2017") eff_weight=1.; 
       // // Changing the weight for pileup and efficiency
       if (eff_weight>0.) newweight=weight*pu_weight*weight_kfactor*eff_weight;
       else newweight=weight*pu_weight*weight_kfactor;
@@ -4268,7 +4273,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
      // JET smearing
      double jercorr = 1.0; double jercorrup = 1.0; double jercorrdn = 1.0;
      
-     if (MC_type == "Spring16" || MC_type== "Moriond17") {
+     if (MC_type == "Fall17"){// || MC_type== "Moriond17") {
        jetparameters.setJetPt(RECO_PFJET_PT[i]);
        jetparameters.setJetEta(RECO_PFJET_ETA[i]);
        jetparameters.setRho(RHO_mu);
