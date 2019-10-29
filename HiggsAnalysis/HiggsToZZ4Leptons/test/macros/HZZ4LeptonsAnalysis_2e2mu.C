@@ -4596,15 +4596,15 @@ if(N_tot >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets inside
 	 hMETnosel->Fill(RECO_PFMET,newweight);}       
 
 
-       if(cSV_BTagJet_DISCR[i] > 0.460 && jetfail[i] == 0){
+       if(cSV_BTagJet_DISCR[i] > 0.1522 && jetfail[i] == 0){
 	 n_jetl++;
        }
        
-       if(cSV_BTagJet_DISCR[i] > 0.840 && jetfail[i] == 0){
+       if(cSV_BTagJet_DISCR[i] > 0.4941 && jetfail[i] == 0){
 	 n_jetm++;
        }
        
-       if(cSV_BTagJet_DISCR[i] > 0.890 && jetfail[i] == 0){
+       if(cSV_BTagJet_DISCR[i] > 0.8001 && jetfail[i] == 0){
 	 n_jett++;
        }
        

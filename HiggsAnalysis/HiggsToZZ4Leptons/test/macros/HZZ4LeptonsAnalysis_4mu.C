@@ -4829,15 +4829,15 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
 	 flagi = i;
        }
        
-       if(cSV_BTagJet_DISCR[i] > 0.84){
+       if(cSV_BTagJet_DISCR[i] > 0.4941){
 	 n_totjetp++;
        }
        
-       if(cSV_BTagJet_DISCR[i] > 0.460){
+       if(cSV_BTagJet_DISCR[i] > 0.1522){
 	 n_totjetp2++;
        }
        
-       if(cSV_BTagJet_DISCR[i] > 0.890){
+       if(cSV_BTagJet_DISCR[i] > 0.8001){
 	 n_totjetp3++;
        }  
      }
