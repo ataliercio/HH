@@ -22,7 +22,7 @@ SBARI="BARI";
 if  [ $1 = ${SBARI} ]; then
  macrosdir=`echo ${PWD}`
  tarname=`basename ${CMSSW_BASE}`
- cd ${CMSSW_BASE}; tar --exclude=.git --exclude=tmp -zcvf ${macrosdir}/${tarname}.tgz .
+ cd ${CMSSW_BASE}; tar --exclude=src/HiggsAnalysis/HiggsToZZ4Leptons/test/macros/jobs4mu --exclude=src/HiggsAnalysis/HiggsToZZ4Leptons/test/macros/jobs4e --exclude=src/HiggsAnalysis/HiggsToZZ4Leptons/test/macros/jobs2e2mu --exclude=src/HiggsAnalysis/HiggsToZZ4Leptons/test/Signal_HH --exclude=src/HiggsAnalysis/HiggsToZZ4Leptons/test/Fall17 --exclude=src/HiggsAnalysis/HiggsToZZ4Leptons/test/mc_test --exclude=src/HiggsAnalysis/HiggsToZZ4Leptons/test/macros/For_trigeff/hlt_eff --exclude=src/HiggsAnalysis/HiggsToZZ4Leptons/test/macros/plot_HH --exclude=.git --exclude=tmp --exclude=src/hlt_eff --exclude=src/HiggsAnalysis/HiggsToZZ4Leptons/test/macros/angela --exclude=src/HiggsAnalysis/HiggsToZZ4Leptons/test/macros/plots --exclude=src/HiggsAnalysis/HiggsToZZ4Leptons/test/macros/CMSSW_9_4_9.tgz --exclude=src/HiggsAnalysis/HiggsToZZ4Leptonstest/macros/CMSSW_9_4_13_patch4.tgz -zcvf ${macrosdir}/${tarname}.tgz . #tar --exclude=.git --exclude=tmp -zcvf ${macrosdir}/${tarname}.tgz .
  cd ${macrosdir};
 else
  tarname="dummy"
