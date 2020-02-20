@@ -360,6 +360,11 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
   hTKLayLep_0->SetXTitle("N_{TkLayers}");
   TH1F * hTKIsoLep_0 = new TH1F("hTKIsoLep_0", "Trackerisolation (sum pT) of Lep after selection step 0",  1000 , 0. , 20.);
   hTKIsoLep_0->SetXTitle("Tk Iso");
+
+  TH1F * hPFMET_0 = new TH1F("hPFMET_0", "PF MET after selection step 0", 1000 , 0., 1000.);
+  TH1F * hPFMET_0_nofilter = new TH1F("hPFMET_0_nofilter", "PF MET after selection step 0 no filter", 1000 , 0., 1000.);
+  TH1F *hLogLinXPFMET_0_nofilter = new TH1F("hLogLinXPFMET_0_nofilter","hLogLinXPFMET_0_nofilter",NMOBINS, loglinMbins);
+  TH1F *hLogLinXPFMET_0  = new TH1F("hLogLinXPFMET_0","hLogLinXPFMET_0",NMOBINS, loglinMbins);
   
   //step 3
   TH1F * hMZ_3 = new TH1F("hMZ_3", "Mass of Z after selection step 3", 200 , -0.5 , 199.5 );
@@ -368,6 +373,9 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
   hPtZ_3->SetXTitle("pt_Z1  (GeV)");
   TH1F * hYZ_3 = new TH1F("hYZ_3", "Y of Z after selection step 3", 500 , -5. , 5.);
   hYZ_3->SetXTitle("Y_Z");
+
+  TH1F * hMZ1_3 = new TH1F("hMZ1_3", "Mass of Z1 after selection step 3", 200 , -0.5 , 199.5 );
+  hMZ1_3->SetXTitle("mass_Z1  (GeV)");
   
   TH1F * hPtLep_3 = new TH1F("hPtLep_3", "Pt of Lep after selection step 3", 500 , -0.5 , 499.5 );
   hPtLep_3->SetXTitle("pt_Lep  (GeV)");
@@ -1093,8 +1101,8 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
   TH1D *hdeltarcontrol = new TH1D("hdeltarcontrol","hdeltarcontrol",100,0,10);
   TH1D *hptmaxcontrol = new TH1D("hptmaxcontrol","hptmaxcontrol",400,0,400);
   TH1D *hptmincontrol = new TH1D("hptmincontrol","hptmincontrol",400,0,400);
-  TH1D *hbdiscmaxcontrol = new TH1D("hbdiscmaxcontrol","hbdiscmaxcontrol",100,0,100);
-  TH1D *hbdiscmincontrol = new TH1D("hbdiscmincontrol","hbdiscmincontrol",100,0,100);
+  TH1D *hbdiscmaxcontrol = new TH1D("hbdiscmaxcontrol","hbdiscmaxcontrol",100,0,1);
+  TH1D *hbdiscmincontrol = new TH1D("hbdiscmincontrol","hbdiscmincontrol",100,0,1);
   TH2 *h2nobjetcontrol = new TH2D("h2nobjetcontrol","h2nobjetcontrol",300,0,300,100,0,1);
   TH2 *h2bjetcontrol = new TH2D("h2bjetcontrol","h2bjetcontrol",300,0,300,100,0,1);
   TH2 *h2control = new TH2D("h2control","h2control",300,0,300,100,0,1);
@@ -1102,11 +1110,16 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
   TH1D *hdeltarcontrolnpm = new TH1D("hdeltarcontrolnpm","hdeltarcontrolnpm",100,0,10);
   TH1D *hptmaxcontrolnpm = new TH1D("hptmaxcontrolnpm","hptmaxcontrolnpm",400,0,400);
   TH1D *hptmincontrolnpm = new TH1D("hptmincontrolnpm","hptmincontrolnpm",400,0,400);
-  TH1D *hbdiscmaxcontrolnpm = new TH1D("hbdiscmaxcontrolnpm","hbdiscmaxcontrolnpm",100,0,100);
-  TH1D *hbdiscmincontrolnpm = new TH1D("hbdiscmincontrolnpm","hbdiscmincontrolnpm",100,0,100);
+  TH1D *hbdiscmaxcontrolnpm = new TH1D("hbdiscmaxcontrolnpm","hbdiscmaxcontrolnpm",100,0,1);
+  TH1D *hbdiscmincontrolnpm = new TH1D("hbdiscmincontrolnpm","hbdiscmincontrolnpm",100,0,1);
   TH2 *h2nobjetcontrolnpm = new TH2D("h2nobjetcontrolnpm","h2nobjetcontrolnpm",300,0,300,100,0,1);
   TH2 *h2bjetcontrolnpm = new TH2D("h2bjetcontrolnpm","h2bjetcontrolnpm",300,0,300,100,0,1);
   TH2 *h2npmcontrol = new TH2D("h2controlnpm","h2controlnpm",300,0,300,100,0,1);
+
+  TH1D *hjetcontrol_sideband = new TH1D("hjetcontrol_sideband", "hjetcontrol_sideband", 400, 0, 400);
+  TH1D *hbdisccontrol_sideband = new TH1D("hbdisccontrol_sideband", "hbdisccontrol_sideband", 100, 0, 1);
+  TH1D *hmassjetjetcontrol_sideband_2jets = new TH1D("hmassjetjetcontrol_sideband_2jets", "hmassjetjetcontrol_sideband_2jets", 200, 0, 200);
+  TH1D *etacontrol = new TH1D("etacontrol", "etacontrol", 100, -5, 5);
 
   TH1D *kpt = new TH1D("kpt","kpt",300,0,300);
   TH1D *prova = new TH1D("prova","prova",200,0,200);
@@ -1118,15 +1131,50 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 
 //--------------------------------------ttZ histograms
 
-  TH1D *hmassttZ = new TH1D("hmassttZ","hmassttZ",100,0,100);
+  TH1D *hmassttZ = new TH1D("hmassttZ","hmassttZ",200,0,200);
+  TH1D *hmassttZ_1jet = new TH1D("hmassttZ_1jet","hmassttZ_1jet",200,0,200);
   TH1D *ptjet1 = new TH1D("ptjet1","ptjet1",300,0,300);
+  TH1D *ptjet1_1jet = new TH1D("ptjet1_1jet","ptjet1_1jet",300,0,300);
   TH1D *ptjet2 = new TH1D("ptjet2","ptjet2",300,0,300);
   TH1D *bdiscjet1 = new TH1D("bdiscjet1","bdiscjet1",100,0,1);
+  TH1D *bdiscjet1_1jet = new TH1D("bdiscjet1_1jet","bdiscjet1_1jet",100,0,1);
   TH1D *bdiscjet2 = new TH1D("bdiscjet2","bdiscjet2",100,0,1);
   TH1D *hmassjet_12 = new TH1D("hmassjet_12","hmassjet_12",200,0,200);
   TH1D *hdeltaphitt_Z = new TH1D("hdeltaphitt_Z","hdeltaphitt_Z",100,0,10);
+  TH1D *ptjet_control = new TH1D("ptjet_control", "ptjet_control", 200, 0, 200);
+
+
+  TH1D *eta_jet1 = new TH1D("etajet1", "etajet1", 100, -5, 5);
+  TH1D *eta_jet1_alone = new TH1D("etajet1_1jet", "etajet1_1jet", 100, -5, 5);
+  TH1D *eta_jet2 = new TH1D("etajet2", "etajet2", 100, -5, 5);
+  TH1D *deltaeta_jet_12 = new TH1D("deltaeta_jet_12", "deltaeta_jet_12", 100, -2.4, 2.4);
+  TH1D *abs_deltaeta_jet_12 = new TH1D("abs_deltaeta_jet_12", "abs_deltaeta_jet_12", 100, 0, 2.4);
+  TH1D *met_jetjetcr = new TH1D("met_jetjetcr", "met_jetjetcr", 200, 0, 200);
   
-  
+  TH1D *hmassttZ_2lept = new TH1D("hmassttZ_2lept","hmassttZ_2lept",200,0,200);
+  TH1D *hmassttZ_2lept_1jet = new TH1D("hmassttZ_2lept_1jet","hmassttZ_2lept_1jet",200,0,200);
+  TH1D *ptjet1_2lept = new TH1D("ptjet1_2lept","ptjet1_2lept",300,0,300);
+  TH1D *ptjet1_2lept_1jet = new TH1D("ptjet1_2lept_1jet","ptjet1_2lept_1jet",300,0,300);
+  TH1D *ptjet2_2lept = new TH1D("ptjet2_2lept","ptjet2_2lept_2lept",300,0,300);
+  TH1D *bdiscjet1_2lept = new TH1D("bdiscjet1_2lept","bdiscjet1_2lept",100,0,1);
+  TH1D *bdiscjet1_2lept_1jet = new TH1D("bdiscjet1_2lept_1jet","bdiscjet1_2lept_1jet",100,0,1);
+  TH1D *bdiscjet2_2lept = new TH1D("bdiscjet2_2lept","bdiscjet2_2lept",100,0,1);
+  TH1D *hmassjet_12_2lept = new TH1D("hmassjet_2lept_12","hmassjet_2lept_12",200,0,200);
+  TH1D *hdeltaphitt_Z_2lept = new TH1D("hdeltaphitt_2lept_Z","hdeltaphitt_2lept_Z",100,0,10);
+
+
+  TH1D *hmassttZ_magg2lept = new TH1D("hmassttZ_magg2lept","hmassttZ_magg2lept",200,0,200);
+  TH1D *hmassttZ_magg2lept_1jet = new TH1D("hmassttZ_magg2lept_1jet","hmassttZ_magg2lept_1jet",200,0,200);
+  TH1D *ptjet1_magg2lept = new TH1D("ptjet1_magg2lept","ptjet1_magg2lept",300,0,300);
+  TH1D *ptjet1_magg2lept_1jet = new TH1D("ptjet1_magg2lept_1jet","ptjet1_magg2lept_1jet",300,0,300);
+  TH1D *ptjet2_magg2lept = new TH1D("ptjet2_magg2lept","ptjet2_magg2lept_magg2lept",300,0,300);
+  TH1D *bdiscjet1_magg2lept = new TH1D("bdiscjet1_magg2lept","bdiscjet1_magg2lept",100,0,1);
+  TH1D *bdiscjet1_magg2lept_1jet = new TH1D("bdiscjet1_magg2lept_1jet","bdiscjet1_magg2lept_1jet",100,0,1);
+  TH1D *bdiscjet2_magg2lept = new TH1D("bdiscjet2_magg2lept","bdiscjet2_magg2lept",100,0,1);
+  TH1D *hmassjet_12_magg2lept = new TH1D("hmassjet_magg2lept_12","hmassjet_magg2lept_12",200,0,200);
+  TH1D *hdeltaphitt_Z_magg2lept = new TH1D("hdeltaphitt_magg2lept_Z","hdeltaphitt_magg2lept_Z",100,0,10);
+
+
   //-----------------------------------FR histograms
   
   TH1D *Z1_mass = new TH1D("Z1_mass","Z1_mass",200,0,200);
@@ -1163,6 +1211,9 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
   TH1D *Z1_fakejetmasstight_endcap = new TH1D("Z1_fakejetmasstight_endcap","Z1_fakejetmasstight_endcap",200,0,200);
   
 
+  TH1F * hPFMET_3_nofilter = new TH1F("hPFMET_3_nofilter", "hPFMET_3_nofilter", 1000 , 0., 1000.);
+
+
   TTree *newtree = new TTree("HZZ4LeptonsAnalysisReduced", "reduced ttree");
   
    // Add branches to output rootuple 
@@ -1177,13 +1228,15 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 
   Int_t f_totbjet;
 
+  Bool_t f_crjetjet;
+
    Float_t f_D_bkg_kin,f_D_bkg,f_D_gg,f_D_g4,f_Djet_VAJHU; 
    Float_t f_genmet, f_pfmet,f_mT,f_dphi;
    Int_t f_lept1_pdgid,f_lept2_pdgid,f_lept3_pdgid,f_lept4_pdgid;
    Int_t f_category,f_Ngood, f_Nbjets;
 
    Int_t f_run, f_lumi, f_event;
-
+   TBranch *b_crjetjet= newtree->Branch("f_crjetjet", &f_crjetjet,"f_crjetjet/B");
    TBranch *b_run= newtree->Branch("f_run", &f_run,"f_run/I");
    TBranch *b_lumi= newtree->Branch("f_lumi", &f_lumi,"f_lumi/I");    
    TBranch *b_event= newtree->Branch("f_event", &f_event,"f_event/I");    
@@ -1333,7 +1386,7 @@ float newweight=1.;
   cout << "Analyzing " << nentries << " entries"  <<endl;     
 
   Long64_t nbytes = 0, nb = 0;
-  for (Long64_t jentry=0; jentry<nentries;jentry++) {//nentries
+  for (Long64_t jentry=0; jentry<100000;jentry++) {//nentries
     Long64_t ientry = LoadTree(jentry);
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
@@ -1350,6 +1403,8 @@ float newweight=1.;
     
     f_totbjet = -999.;
 
+    f_crjetjet = false;
+
       //if (!(Run==1 && LumiSection==2591 && Event==497247)) continue;
       //if (Run==LumiSection && Run==Event) continue;   
       //if (jentry!=1276102) continue;
@@ -1360,10 +1415,10 @@ float newweight=1.;
     if( RECO_NELE > 100 ) RECO_NELE = 100;
     if( RECO_NPFPHOT > 20 ) RECO_NPFPHOT = 20;
     
-    bool debug=true;  //debug flag  -- default false
+    bool debug=false;  //debug flag  -- default false
     
     newweight=weight;
-    cout << "Starting weight= " << newweight << endl;
+    //tolto//cout << "Starting weight= " << newweight << endl;
       
       // pileup reweighting 2016
     if (DATA_type=="NO" && num_PU_vertices < 0) continue;                                                                                                                                             
@@ -1372,17 +1427,17 @@ float newweight=1.;
     double pu_weight=1.;
     if (MC_type == "Fall17"){
       Int_t binx = puweight->GetXaxis()->FindBin(num_PU_vertices);
-      cout << " bin x= " << binx << " " << puweight->GetBinContent(binx) << endl;	
+      //tolto//cout << " bin x= " << binx << " " << puweight->GetBinContent(binx) << endl;	
       pu_weight=double(puweight->GetBinContent(binx));	
     }      
       
     hPUvertices_ReWeighted->Fill(num_PU_vertices,weight*pu_weight);
-    cout << "Pileup interations and weight is= " << num_PU_vertices << " " << " and weight= " << pu_weight << endl;  
+    //tolto//cout << "Pileup interations and weight is= " << num_PU_vertices << " " << " and weight= " << pu_weight << endl;  
 
 
       // Changing the weight for pileup
     newweight=weight*pu_weight;
-    cout << "Starting weight + pileup = " << newweight << endl;
+    //tolto//cout << "Starting weight + pileup = " << newweight << endl;
       
       // ggZZ kfactor
     double ggzz_kf_wgt[9];
@@ -1398,7 +1453,7 @@ float newweight=1.;
 	for(int f=0;f<9;f++) ggzz_kf_wgt[f] = ggZZ_kf[f]->Eval(MC_ZZ_MASS[0][0]); // Evaluate at the true m4l
 	weight_kfactor=ggzz_kf_wgt[0]; // Using the nominal one
 	newweight=weight*pu_weight*weight_kfactor;
-	cout << "The kfactor for ggZZ is= " << weight_kfactor<< endl;
+	//tolto//cout << "The kfactor for ggZZ is= " << weight_kfactor<< endl;
       }
       //weight_kfactor=2.3;
     }
@@ -1436,7 +1491,7 @@ float newweight=1.;
     ++N_0 ;  // fill counter
     N_0_w=N_0_w+newweight;
     
-    cout << "STEP 0 ************* newweight = " << newweight << "\n";
+    //tolto//cout << "STEP 0 ************* newweight = " << newweight << "\n";
 
       // ** Step 0.1:
       // number of 4L (4mu)...
@@ -1469,7 +1524,7 @@ float newweight=1.;
     if (isSignal || isggH){
       if( MC_PDGID[3] == 13 && MC_PDGID[4] == -13  
 	  && MC_PDGID[5] == 13 && MC_PDGID[6] == -13 ){
-	cout << "ciao" << endl;
+	//tolto//cout << "ciao" << endl;
 	is4mu=true;
 	++N_01 ;  // fill counter 
 	N_01_w=N_01_w+newweight;
@@ -1605,6 +1660,35 @@ float newweight=1.;
       tag_2011=true;
     }
       
+
+    //MET Filters
+    
+    bool pass_METFilters = false;
+
+    if ( RECO_PFMET_GoodVtxNoiseFilter==1 && RECO_PFMET_GlobalSuperTightHalo2016NoiseFilter==1 && RECO_PFMET_HBHENoiseFilter==1 && RECO_PFMET_HBHENoiseIsoFilter==1 && RECO_PFMET_EcalDeadCellTriggerPrimitiveNoiseFilter==1 && RECO_PFMET_BadPFMuonFilter==1 && RECO_PFMET_BadChargedCandidateFilter==1 && RECO_PFMET_EcalBadCalibFilter==1 ) pass_METFilters = true;
+    else pass_METFilters = false;
+
+    /*cout<<"MET Filters  RECO_PFMET_GoodVtxNoiseFilter = "<< RECO_PFMET_GoodVtxNoiseFilter
+	<<"\n RECO_PFMET_GlobalSuperTightHalo2016NoiseFilter = "<<RECO_PFMET_GlobalSuperTightHalo2016NoiseFilter
+	<<"\n  RECO_PFMET_HBHENoiseFilter = "<< RECO_PFMET_HBHENoiseFilter
+	<<"\n RECO_PFMET_HBHENoiseIsoFilter = "<<RECO_PFMET_HBHENoiseIsoFilter
+	<<"\n RECO_PFMET_EcalDeadCellTriggerPrimitiveNoiseFilter = "<<RECO_PFMET_EcalDeadCellTriggerPrimitiveNoiseFilter
+	<<"\n RECO_PFMET_BadPFMuonFilter = "<<RECO_PFMET_BadPFMuonFilter
+	<<"\n RECO_PFMET_BadChargedCandidateFilter = "<<RECO_PFMET_BadChargedCandidateFilter
+	<<"\n RECO_PFMET_EcalBadCalibFilter = "<<RECO_PFMET_EcalBadCalibFilter
+	<<"\n pass_METFilters = "<<pass_METFilters
+	<<endl;*/
+
+    if (pass_METFilters == false)continue;
+
+    hPFMET_0_nofilter->Fill(RECO_PFMET, newweight) ;
+    hLogLinXPFMET_0_nofilter->Fill(RECO_PFMET, newweight) ;
+    if (pass_METFilters == true) {hPFMET_0->Fill(RECO_PFMET, newweight);
+      hLogLinXPFMET_0->Fill(RECO_PFMET, newweight);}
+
+
+
+
       // Loose lepton identification
       
     int N_loose_mu = 0;
@@ -1625,7 +1709,7 @@ float newweight=1.;
       iL_loose_mu[i]=-999.;
     }
   
-     cout << "\nLeptons' indeces loose previous: "
+     /*cout << "\nLeptons' indeces loose previous: "
 		     << "\niL[0]: " << iL_loose_mu[0]
 		     << "\niL[1]: " << iL_loose_mu[1]
 		     << "\niL[2]: " << iL_loose_mu[2]
@@ -1635,7 +1719,7 @@ float newweight=1.;
 		     << "\niL[6]: " << iL_loose_mu[6]
 		     << "\niL[7]: " << iL_loose_mu[7]
 		     << "\nNumber of good muons: " << N_loose_mu
-		     << endl;
+		     << endl;*/
   
     for( int i = 0; i < RECO_NMU; ++i ){
       
@@ -1676,7 +1760,7 @@ float newweight=1.;
       
     } // end loop on muons
 
-     cout << "\nLeptons' indeces loose: "
+     /*cout << "\nLeptons' indeces loose: "
 		     << "\niL[0]: " << iL_loose_mu[0]
 		     << "\niL[1]: " << iL_loose_mu[1]
 		     << "\niL[2]: " << iL_loose_mu[2]
@@ -1686,7 +1770,7 @@ float newweight=1.;
 		     << "\niL[6]: " << iL_loose_mu[6]
 		     << "\niL[7]: " << iL_loose_mu[7]
 		     << "\nNumber of good muons: " << N_loose_mu
-		     << endl ;
+		     << endl ;*/
     
       
     int* arraysize_e = new int[1];
@@ -1853,18 +1937,19 @@ float newweight=1.;
       else continue ;
 	
       bool BDT_ok = 0; // Spring16 with CMSSW_8_2_0
-      if( RECOELE_PT[i] > 7. &&  RECOELE_PT[i] <= 10. ){
-	if( fabs(RECOELE_scl_Eta[i]) < .8 && RECOELE_mvaNonTrigV0[i] > -0.211 ) BDT_ok = 1 ;
-	if( ( fabs(RECOELE_scl_Eta[i]) >= .8 && fabs(RECOELE_scl_Eta[i]) < 1.479 )
-	    && RECOELE_mvaNonTrigV0[i] > -0.396 ) BDT_ok = 1 ;
-	if( fabs(RECOELE_scl_Eta[i]) >= 1.479 && RECOELE_mvaNonTrigV0[i] > -0.215 ) BDT_ok = 1 ;
-      }
-      else { 
-	if( fabs(RECOELE_scl_Eta[i]) < .8 && RECOELE_mvaNonTrigV0[i] > -0.870 ) BDT_ok = 1 ;
-	if( ( fabs(RECOELE_scl_Eta[i]) >= .8 && fabs(RECOELE_scl_Eta[i]) <= 1.479 )
-	    && RECOELE_mvaNonTrigV0[i] > -0.838 ) BDT_ok = 1 ;
-	if( fabs(RECOELE_scl_Eta[i]) > 1.479 && RECOELE_mvaNonTrigV0[i] > -0.763 ) BDT_ok = 1 ;
-      }
+      //if( RECOELE_PT[i] > 7. &&  RECOELE_PT[i] <= 10. ){
+      //if( fabs(RECOELE_scl_Eta[i]) < .8 && RECOELE_mvaNonTrigV0[i] > -0.211 ) BDT_ok = 1 ;
+      //if( ( fabs(RECOELE_scl_Eta[i]) >= .8 && fabs(RECOELE_scl_Eta[i]) < 1.479 )
+      //    && RECOELE_mvaNonTrigV0[i] > -0.396 ) BDT_ok = 1 ;
+      //if( fabs(RECOELE_scl_Eta[i]) >= 1.479 && RECOELE_mvaNonTrigV0[i] > -0.215 ) BDT_ok = 1 ;
+      //}
+      //else { 
+      //if( fabs(RECOELE_scl_Eta[i]) < .8 && RECOELE_mvaNonTrigV0[i] > -0.870 ) BDT_ok = 1 ;
+      //if( ( fabs(RECOELE_scl_Eta[i]) >= .8 && fabs(RECOELE_scl_Eta[i]) <= 1.479 )
+      //    && RECOELE_mvaNonTrigV0[i] > -0.838 ) BDT_ok = 1 ;
+      //if( fabs(RECOELE_scl_Eta[i]) > 1.479 && RECOELE_mvaNonTrigV0[i] > -0.763 ) BDT_ok = 1 ;
+      //}
+      if( RECOELE_PT[i] > 7. && RECOELE_ID[i]==1 ){BDT_ok =1;};
       if( !BDT_ok ) continue ;
       
       if( fabs(RECOELE_gsftrack_dxy[i]) < .5 
@@ -1973,7 +2058,7 @@ float newweight=1.;
     
     for( int i = 0; i < Nphotons; ++i ){
 
-      cout <<  RECOPFPHOT_PT[iLp[i]] << endl;
+      //tolto//cout <<  RECOPFPHOT_PT[iLp[i]] << endl;
       double min_deltaR = 1000;
       int  l_min_deltaR = -1;
       int  tag_min_deltaR = -1;   // 0: mu  1: ele
@@ -1984,7 +2069,7 @@ float newweight=1.;
 	if(!(deltaR < 0.5 && deltaR/pow(RECOPFPHOT_PT[iLp[i]],2)<0.012) ) continue;
 	//cout << "DeltaR= " << deltaR << endl;
 	if( deltaR<min_deltaR) { // the closest lepton
-	  cout << "Possible candidate of photon with pT= " << RECOPFPHOT_PT[iLp[i]] << " associated to a muon with pT= " << RECOMU_PT[iL_loose_mu[l]]<< endl;
+	  //tolto//cout << "Possible candidate of photon with pT= " << RECOPFPHOT_PT[iLp[i]] << " associated to a muon with pT= " << RECOMU_PT[iL_loose_mu[l]]<< endl;
 	    min_deltaR = deltaR;
 	    l_min_deltaR = l;
 	    tag_min_deltaR = 0;
@@ -1996,7 +2081,7 @@ float newweight=1.;
 	double deltaR = sqrt( pow( DELTAPHI( RECOPFPHOT_PHI[iLp[i]] , RECOELE_PHI[iL_loose_e[l]] ),2) + pow(RECOPFPHOT_ETA[iLp[i]] - RECOELE_ETA[iL_loose_e[l]],2) );
 	if(!(deltaR < 0.5 && deltaR/pow(RECOPFPHOT_PT[iLp[i]],2)<0.012) ) continue;
 	if( deltaR<min_deltaR) { // the closest lepton
-	  cout << "Possible candidate of photon with pT= " << RECOPFPHOT_PT[iLp[i]] << " associated to an electron with pT= " << RECOELE_PT[iL_loose_e[l]]<< endl;
+	  //tolto//cout << "Possible candidate of photon with pT= " << RECOPFPHOT_PT[iLp[i]] << " associated to an electron with pT= " << RECOELE_PT[iL_loose_e[l]]<< endl;
 	  min_deltaR = deltaR;
 	  l_min_deltaR = l;
 	  tag_min_deltaR = 1;
@@ -2049,7 +2134,7 @@ float newweight=1.;
       
       for( int p = 0; p < Nphotons; ++p ){
 	if( iLp_l[ p ] == iL_loose_mu[l] && iLp_tagEM[ p ] == 0 )  {
-	  cout <<  "index muon" << iL_loose_mu[l] << endl;
+	  //tolto//cout <<  "index muon" << iL_loose_mu[l] << endl;
 	  double deltaR = sqrt( pow( DELTAPHI( RECOPFPHOT_PHI[iLp[p]] , RECOMU_PHI[iL_loose_mu[l]] ),2) + pow(RECOPFPHOT_ETA[iLp[p]] - RECOMU_ETA[iL_loose_mu[l]],2) );
 	  double deltaR_ET2 = deltaR/pow(RECOPFPHOT_PT[iLp[p]],2);
 	  if (deltaR_ET2<min_deltaR_ET2) {
@@ -2086,15 +2171,15 @@ float newweight=1.;
       
       for( int p = 0; p < Nphotons; ++p ){
 	if( iLp_l[ p ] == iL_loose_e[l] && iLp_tagEM[ p ] == 1 )  {
-	  cout <<  "index electron" << iL_loose_e[l] << endl;
+	  //tolto//cout <<  "index electron" << iL_loose_e[l] << endl;
 	  double deltaR = sqrt( pow( DELTAPHI( RECOPFPHOT_PHI[iLp[p]] , RECOELE_PHI[iL_loose_e[l]] ),2) + pow(RECOPFPHOT_ETA[iLp[p]] - RECOELE_ETA[iL_loose_e[l]],2));
 	  double deltaR_ET2 = deltaR/pow(RECOPFPHOT_PT[iLp[p]],2);
-	  cout << " deltaR_ET2= " << deltaR_ET2 <<endl;
+	  //tolto//cout << " deltaR_ET2= " << deltaR_ET2 <<endl;
 	  if (deltaR_ET2<min_deltaR_ET2){
 	    min_deltaR_ET2=deltaR_ET2;
 	    RECOPFPHOT_DR[iLp[p]]=deltaR;
 	    p_min_deltaR_ET2=p;
-	    cout << " p_min_deltaR_ET2= " << p_min_deltaR_ET2 <<endl;
+	    //tolto//cout << " p_min_deltaR_ET2= " << p_min_deltaR_ET2 <<endl;
 	  }
 	}	  
       }
@@ -2136,14 +2221,14 @@ float newweight=1.;
 		     << "\niLp_tagEM[7]: " << iLp_tagEM[7]
 		     << endl ;
     
-    for(int i=0.;i<Nphotons;i++) {
+    /*for(int i=0.;i<Nphotons;i++) {
       if (iLp_l[i]!=-1 && iLp_tagEM[i]==0) cout << "There is photon with pT= " << RECOPFPHOT_PT[iLp[i]] << " attached to a muon with pT= " << RECOMU_PT[iLp_l[i]] << endl;
-    };
+    };*/
     
       
       // Exclude that photon from the isolation cone all leptons in the event passing loose ID + SIP cut if it was in the isolation cone and outside the isolation veto (ΔR>0.01 for muons and (ele->supercluster()->eta() < 1.479 || dR > 0.08) for electrons
 
-      cout << "Rho for electron pileup isolation correction is= " << RHO_ele << endl;
+      //tolto//cout << "Rho for electron pileup isolation correction is= " << RHO_ele << endl;
       double EffectiveArea=-9999.;
 
       for(int i=0.;i<Nphotons;i++) {
@@ -2153,7 +2238,7 @@ float newweight=1.;
 	  //if(!( iLp_l[i] == iL_loose_e[e] && iLp_tagEM[i] == 1 ) ) continue; // subtracting the photon contribution from all the leptons 
 	  if (fabs( RECOELE_SIP[iL_loose_e[e]])>=4.) continue;
 	  //double deltaR = sqrt( pow( DELTAPHI( RECOPFPHOT_PHI[iLp[i]] , RECOELE_scl_Phi[iL_loose_e[e]] ),2) + pow(RECOPFPHOT_ETA[iLp[i]] - RECOELE_scl_Eta[iL_loose_e[e]],2) );
-	  double deltaR = sqrt( pow( DELTAPHI( RECOPFPHOT_PHI[iLp[i]] , RECOELE_PHI[iL_loose_e[e]] ),2) + pow(RECOPFPHOT_ETA[iLp[i]] - RECOELE_ETA[iL_loose_e[e]],2) );          cout << "deltaR for photon subtraction= " << deltaR << endl;
+	  double deltaR = sqrt( pow( DELTAPHI( RECOPFPHOT_PHI[iLp[i]] , RECOELE_PHI[iL_loose_e[e]] ),2) + pow(RECOPFPHOT_ETA[iLp[i]] - RECOELE_ETA[iL_loose_e[e]],2) );          //tolto//cout << "deltaR for photon subtraction= " << deltaR << endl;
 	  if( deltaR<=0.3 && (RECOELE_scl_Eta[iL_loose_e[e]]< 1.479 || deltaR>0.08) ){ // 0.3 in 76x              
 	    if( debug )cout << "Subtracting the photon isolation from the electron isolation value " << endl;
 	    
@@ -2170,7 +2255,7 @@ float newweight=1.;
 	  //if(!( iLp_l[i] == iL_loose_mu[l] && iLp_tagEM[i] == 0 ) ) continue;  // subtracting the photon contribution from all the leptons 
           if (fabs(RECOMU_SIP[iL_loose_mu[l]])>=4.) continue;
           double deltaR = sqrt( pow( DELTAPHI( RECOPFPHOT_PHI[iLp[i]] , RECOMU_PHI[iL_loose_mu[l]] ),2) + pow(RECOPFPHOT_ETA[iLp[i]] - RECOMU_ETA[iL_loose_mu[l]],2) );
-	  cout << "deltaR for photon subtraction= " << deltaR << endl;
+	  //tolto//cout << "deltaR for photon subtraction= " << deltaR << endl;
 	  if( deltaR<=0.3 && deltaR>0.01){ // 0.3 is the isolation cone for muons in 76x
 	    if( debug )cout << "Subtracting the photon isolation from the muon isolation value " << endl;
 		    
@@ -2247,7 +2332,7 @@ float newweight=1.;
 	  
 	  if(RECOMU_CHARGE[ iL[j] ] == RECOMU_CHARGE[ iL[i] ]) continue; // opposite charge
 
-	  cout << "Pairing muons with pT= " << RECOMU_PT[ iL[i] ] << " and " <<  RECOMU_PT[ iL[j] ] << endl;
+	  //tolto//cout << "Pairing muons with pT= " << RECOMU_PT[ iL[i] ] << " and " <<  RECOMU_PT[ iL[j] ] << endl;
 	  
 	  // evaluate the mass
 	  double pxZ, pyZ, pzZ;
@@ -2300,7 +2385,7 @@ float newweight=1.;
 	      if( RECOPFPHOT_PT[iLp[p]] > max_pt_FSR_Z ) max_pt_FSR_Z = RECOPFPHOT_PT[iLp[p]];
 	      massZ=mllp;
 
-	      cout << "Mass Z with FSR= "<< massZ << endl;
+	      //tolto//cout << "Mass Z with FSR= "<< massZ << endl;
 	      
 	    }
 	    
@@ -2321,7 +2406,7 @@ float newweight=1.;
 	      if( RECOPFPHOT_PT[iLp[p]] > max_pt_FSR_Z ) max_pt_FSR_Z = RECOPFPHOT_PT[iLp[p]];
 	      massZ=mllp;
 
-	      cout << "Mass Z with FSR= "<< massZ << endl;
+	      //tolto//cout << "Mass Z with FSR= "<< massZ << endl;
 
 	    }
 	  } // end loop on FSR photons
@@ -2339,9 +2424,9 @@ float newweight=1.;
 	    if( pi > -1 ) cout  << "  pi " << pi << " --> index photon: " << iLp[pi] << " associated lepton: " << iLp_l[pi] << " (= "<< iL[i]<<" ? )  tag: " << iLp_tagEM[pi] << endl;
 	    if( pj > -1 ) cout  << "  pj " << pj << " --> index photon: " << iLp[pj] << " associated lepton: " << iLp_l[pj] << " (= "<< iL[j]<<" ? )  tag: " << iLp_tagEM[pj] << endl;
 	  }
-	  else {
-	    cout << "No FSR photon attached" << endl;
-	  }
+	  //tolto//else {
+	  //tolto//  cout << "No FSR photon attached" << endl;
+	  //tolto//}
 	  	  
 	  if( has_FSR_Z ){ // if Z has FSR
 	    
@@ -2379,7 +2464,7 @@ float newweight=1.;
 	  
 	  //if( massZ == 0 || i1 == -1 || j1 == -1) continue;
 	  
-	  cout << "Filling a struct for Z" << endl; 
+	  //tolto//cout << "Filling a struct for Z" << endl; 
 	  candidateZ *Z = new candidateZ;
 	  Z->massvalue=massZ;
 	  Z->ilept1=iL[i];
@@ -2417,12 +2502,12 @@ float newweight=1.;
       } // end loop on pairs
       
     
-
+      /*
       if (Zcandvector.size()<2) {
        	cout << "Less than two Z pairs with isolated leptons...exiting" << endl;
 	continue; 
       }
-
+      */
       ++N_3a ;  // fill counter
       N_3a_w=N_3a_w+newweight;
       
@@ -2432,23 +2517,23 @@ float newweight=1.;
       Zcandisolmassvector.clear();
 
       for (int index=0; index<Zcandvector.size();index++){
-	if (!(Zcandvector.at(index).massvalue > 12. && Zcandvector.at(index).massvalue < 120.)) continue;
-	cout << "Z passing the 12 < mll < 120 cut with mass= " << Zcandvector.at(index).massvalue<< endl;
+	//if (!(Zcandvector.at(index).massvalue > 12. && Zcandvector.at(index).massvalue < 120.)) continue;
+	//tolto//cout << "Z passing the 12 < mll < 120 cut with mass= " << Zcandvector.at(index).massvalue<< endl;
 	Zcandisolmassvector.push_back(Zcandvector.at(index));
       };
       
       if (Zcandisolmassvector.size()<2) {
-	cout << "No ZZ passing the mass cut"<< endl;
+	//tolto//cout << "No ZZ passing the mass cut"<< endl;
 	continue;
       }
       //
-      cout << "Number of Z passing the isolation and the 12 << mll < 120 cut is= " << Zcandisolmassvector.size() << endl;
+      //tolto//cout << "Number of Z passing the isolation and the 12 << mll < 120 cut is= " << Zcandisolmassvector.size() << endl;
                 
       ++N_3b ;  // fill counter
       N_3b_w=N_3b_w+newweight;
       
       Double_t eff_weight_3;
-
+      float massZ1pre;
       // MZ and PFMET
       for (int index=0; index<Zcandisolmassvector.size();index++){	
 
@@ -2496,13 +2581,19 @@ float newweight=1.;
 	hIpErLep_3->Fill( RECOMU_IPERROR[ ipt2_3 ],newweight );
 	
 	hMZ_3->Fill(Zcandisolmassvector.at(index).massvalue,newweight );
-
+	if( fabs(Zcandisolmassvector.at(index).massvalue - Zmass) < fabs(massZ1pre - Zmass) ){
+          massZ1pre = Zcandisolmassvector.at(index).massvalue;
+        }
       }
-      hPFMET_3->Fill(RECO_PFMET,newweight);
-      hLogXPFMET_3->Fill(RECO_PFMET,newweight); 
-      hLogLinXPFMET_3->Fill(RECO_PFMET,newweight);
+      hMZ1_3->Fill(massZ1pre,newweight );
 
-    cout << "Starting weight + pileup + efficiency= " << newweight << endl;
+      //hPFMET_3_nofilter->Fill(RECO_PFMET,newweight);
+      if (pass_METFilters == true){
+        hPFMET_3->Fill(RECO_PFMET,newweight);
+        hLogXPFMET_3->Fill(RECO_PFMET,newweight);
+        hLogLinXPFMET_3->Fill(RECO_PFMET,newweight);
+	}
+    //tolto//cout << "Starting weight + pileup + efficiency= " << newweight << endl;
     if(debug) cout << "Efficiency Weight for the Z1: " << eff_weight_3 << " Final weight for Z1= " << newweight << endl;
 
 //------------------------------------------------------------------------
@@ -2550,14 +2641,14 @@ cout << "good muons + loose muons before fr calculation " << N_good + N_loose_mu
      
      for (int i=0;i<Zcandvector.size();i++){
        
-       cout<<"Zcandvector massvalue = "<<Zcandvector.at(i).massvalue<<endl;
-       cout<<"Z1cand massvalue = "<<Z1cand.massvalue<<endl;
+       //tolto//cout<<"Zcandvector massvalue = "<<Zcandvector.at(i).massvalue<<endl;
+       //tolto//cout<<"Z1cand massvalue = "<<Z1cand.massvalue<<endl;
        
        if( fabs(Zcandvector.at(i).massvalue - Zmass) < fabs(Z1cand.massvalue - Zmass) ){
 	 
 	 Z1cand =  Zcandvector.at(i);
 	 
-	 cout<<"Z1cand mass = "<<Z1cand.massvalue<<endl;
+	 //tolto//cout<<"Z1cand mass = "<<Z1cand.massvalue<<endl;
 	 
        }
      } 
@@ -2578,9 +2669,9 @@ int ngood_jets =0;
       if(RECO_PFJET_PT[j] > 20 && fabs(RECO_PFJET_ETA[j]) < 2.4 && delta_R_1 > 0.3 && delta_R_2 > 0.3)//2.4
 	{ngood_jets++;}
 	}
-cout << "good jets before fr calculation (in the index) "<< ngood_jets << "\n";
-cout << "loose muons before fr calculation (in the index) " << N_loose_mu << "\n";
-cout << "good muons before fr calculation (in the index) " << N_good << "\n";
+//tolto//cout << "good jets before fr calculation (in the index) "<< ngood_jets << "\n";
+//tolto//cout << "loose muons before fr calculation (in the index) " << N_loose_mu << "\n";
+//tolto//cout << "good muons before fr calculation (in the index) " << N_good << "\n";
 //if(N_loose_mu == 3 && njets_pass >=2){//control region 2 good leptons + 1 fake leptons + 2 good jets
 /*for(int i = 0; i < N_loose_mu; i++){//cycle on loose muons
 if(N_loose_mu == 3 && ngood_jets >= 2 ){// && njets_pass >=2){//control region 2 good leptons + 1 fake leptons + 2 good jets
@@ -2689,7 +2780,7 @@ if (fabs( RECOMU_SIP[iL_loose_mu[i]] ) < 4. && deltar_fake_1 > 0.02 && deltar_fa
       }
     }
   }*/
-      
+    /*  
        for (int i=0 ; i< N_loose_mu ; i++){
 	 
 	 if (N_loose_mu > 3 || N_loose_e> 0) continue;
@@ -2739,9 +2830,9 @@ if (fabs( RECOMU_SIP[iL_loose_mu[i]] ) < 4. && deltar_fake_1 > 0.02 && deltar_fa
 	 
 	 cout<<"leptonspT = "<<leptonspT.at(0)<<" , "<<leptonspT.at(1)<<" , "<<leptonspT.at(2)<<endl;
 	 
-	
-	if ( leptonspT.at(0) > 20 && leptonspT.at(1) > 10 ){/*ok*/}
-	else continue;
+	*/
+	//if ( leptonspT.at(0) > 20 && leptonspT.at(1) > 10 ){/*ok*/}
+	/*else continue;
 	 
 	 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -2849,11 +2940,135 @@ if (fabs( RECOMU_SIP[iL_loose_mu[i]] ) < 4. && deltar_fake_1 > 0.02 && deltar_fa
 
 
        }
+*/
 
 
+   int njets_pass=0;
+     //int njets2=0;
 
-
+   double bdiscr1 = -999.;
+   double bdiscr2 = -999.;
+   TLorentzVector JET1,JET2;
+   int jet1=-999,jet2=-999;      
+   int jetfail[100];
+   
+   for(int i=0;i<100;i++) jetfail[i]=0;
+     
+   for(int i=0;i<RECO_PFJET_N;i++){
+     //tolto//cout<<i<<" Jet with pt= "<<RECO_PFJET_PT[i]<<" ETA "<<RECO_PFJET_ETA[i]<<" PUID "<<RECO_PFJET_PUID[i] << " PUID_MVA "<< RECO_PFJET_PUID_MVA[i]<<endl;
+     
+     // JET smearing
+     double jercorr = 1.0; double jercorrup = 1.0; double jercorrdn = 1.0;
+     
+     if (MC_type == "Fall17"){// || MC_type== "Moriond17") {
+       jetparameters.setJetPt(RECO_PFJET_PT[i]);
+       jetparameters.setJetEta(RECO_PFJET_ETA[i]);
+       jetparameters.setRho(RHO_mu);
+       
        /*
+	 float relpterr = jetresolution.getResolution(jetparameters); // jet pt resolution	
+	 
+	 JME::JetParameters sf_parameters = {{JME::Binning::JetEta, RECO_PFJET_ETA[i]}, {JME::Binning::Rho, RHO_mu}};
+	 float factor = jetresolution_sf.getScaleFactor(sf_parameters);
+	 float factorup = jetresolution_sf.getScaleFactor(sf_parameters, Variation::UP);
+	 float factordn = jetresolution_sf.getScaleFactor(sf_parameters, Variation::DOWN);
+         */
+     }
+
+       // re-definition of the jet 4 momentum
+       //TLorentzVector jet_jer_tmp,jet_jer;
+       //jet_jer_tmp.SetPtEtaPhiE(RECO_PFJET_PT[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
+       //jet_jer.SetPxPyPzE(jercorr*jet_jer_tmp.Px(),jercorr*jet_jer_tmp.Py(),jercorr*jet_jer_tmp.Pz(),jercorr*jet_jer_tmp.E());
+       //RECO_PFJET_PT[i]=jet_jer.Perp(); // pt jet corrected
+       //RECO_PFJET_ETA[i]=jet_jer.Eta();
+       //RECO_PFJET_PHI[i]=jet_jer.Phi();
+       //RECO_PFJET_ET[i]=jet_jer.Et();
+
+       //if(RECO_PFJET_PUID[i]==1 && RECO_PFJET_PT[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){ // NO PU ID temporary
+       
+       //if(RECO_PFJET_PT[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){
+       
+     if(RECO_PFJET_PUID[i]==1 && RECO_PFJET_PT[i]>20. && fabs(RECO_PFJET_ETA[i])<2.4 ){
+
+      	 //Check that jet has deltaR>0.4 away from any tight lepton corrected for FSR
+       for(int mu = 0; mu < N_good; ++mu){
+	 if (fabs(RECOMU_SIP[iL[mu]])>=4.) continue;
+	 if (RECOMU_PFX_dB_new[iL[mu]]>=0.35) continue;
+	 double deltaR = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOMU_PHI[iL[mu]]),2) + pow(RECO_PFJET_ETA[i] - RECOMU_ETA[iL[mu]],2));
+	 //tolto//cout << "1st lepton muon: " << " pT=" << RECOMU_PT[iL[mu]] <<" deltaR "<< deltaR <<endl;	   
+	 if (deltaR<0.3){ //0.4
+	   jetfail[i]=1;
+	   //tolto//cout << " jetfail " << jetfail[i] <<endl;
+	   break;
+	 }
+       }
+	 
+       for(int ele = 0; ele < Ne_good; ++ele){
+	 if (fabs(RECOELE_SIP[iLe[ele]])>=4.) continue;
+	 if (RECOELE_PFX_rho_new[iLe[ele]]>=0.35) continue;
+	 double deltaR = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOELE_PHI[iLe[ele]]),2) + pow(RECO_PFJET_ETA[i] - RECOELE_ETA[iLe[ele]],2));
+	 //tolto//cout << "1st lepton electron: " << " pT=" << RECOELE_PT[iLe[ele]] <<" deltaR "<< deltaR <<endl;
+	 if (deltaR<0.3){ //0.4
+	   jetfail[i]=1;
+	   //tolto//cout << " jetfail " << jetfail[i] <<endl;
+	   break;
+	 }
+       }
+
+	 // cleaning w.r.t FSR photons attached to leptons
+       for(int j=0.;j<Nphotons;j++) {
+	 if (iLp_l[j]!=-1 && (iLp_tagEM[j]==0 || iLp_tagEM[j]==1) ) {
+	   //tolto//if (iLp_tagEM[j]==0) cout << "There is photon with pT= " << RECOPFPHOT_PT[iLp[j]] << " attached to a muon with pT= " << RECOMU_PT[iLp_l[j]] << endl;
+	   //tolto//if (iLp_tagEM[j]==1) cout << "There is photon with pT= " << RECOPFPHOT_PT[iLp[j]] << " attached to a electron with pT= " << RECOELE_PT[iLp_l[j]] << endl;
+	   double deltaR = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOPFPHOT_PHI[iLp[j]]),2) + pow(RECO_PFJET_ETA[i] - RECOPFPHOT_ETA[iLp[j]],2));
+	   if (deltaR<0.3){ //0.4
+	     jetfail[i]=1;
+	     //tolto//cout << " jetfail " << jetfail[i] <<endl;
+	     break;
+	   }
+	 }
+       }
+	 // 
+	 
+       if (jetfail[i]==0){
+	 //tolto//cout<< " PASS jet " <<i<<" PT= "<<RECO_PFJET_PT[i]<<" ETA= "<<RECO_PFJET_ETA[i]<<" PUID= "<<RECO_PFJET_PUID[i]<<endl;
+	 njets_pass++;
+	 if (njets_pass==1){
+	     jet1=i;
+	     bdiscr1 = cSV_BTagJet_DISCR[i];
+	     JET1.SetPtEtaPhiE(RECO_PFJET_PT[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
+
+	     f_jet1_highpt_pt = RECO_PFJET_PT[i];
+	     f_jet1_highpt_eta = RECO_PFJET_ETA[i];
+	     f_jet1_highpt_phi = RECO_PFJET_PHI[i];
+	     f_jet1_highpt_e = RECO_PFJET_ET[i];
+	   }
+	   if (njets_pass==2){
+	     jet2=i;
+	     bdiscr2 = cSV_BTagJet_DISCR[i];
+	     JET2.SetPtEtaPhiE(RECO_PFJET_PT[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
+
+	     f_jet2_highpt_pt = RECO_PFJET_PT[i];
+	     f_jet2_highpt_eta = RECO_PFJET_ETA[i];
+	     f_jet2_highpt_phi = RECO_PFJET_PHI[i];
+	     f_jet2_highpt_e = RECO_PFJET_ET[i];
+	   }
+	   if (njets_pass==3){
+	     f_jet3_highpt_pt = RECO_PFJET_PT[i];
+	     f_jet3_highpt_eta = RECO_PFJET_ETA[i];
+	     f_jet3_highpt_phi = RECO_PFJET_PHI[i];
+	     f_jet3_highpt_e = RECO_PFJET_ET[i];
+	   }
+	   
+       }
+       
+     }
+     else{
+       jetfail[i]=1;
+     }
+     //cout<<" JETFAIL "<<jetfail[i]<<endl;
+   }
+      
 //------------------------------------------------------------------------------
 
     //ttZ exstimation
@@ -2863,22 +3078,17 @@ if (fabs( RECOMU_SIP[iL_loose_mu[i]] ) < 4. && deltar_fake_1 > 0.02 && deltar_fa
     double massttZ = -999.; //initial value
     int indexgood = -999.;
 
-    //vector<candidateZ> ZcandittZ;
-    //ZcandittZ.clear();
-
-if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the event with more good leptons
+    //>= 2 leptons >= 1 / 2 jet
+    if(N_good >= 2 and N_good != 4){//to suppress DY because DY->2good leptons, I have to take the event with more good leptons
     for (int indexttZ=0; indexttZ<Zcandisolmassvector.size();indexttZ++){	
       if( fabs(Zcandisolmassvector.at(indexttZ).massvalue - Zmass) < fabs(massttZ - Zmass) ){
 	massttZ=Zcandisolmassvector.at(indexttZ).massvalue;
 	indexgood = indexttZ;
       }       
     }
-    //ZcandittZ.push_back(Zcandisolmassvector.at(indexgood));
+
     if(indexgood >= 0){
-    //ZcandittZ.push_back(Zcandisolmassvector.at(indexgood));
-    hmassttZ->Fill(massttZ,newweight);
-		
- 
+    ptjet_control->Fill(massttZ , newweight);
     double delta_R1_1, delta_R2_1, delta_R1_2, delta_R2_2;
     int btag1 = -99., btag2 = -99.;
     int ibtag = -1., jbtag =-1.;
@@ -2886,9 +3096,10 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
     double deltaphi_Z, deltaphijet_12;
 
     for(int i=0;i<RECO_PFJET_N;i++){
-      delta_R1_1 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],Zcandisolmassvector.at(indexgood).phi1),2) + pow(RECO_PFJET_ETA[i] - Zcandisolmassvector.at(indexgood).eta1,2));
-      delta_R1_2 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],Zcandisolmassvector.at(indexgood).phi2),2) + pow(RECO_PFJET_ETA[i] - Zcandisolmassvector.at(indexgood).eta2,2));
-      if(RECO_PFJET_PT[i] > 20 && fabs(RECO_PFJET_ETA[i]) < 2.4 && delta_R1_1 > 0.3 && delta_R1_2 > 0.3)
+      //delta_R1_1 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],Zcandisolmassvector.at(indexgood).phi1),2) + pow(RECO_PFJET_ETA[i] - Zcandisolmassvector.at(indexgood).eta1,2));
+      //delta_R1_2 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],Zcandisolmassvector.at(indexgood).phi2),2) + pow(RECO_PFJET_ETA[i] - Zcandisolmassvector.at(indexgood).eta2,2));
+      //if(RECO_PFJET_PT[i] > 30 && fabs(RECO_PFJET_ETA[i]) < 2.4 && delta_R1_1 > 0.3 && delta_R1_2 > 0.3)
+      if(jetfail[i]==0)
 	{
 	  if(btag1 <  cSV_BTagJet_DISCR[i]){
 	    btag1 = cSV_BTagJet_DISCR[i];
@@ -2896,15 +3107,19 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 	  }
 	}
     }
-    jet1ttZ.SetPtEtaPhiE(RECO_PFJET_PT[ibtag],RECO_PFJET_ETA[ibtag],RECO_PFJET_PHI[ibtag],RECO_PFJET_ET[ibtag]*TMath::CosH(RECO_PFJET_ETA[ibtag]));
-    ptjet1 -> Fill(RECO_PFJET_PT[ibtag], newweight);
-    bdiscjet1 -> Fill(cSV_BTagJet_DISCR[ibtag],newweight);
 
+    if(ibtag != -1){
+    jet1ttZ.SetPtEtaPhiE(RECO_PFJET_PT[ibtag],RECO_PFJET_ETA[ibtag],RECO_PFJET_PHI[ibtag],RECO_PFJET_ET[ibtag]*TMath::CosH(RECO_PFJET_ETA[ibtag]));
+    hmassttZ_1jet->Fill(massttZ,newweight);
+    ptjet1_1jet -> Fill(RECO_PFJET_PT[ibtag], newweight);
+    bdiscjet1_1jet -> Fill(cSV_BTagJet_DISCR[ibtag],newweight);
+    eta_jet1_alone->Fill(RECO_PFJET_ETA[ibtag], newweight);
 
     for(int j=0;j<RECO_PFJET_N;j++){
-      delta_R2_1 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[j],Zcandisolmassvector.at(indexgood).phi1),2) + pow(RECO_PFJET_ETA[j] - Zcandisolmassvector.at(indexgood).eta1,2));
-      delta_R2_2 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[j],Zcandisolmassvector.at(indexgood).phi2),2) + pow(RECO_PFJET_ETA[j] - Zcandisolmassvector.at(indexgood).eta2,2));
-      if(ibtag != j && RECO_PFJET_PT[j] > 20 && fabs(RECO_PFJET_ETA[j]) < 2.4 && delta_R2_1 > 0.3 && delta_R2_2 > 0.3)
+      //delta_R2_1 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[j],Zcandisolmassvector.at(indexgood).phi1),2) + pow(RECO_PFJET_ETA[j] - Zcandisolmassvector.at(indexgood).eta1,2));
+      //delta_R2_2 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[j],Zcandisolmassvector.at(indexgood).phi2),2) + pow(RECO_PFJET_ETA[j] - Zcandisolmassvector.at(indexgood).eta2,2));
+      //if(ibtag != j && RECO_PFJET_PT[j] > 20 && fabs(RECO_PFJET_ETA[j]) < 2.4 && delta_R2_1 > 0.3 && delta_R2_2 > 0.3)
+      if(ibtag != j && jetfail[j]==0)
 	{
 	  if(btag2 <  cSV_BTagJet_DISCR[j]){
 	    btag2 = cSV_BTagJet_DISCR[j];
@@ -2912,6 +3127,14 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 	  }
 	}
     }
+    if(jbtag != -1){
+      f_crjetjet = true;
+      hmassttZ->Fill(massttZ,newweight);
+
+    met_jetjetcr->Fill(RECO_PFMET,newweight);
+    ptjet1 -> Fill(RECO_PFJET_PT[ibtag], newweight);
+    bdiscjet1 -> Fill(cSV_BTagJet_DISCR[ibtag],newweight);
+
     jet2ttZ.SetPtEtaPhiE(RECO_PFJET_PT[jbtag],RECO_PFJET_ETA[jbtag],RECO_PFJET_PHI[jbtag],RECO_PFJET_ET[jbtag]*TMath::CosH(RECO_PFJET_ETA[jbtag]));
     ptjet2 -> Fill(RECO_PFJET_PT[jbtag], newweight);
     bdiscjet2 -> Fill(cSV_BTagJet_DISCR[jbtag],newweight);
@@ -2921,28 +3144,165 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 
     deltaphi_Z = DELTAPHI(Zcandisolmassvector.at(indexgood).phi1, Zcandisolmassvector.at(indexgood).phi2);
     deltaphijet_12 = DELTAPHI(massjet_12.Phi(),deltaphi_Z);
+
+    eta_jet1->Fill(RECO_PFJET_ETA[ibtag],newweight);
+    eta_jet2->Fill(RECO_PFJET_ETA[jbtag],newweight);
+    deltaeta_jet_12->Fill(RECO_PFJET_ETA[ibtag]-RECO_PFJET_ETA[jbtag], newweight);
+    abs_deltaeta_jet_12->Fill(fabs(RECO_PFJET_ETA[ibtag]-RECO_PFJET_ETA[jbtag]), newweight);
+
     hdeltaphitt_Z -> Fill(deltaphijet_12,newweight);
+    }
+    }
 
+    }
+
+    }
+
+/*
+    //==2 >= 1 / 2 jet
+    double massttZ_2lept = -999.; //initial value
+    int indexgood_2lept = -999.;
+
+    if(N_good == 2 and N_good != 4){//to suppress DY because DY->2good leptons, I have to take the event with more good leptons
+      for (int indexttZ=0; indexttZ<Zcandisolmassvector.size();indexttZ++){
+	if( fabs(Zcandisolmassvector.at(indexttZ).massvalue - Zmass) < fabs(massttZ - Zmass) ){
+	  massttZ_2lept=Zcandisolmassvector.at(indexttZ).massvalue;
+	  indexgood_2lept = indexttZ;
 	}
- }*/
-    /*
-  k1control.SetPtEtaPhiE(RECO_PFJET_PT[flagicontrol],RECO_PFJET_ETA[flagicontrol],RECO_PFJET_PHI[flagicontrol],RECO_PFJET_ET[flagicontrol]*TMath::CosH(RECO_PFJET_ETA[flagicontrol]));
-   k2control.SetPtEtaPhiE(RECO_PFJET_PT[flagjcontrol],RECO_PFJET_ETA[flagjcontrol],RECO_PFJET_PHI[flagjcontrol],RECO_PFJET_ET[flagjcontrol]*TMath::CosH(RECO_PFJET_ETA[flagjcontrol]));
-   masscontrol = k1control+k2control; 
-   deltaphicontrol = DELTAPHI(masscontrol.Phi(), hP4.Phi());
-   hdeltaphinormcontrol->Fill(deltaphicontrol, newweight); 
-   deltarcontrol = sqrt(deltaphicontrol*deltaphicontrol + (masscontrol.Eta()-hP4.Eta())*(masscontrol.Eta()-hP4.Eta()));
-   hdeltarcontrol->Fill(deltarcontrol,newweight);
-   hptmaxcontrol->Fill(RECO_PFJET_PT[flagjcontrol],newweight);
-   hptmincontrol->Fill(RECO_PFJET_PT[flagicontrol],newweight);
-   hbdiscmaxcontrol->Fill(cSV_BTagJet_DISCR[flagicontrol],newweight);
-   hbdiscmincontrol->Fill(cSV_BTagJet_DISCR[flagjcontrol],newweight);
-   h2nobjetcontrol->Fill(RECO_PFJET_PT[flagjcontrol],cSV_BTagJet_DISCR[flagjcontrol],newweight);
-   h2bjetcontrol->Fill(RECO_PFJET_PT[flagicontrol],cSV_BTagJet_DISCR[flagicontrol],newweight);
-   h2control->Fill(masscontrol.M(),hP4.M(),newweight);
-    */
+      }
+
+      if(indexgood_2lept >= 0){
+
+	double delta_R1_1, delta_R2_1, delta_R1_2, delta_R2_2;
+	int btag1 = -99., btag2 = -99.;
+	int ibtag = -1., jbtag =-1.;
+	TLorentzVector jet1ttZ, jet2ttZ, massjet_12_2lept;
+	double deltaphi_Z_2lept, deltaphijet_12_2lept;
+
+	for(int i=0;i<RECO_PFJET_N;i++){
+	  delta_R1_1 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],Zcandisolmassvector.at(indexgood).phi1),2) + pow(RECO_PFJET_ETA[i] - Zcandisolmassvector.at(indexgood).eta1,2));
+	  delta_R1_2 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],Zcandisolmassvector.at(indexgood).phi2),2) + pow(RECO_PFJET_ETA[i] - Zcandisolmassvector.at(indexgood).eta2,2));
+	  if(RECO_PFJET_PT[i] > 30 && fabs(RECO_PFJET_ETA[i]) < 2.4 && delta_R1_1 > 0.3 && delta_R1_2 > 0.3)
+	    {
+	      if(btag1 <  cSV_BTagJet_DISCR[i]){
+		btag1 = cSV_BTagJet_DISCR[i];
+		ibtag = i;
+	      }
+	    }
+	}
+	if(ibtag != -1){
+	  jet1ttZ.SetPtEtaPhiE(RECO_PFJET_PT[ibtag],RECO_PFJET_ETA[ibtag],RECO_PFJET_PHI[ibtag],RECO_PFJET_ET[ibtag]*TMath::CosH(RECO_PFJET_ETA[ibtag]));
+	  hmassttZ_2lept_1jet->Fill(massttZ,newweight);
+	  ptjet1_2lept_1jet -> Fill(RECO_PFJET_PT[ibtag], newweight);
+	  bdiscjet1_2lept_1jet -> Fill(cSV_BTagJet_DISCR[ibtag],newweight);
 
 
+	  for(int j=0;j<RECO_PFJET_N;j++){
+	    delta_R2_1 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[j],Zcandisolmassvector.at(indexgood).phi1),2) + pow(RECO_PFJET_ETA[j] - Zcandisolmassvector.at(indexgood).eta1,2));
+	    delta_R2_2 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[j],Zcandisolmassvector.at(indexgood).phi2),2) + pow(RECO_PFJET_ETA[j] - Zcandisolmassvector.at(indexgood).eta2,2));
+	    if(ibtag != j && RECO_PFJET_PT[j] > 20 && fabs(RECO_PFJET_ETA[j]) < 2.4 && delta_R2_1 > 0.3 && delta_R2_2 > 0.3)
+	      {
+		if(btag2 <  cSV_BTagJet_DISCR[j]){
+		  btag2 = cSV_BTagJet_DISCR[j];
+		  jbtag = j;
+		}
+	      }
+	  }
+	  if(jbtag != -1){
+	    hmassttZ_2lept->Fill(massttZ,newweight);
+
+
+	    ptjet1_2lept -> Fill(RECO_PFJET_PT[ibtag], newweight);
+	    bdiscjet1_2lept -> Fill(cSV_BTagJet_DISCR[ibtag],newweight);
+
+	    jet2ttZ.SetPtEtaPhiE(RECO_PFJET_PT[jbtag],RECO_PFJET_ETA[jbtag],RECO_PFJET_PHI[jbtag],RECO_PFJET_ET[jbtag]*TMath::CosH(RECO_PFJET_ETA[jbtag]));
+	    ptjet2_2lept -> Fill(RECO_PFJET_PT[jbtag], newweight);
+	    bdiscjet2_2lept -> Fill(cSV_BTagJet_DISCR[jbtag],newweight);
+
+	    massjet_12_2lept = jet1ttZ + jet2ttZ;
+	    hmassjet_12_2lept->Fill(massjet_12_2lept.M(),newweight);
+
+	    deltaphi_Z_2lept = DELTAPHI(Zcandisolmassvector.at(indexgood).phi1, Zcandisolmassvector.at(indexgood).phi2);
+	    deltaphijet_12_2lept = DELTAPHI(massjet_12_2lept.Phi(),deltaphi_Z_2lept);
+	    hdeltaphitt_Z_2lept -> Fill(deltaphijet_12_2lept,newweight);
+	  }
+	}
+
+      }
+
+    }
+
+
+    //>2 >= 1 / 2 jet
+    double massttZ_magg2lept = -999.; //initial value
+    int indexgood_magg2lept = -999.;
+
+    if(N_good > 2 and N_good != 4){//to suppress DY because DY->2good leptons, I have to take the event with more good leptons
+      for (int indexttZ=0; indexttZ<Zcandisolmassvector.size();indexttZ++){
+        if( fabs(Zcandisolmassvector.at(indexttZ).massvalue - Zmass) < fabs(massttZ - Zmass) ){
+          massttZ_magg2lept=Zcandisolmassvector.at(indexttZ).massvalue;
+          indexgood_magg2lept = indexttZ;
+        }
+      }
+
+      if(indexgood_magg2lept >= 0){
+
+        double delta_R1_1, delta_R2_1, delta_R1_2, delta_R2_2;
+        int btag1 = -99., btag2 = -99.;
+        int ibtag = -1., jbtag =-1.;
+        TLorentzVector jet1ttZ, jet2ttZ, massjet_12_magg2lept;
+        double deltaphi_Z_magg2lept, deltaphijet_12_magg2lept;
+
+        for(int i=0;i<RECO_PFJET_N;i++){
+          delta_R1_1 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],Zcandisolmassvector.at(indexgood).phi1),2) + pow(RECO_PFJET_ETA[i] - Zcandisolmassvector.at(indexgood).eta1,2));
+          delta_R1_2 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],Zcandisolmassvector.at(indexgood).phi2),2) + pow(RECO_PFJET_ETA[i] - Zcandisolmassvector.at(indexgood).eta2,2));
+          if(RECO_PFJET_PT[i] > 30 && fabs(RECO_PFJET_ETA[i]) < 2.4 && delta_R1_1 > 0.3 && delta_R1_2 > 0.3)
+            {
+              if(btag1 <  cSV_BTagJet_DISCR[i]){
+                btag1 = cSV_BTagJet_DISCR[i];
+                ibtag = i;
+              }
+            }
+        }
+        if(ibtag != -1){
+          jet1ttZ.SetPtEtaPhiE(RECO_PFJET_PT[ibtag],RECO_PFJET_ETA[ibtag],RECO_PFJET_PHI[ibtag],RECO_PFJET_ET[ibtag]*TMath::CosH(RECO_PFJET_ETA[ibtag]));
+          hmassttZ_magg2lept_1jet->Fill(massttZ,newweight);
+          ptjet1_magg2lept_1jet -> Fill(RECO_PFJET_PT[ibtag], newweight);
+          bdiscjet1_magg2lept_1jet -> Fill(cSV_BTagJet_DISCR[ibtag],newweight);
+          for(int j=0;j<RECO_PFJET_N;j++){
+            delta_R2_1 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[j],Zcandisolmassvector.at(indexgood).phi1),2) + pow(RECO_PFJET_ETA[j] - Zcandisolmassvector.at(indexgood).eta1,2));
+            delta_R2_2 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[j],Zcandisolmassvector.at(indexgood).phi2),2) + pow(RECO_PFJET_ETA[j] - Zcandisolmassvector.at(indexgood).eta2,2));
+            if(ibtag != j && RECO_PFJET_PT[j] > 20 && fabs(RECO_PFJET_ETA[j]) < 2.4 && delta_R2_1 > 0.3 && delta_R2_2 > 0.3)
+              {
+                if(btag2 <  cSV_BTagJet_DISCR[j]){
+                  btag2 = cSV_BTagJet_DISCR[j];
+                  jbtag = j;
+                }
+              }
+          }
+          if(jbtag != -1){
+            hmassttZ_magg2lept->Fill(massttZ,newweight);
+
+
+            ptjet1_magg2lept -> Fill(RECO_PFJET_PT[ibtag], newweight);
+            bdiscjet1_magg2lept -> Fill(cSV_BTagJet_DISCR[ibtag],newweight);
+
+            jet2ttZ.SetPtEtaPhiE(RECO_PFJET_PT[jbtag],RECO_PFJET_ETA[jbtag],RECO_PFJET_PHI[jbtag],RECO_PFJET_ET[jbtag]*TMath::CosH(RECO_PFJET_ETA[jbtag]));
+            ptjet2_magg2lept -> Fill(RECO_PFJET_PT[jbtag], newweight);
+            bdiscjet2_magg2lept -> Fill(cSV_BTagJet_DISCR[jbtag],newweight);
+
+            massjet_12_magg2lept = jet1ttZ + jet2ttZ;
+            hmassjet_12_magg2lept->Fill(massjet_12_magg2lept.M(),newweight);
+     
+            deltaphi_Z_magg2lept = DELTAPHI(Zcandisolmassvector.at(indexgood).phi1, Zcandisolmassvector.at(indexgood).phi2);
+            deltaphijet_12_magg2lept = DELTAPHI(massjet_12_magg2lept.Phi(),deltaphi_Z_magg2lept);
+            hdeltaphitt_Z_magg2lept -> Fill(deltaphijet_12_magg2lept,newweight);
+          }
+        }
+
+      }
+
+    }*/
       /*
       //z1tree->Fill();
                  
@@ -3077,6 +3437,12 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 
       //if( debug ) cout  << "\nStep 4: Number of good leptons: " << N_good << endl;
 
+
+    if (Zcandvector.size()<2) {
+      //tolto//cout << "Less than two Z pairs with isolated leptons...exiting" << endl;
+      continue;
+    }
+
     int N_Z2_pairs = 0;
     
     int i2 = -1; //index of the first lepton (from Z1)
@@ -3107,49 +3473,51 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
       vector<candidateZ> goodZ;
 
       for (int i=0;i<Zcandisolmassvector.size();i++){
-	cout << "Checking mass i= " << Zcandisolmassvector.at(i).massvalue << endl;
-	cout << "Ghost removal check 0: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi1, Zcandisolmassvector.at(i).phi2 ),2) 
-		  + pow(Zcandisolmassvector.at(i).eta1-Zcandisolmassvector.at(i).eta2,2) ) << endl;
+	//tolto//cout << "Checking mass i= " << Zcandisolmassvector.at(i).massvalue << endl;
+	if (!(Zcandisolmassvector.at(i).massvalue > 12. && Zcandisolmassvector.at(i).massvalue < 120.)) continue;
+	//tolto//cout << "Ghost removal check 0: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi1, Zcandisolmassvector.at(i).phi2 ),2) 
+		  //tolto//+ pow(Zcandisolmassvector.at(i).eta1-Zcandisolmassvector.at(i).eta2,2) ) << endl;
 	if( sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi1, Zcandisolmassvector.at(i).phi2 ),2) 
 		  + pow(Zcandisolmassvector.at(i).eta1-Zcandisolmassvector.at(i).eta2,2) ) <= 0.02) continue;
 	
 	
 	for (int j=i+1;j<Zcandisolmassvector.size();j++){
-	  cout << "Checking mass j= " << Zcandisolmassvector.at(j).massvalue << endl;
-	  cout <<Zcandisolmassvector.at(i).pt1 << " " << Zcandisolmassvector.at(j).pt1 << " " << Zcandisolmassvector.at(j).pt2 << endl;
-	  cout <<Zcandisolmassvector.at(i).pt2 << " " << Zcandisolmassvector.at(j).pt1 << " " << Zcandisolmassvector.at(j).pt2 << endl;
+	  //tolto//cout << "Checking mass j= " << Zcandisolmassvector.at(j).massvalue << endl;
+	  if (!(Zcandisolmassvector.at(i).massvalue > 12. && Zcandisolmassvector.at(i).massvalue < 120.)) continue;
+	  //tolto//cout <<Zcandisolmassvector.at(i).pt1 << " " << Zcandisolmassvector.at(j).pt1 << " " << Zcandisolmassvector.at(j).pt2 << endl;
+	  //tolto//cout <<Zcandisolmassvector.at(i).pt2 << " " << Zcandisolmassvector.at(j).pt1 << " " << Zcandisolmassvector.at(j).pt2 << endl;
 	  if (Zcandisolmassvector.at(i).pt1==Zcandisolmassvector.at(j).pt1 || Zcandisolmassvector.at(i).pt1==Zcandisolmassvector.at(j).pt2) continue;
 	  if (Zcandisolmassvector.at(i).pt2==Zcandisolmassvector.at(j).pt1 || Zcandisolmassvector.at(i).pt2==Zcandisolmassvector.at(j).pt2) continue;
 	 	  
-	  cout << "Ghost removal check 1: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(j).phi1, Zcandisolmassvector.at(j).phi2 ),2) 
-		    + pow(Zcandisolmassvector.at(j).eta1-Zcandisolmassvector.at(j).eta2,2) )<< endl;
+	  //tolto//cout << "Ghost removal check 1: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(j).phi1, Zcandisolmassvector.at(j).phi2 ),2) 
+		    //tolto//+ pow(Zcandisolmassvector.at(j).eta1-Zcandisolmassvector.at(j).eta2,2) )<< endl;
 	  if( sqrt( pow( DELTAPHI(Zcandisolmassvector.at(j).phi1, Zcandisolmassvector.at(j).phi2 ),2) 
 		    + pow(Zcandisolmassvector.at(j).eta1-Zcandisolmassvector.at(j).eta2,2) ) <= 0.02) continue;
 	  
-	  cout << "Ghost removal check 2: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi1, Zcandisolmassvector.at(j).phi1 ),2) 
-		    + pow(Zcandisolmassvector.at(i).eta1-Zcandisolmassvector.at(j).eta1,2) )<< endl;
+	  //tolto//cout << "Ghost removal check 2: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi1, Zcandisolmassvector.at(j).phi1 ),2) 
+		    //tolto//+ pow(Zcandisolmassvector.at(i).eta1-Zcandisolmassvector.at(j).eta1,2) )<< endl;
 	  if( sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi1, Zcandisolmassvector.at(j).phi1 ),2) 
 		    + pow(Zcandisolmassvector.at(i).eta1-Zcandisolmassvector.at(j).eta1,2) ) <= 0.02) continue;
 
-	  cout << "Ghost removal check 3: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi1, Zcandisolmassvector.at(j).phi2 ),2) 
-		    + pow(Zcandisolmassvector.at(i).eta1-Zcandisolmassvector.at(j).eta2,2) ) << endl;
+	  //tolto//cout << "Ghost removal check 3: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi1, Zcandisolmassvector.at(j).phi2 ),2) 
+		    //tolto//+ pow(Zcandisolmassvector.at(i).eta1-Zcandisolmassvector.at(j).eta2,2) ) << endl;
 	  if( sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi1, Zcandisolmassvector.at(j).phi2 ),2) 
 		    + pow(Zcandisolmassvector.at(i).eta1-Zcandisolmassvector.at(j).eta2,2) ) <= 0.02) continue;
 
-	  cout << "Ghost removal check 4: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi2, Zcandisolmassvector.at(j).phi1 ),2) 
-		    + pow(Zcandisolmassvector.at(i).eta2-Zcandisolmassvector.at(j).eta1,2) ) << endl;
+	  //tolto//cout << "Ghost removal check 4: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi2, Zcandisolmassvector.at(j).phi1 ),2) 
+		    //tolto//+ pow(Zcandisolmassvector.at(i).eta2-Zcandisolmassvector.at(j).eta1,2) ) << endl;
 	  if( sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi2, Zcandisolmassvector.at(j).phi1 ),2) 
 		    + pow(Zcandisolmassvector.at(i).eta2-Zcandisolmassvector.at(j).eta1,2) ) <= 0.02) continue;
 
-	  cout << "Ghost removal check 5: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi2, Zcandisolmassvector.at(j).phi2 ),2) 
-		    + pow(Zcandisolmassvector.at(i).eta2-Zcandisolmassvector.at(j).eta2,2) ) << endl;
+	  //tolto//cout << "Ghost removal check 5: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi2, Zcandisolmassvector.at(j).phi2 ),2) 
+		    //tolto//+ pow(Zcandisolmassvector.at(i).eta2-Zcandisolmassvector.at(j).eta2,2) ) << endl;
 	  if( sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi2, Zcandisolmassvector.at(j).phi2 ),2) 
 		    + pow(Zcandisolmassvector.at(i).eta2-Zcandisolmassvector.at(j).eta2,2) ) <= 0.02) continue;
 
-	  cout << "There is a set of 4 leptons passing the ghost removal (deltaR > 0.02)" << endl;
+	  //tolto//cout << "There is a set of 4 leptons passing the ghost removal (deltaR > 0.02)" << endl;
 	  goodZ.push_back(Zcandisolmassvector.at(i));
 	  goodZ.push_back(Zcandisolmassvector.at(j));
-	  cout << "Filling isolgoodZsv vector " << endl;
+	  //tolto//cout << "Filling isolgoodZsv vector " << endl;
 	  isolgoodZs={i,j};
 	  isolgoodZsv.push_back(isolgoodZs);
 	}
@@ -3157,7 +3525,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 
       //cout << "Debug ZZ= " << Zcandisolmassvector.at( (isolgoodZsv.at(0)).at(0) ).massvalue << " " << Zcandisolmassvector.at( (isolgoodZsv.at(0)).at(1)).massvalue << endl;
       if (isolgoodZsv.size()==0) {
-	cout << "No ZZ combination passing the cuts  ...exiting " << endl;
+	//tolto//cout << "No ZZ combination passing the cuts  ...exiting " << endl;
 	continue;
       }
 
@@ -3205,7 +3573,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 	}	 	
       }
       
-      cout << "Cleaned Good ZZ passing pT cuts are " << ileptonspTcleanedgoodZsv.size() << endl;            
+      //tolto//cout << "Cleaned Good ZZ passing pT cuts are " << ileptonspTcleanedgoodZsv.size() << endl;            
       if (ileptonspTcleanedgoodZsv.size()==0) continue;
 
 
@@ -3222,10 +3590,10 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
       vector<candidateZ> pTcleanedgoodZ; 
       
       for (int l=0;l<ileptonspTcleanedgoodZsv.size();l++){
-	cout << "checking masses for QCD suppression= " 
+	/*cout << "checking masses for QCD suppression= " 
 	     << Zcandisolmassvector.at( (ileptonspTcleanedgoodZsv.at(l)).at(0)).massvalue << " and " 
 	     << Zcandisolmassvector.at( (ileptonspTcleanedgoodZsv.at(l)).at(1)).massvalue
-	     << endl;
+	     << endl;*/
 	min_mass_2L = 10000.;
 	ileptonsmumu.clear();
        
@@ -3237,7 +3605,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 	double mass;
 	
 	// mumu
-	cout << "Checking ee pairs for QCD rejection" << endl;
+	//tolto//cout << "Checking ee pairs for QCD rejection" << endl;
 
 	for (int i=0;i<4;i++){ 
 	  for (int j=i+1;j<4;j++){
@@ -3251,14 +3619,14 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 
 	    DiLeptonQCD=Lepton1qcd+Lepton2qcd;       
 	    mass = DiLeptonQCD.M();
-	    cout << "Mass of ee for QCD rejection= " << mass << endl;
+	    //tolto//cout << "Mass of ee for QCD rejection= " << mass << endl;
 	    if( mass < min_mass_2L ) min_mass_2L = mass ;
 	  }
 	}
 
 	hminMll_6->Fill( min_mass_2L,newweight );
 	if( min_mass_2L <= 4 ) { 
-	  cout << "Not passing the mll>4 cut" << endl;
+	  //tolto//cout << "Not passing the mll>4 cut" << endl;
 	  continue ;
 	}
 	else {
@@ -3308,7 +3676,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
       } 
       
       if (massZ1 < 40.) {
-	cout << "The mass of Z1 is < 40 GeV...exiting" << endl;
+	//tolto//cout << "The mass of Z1 is < 40 GeV...exiting" << endl;
 	continue;
       } 
       
@@ -3383,7 +3751,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 	
 	for (int j=i+1;j<pTcleanedgoodZ.size();j++){
 	  float massZa=-999.,massZb=-999.;	 	 
-	  cout << "Masses= " << pTcleanedgoodZ.at(i).massvalue << " " << pTcleanedgoodZ.at(j).massvalue << endl;
+	  //tolto//cout << "Masses= " << pTcleanedgoodZ.at(i).massvalue << " " << pTcleanedgoodZ.at(j).massvalue << endl;
 	  
 	  float lepton3ch=-999., lepton4ch=-999.;
 	  lepton3ch=pTcleanedgoodZ.at(j).charge1;
@@ -3427,7 +3795,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 	    massZb=DiLeptonZa.M();
 	  }	  
 	  
-	  cout << "mass Za and b= " << massZa << " " << massZb << endl;
+	  //tolto//cout << "mass Za and b= " << massZa << " " << massZb << endl;
 	  if ( fabs(massZa-Zmass) < fabs(massZ1-Zmass) && massZb<12) continue; // exclude the original pairs
 	  
 	  //	 cout << "i j " << i << " " << j << endl;
@@ -3436,7 +3804,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 	}
       }
       
-      cout << "How many ZZ objects are present? " << icleanedgoodZsv.size() << endl;
+      //tolto//cout << "How many ZZ objects are present? " << icleanedgoodZsv.size() << endl;
       if (icleanedgoodZsv.size()==0) continue;
       
       // // sort Z by mass value
@@ -3463,7 +3831,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
       // identify pairs  Z1+Z2s
       vector<int> vindexZZ;
       for (int l=0;l<icleanedgoodZsv.size();l++){
-	cout << "Z+Z pairs with masses: " << pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(0)).massvalue << " " <<  pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).massvalue << endl;
+	//tolto//cout << "Z+Z pairs with masses: " << pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(0)).massvalue << " " <<  pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).massvalue << endl;
 	if ( (icleanedgoodZsv.at(l).at(0)==indexZ1 &&  
 	      !(pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).ilept1==indexlep1Z1 || pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).ilept2==indexlep1Z1 || 
 		pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).ilept1==indexlep2Z1 || pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).ilept2==indexlep2Z1)) 
@@ -3473,21 +3841,21 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 		pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(0)).ilept1==indexlep2Z1 || pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(0)).ilept2==indexlep2Z1))
 	     ) 
 	  {
-	    cout << "Found a Z1 + X  pair with no lepton shared with masses= " << pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(0)).massvalue << " " <<  pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).massvalue << endl;
+	    //tolto//cout << "Found a Z1 + X  pair with no lepton shared with masses= " << pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(0)).massvalue << " " <<  pTcleanedgoodZ.at(icleanedgoodZsv.at(l).at(1)).massvalue << endl;
 	    vindexZZ.push_back(l);
 	  }
       }
       
-      cout << "How many Z1+Z2s objects are present? " << vindexZZ.size() << endl;
+      //tolto//cout << "How many Z1+Z2s objects are present? " << vindexZZ.size() << endl;
       
       // If more than one Z2 (couple to the same Z1), choose the one with the highest-pT Z2 leptons
       if (vindexZZ.size()==1){
-	cout << "Just one Z1+Z2 pair" << endl;
+	//tolto//cout << "Just one Z1+Z2 pair" << endl;
 	if (icleanedgoodZsv.at(vindexZZ.at(0)).at(0)==indexZ1) indexZ2=icleanedgoodZsv.at(vindexZZ.at(0)).at(1); 
 	if (icleanedgoodZsv.at(vindexZZ.at(0)).at(1)==indexZ1) indexZ2=icleanedgoodZsv.at(vindexZZ.at(0)).at(0);
       }
       else {
-	cout << "more than one Z2 (couple to the same Z1), choose the one with the highest-pT Z2 leptons" << endl;
+	//tolto//cout << "more than one Z2 (couple to the same Z1), choose the one with the highest-pT Z2 leptons" << endl;
 	int indexZ2tmp=-999;
 	float sumpT=-999.,tmpsumpT=-999.;
 	
@@ -3501,7 +3869,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 	    LorentzZ2.SetPxPyPzE(pTcleanedgoodZ.at(indexZ2tmp).pxZ, pTcleanedgoodZ.at(indexZ2tmp).pyZ, pTcleanedgoodZ.at(indexZ2tmp).pzZ, pTcleanedgoodZ.at(indexZ2tmp).EZ);
 	    LorentzZZ=LorentzZ1+LorentzZ2;
 	    if (LorentzZZ.M()<70.) continue; // cut m4l>70
-	    cout << "Passed m4l>70. cut"<< endl;
+	    //tolto//cout << "Passed m4l>70. cut"<< endl;
 	    
 	    tmpsumpT=
 	      pTcleanedgoodZ.at(indexZ2tmp).pt1+
@@ -3519,7 +3887,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 
      // Z2
      if (indexZ2<0) continue;
-     cout << "The highest pT leptons Z2 has mass= " <<  pTcleanedgoodZ.at(indexZ2).massvalue << endl;
+     //tolto//cout << "The highest pT leptons Z2 has mass= " <<  pTcleanedgoodZ.at(indexZ2).massvalue << endl;
      
      massZ2 = pTcleanedgoodZ.at(indexZ2).massvalue;	 
      pxZ2 = pTcleanedgoodZ.at(indexZ2).pxZ;
@@ -3533,9 +3901,9 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
      indexlep2Z2=pTcleanedgoodZ.at(indexZ2).ilept2;
 
      // Z1 and Z2 final 
-     cout << "Z1 has index= " << indexZ1 << "  Z2 has index= " << indexZ2 << endl;
+     //tolto//cout << "Z1 has index= " << indexZ1 << "  Z2 has index= " << indexZ2 << endl;
  
-     cout << "PTs= " << RECOMU_PT[indexlep1Z1] << " " << RECOMU_PT[indexlep2Z1] << " " <<  RECOMU_PT[indexlep1Z2] << " " << RECOMU_PT[indexlep2Z2]<< endl; 
+     //tolto//cout << "PTs= " << RECOMU_PT[indexlep1Z1] << " " << RECOMU_PT[indexlep2Z1] << " " <<  RECOMU_PT[indexlep1Z2] << " " << RECOMU_PT[indexlep2Z2]<< endl; 
 
      /* h4musel->Fill(RECOMU_PT[indexlep1Z1]);
    h4musel->Fill(RECOMU_PT[indexlep2Z1]);
@@ -3545,7 +3913,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 
       
      if (std::isnan(massZ2)) {
-       cout << "No Z2 found" << endl;
+       //tolto//cout << "No Z2 found" << endl;
        continue; 
      }
      else {
@@ -3604,7 +3972,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
       if (eff_weight>0.) newweight=weight*pu_weight*weight_kfactor*eff_weight;
       else newweight=weight*pu_weight*weight_kfactor;
       
-      cout << "Starting weight + pileup + efficiency= " << newweight << endl;
+      //tolto//cout << "Starting weight + pileup + efficiency= " << newweight << endl;
       if(debug) cout << "Efficiency Weight for the 4l: " << eff_weight << " Final weight= " << newweight << endl;
       
      
@@ -3612,7 +3980,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
       Z1P4.SetPxPyPzE(pxZ1,pyZ1,pzZ1,EZ1);
       Z2P4.SetPxPyPzE(pxZ2,pyZ2,pzZ2,EZ2);
       hP4 = Z1P4 + Z2P4;
-      cout << "Mass of 4l best candidate= " << hP4.M() << endl;
+      //tolto//cout << "Mass of 4l best candidate= " << hP4.M() << endl;
       double mass4l=hP4.M();      
       double pT4l=hP4.Pt();
 
@@ -3630,9 +3998,9 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
       // sort index by pt (kinematics not corrected for FSR)
       int ipt[4] ;
       double tmp_pt[4];
-      cout << "PTs= " << RECOMU_PT[indexlep1Z1] << " " << RECOMU_PT[indexlep2Z1] << " " <<  RECOMU_PT[indexlep1Z2] << " " << RECOMU_PT[indexlep2Z2]<< endl;
+      //tolto//cout << "PTs= " << RECOMU_PT[indexlep1Z1] << " " << RECOMU_PT[indexlep2Z1] << " " <<  RECOMU_PT[indexlep1Z2] << " " << RECOMU_PT[indexlep2Z2]<< endl;
       int indexleptonfinal[4]={indexlep1Z1,indexlep2Z1,indexlep1Z2,indexlep2Z2};
-      cout << "PTs= " << RECOMU_PT[indexleptonfinal[0]] << " " << RECOMU_PT[indexleptonfinal[1]] << " " <<  RECOMU_PT[indexleptonfinal[2]] << " " << RECOMU_PT[indexleptonfinal[3]]<< endl;
+      //tolto//cout << "PTs= " << RECOMU_PT[indexleptonfinal[0]] << " " << RECOMU_PT[indexleptonfinal[1]] << " " <<  RECOMU_PT[indexleptonfinal[2]] << " " << RECOMU_PT[indexleptonfinal[3]]<< endl;
 
       for(int i = 0; i < 4; ++i) tmp_pt[i] =  RECOMU_PT[indexleptonfinal[i]];
       for(int i = 0; i < 4; ++i){
@@ -3666,7 +4034,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 
 	for( int p = 0; p < Nphotons; ++p ){
 	  if( iLp_l[ p ] == ipt[i] && iLp_tagEM[ p ] == 0 )  {
-	    cout << "muons with pT= " << RECOMU_PT[ipt[i]] << " has associated a photon with pT= " << RECOPFPHOT_PT[iLp[p]] <<  endl;
+	    //tolto//cout << "muons with pT= " << RECOMU_PT[ipt[i]] << " has associated a photon with pT= " << RECOPFPHOT_PT[iLp[p]] <<  endl;
 	    flagFSR=1;
 	    pfsr=p;
 	  }
@@ -3761,9 +4129,9 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 	int pfsr=-999;
 	
 	for( int p = 0; p < Nphotons; ++p ){
-	  cout << "Index of lepton with photon ISR= " << iLp_l[ p ] << " and final lepton index= " << iL[i] << endl;
+	  //tolto// << "Index of lepton with photon ISR= " << iLp_l[ p ] << " and final lepton index= " << iL[i] << endl;
 	  if( iLp_l[ p ] == iL[i] && iLp_tagEM[ p ] == 0 )  {
-	    cout << "Muon with pT= " << RECOMU_PT[iL[i]] << " has associated a photon with pT= " << RECOPFPHOT_PT[iLp[p]] <<  endl;
+	    //tolto//cout << "Muon with pT= " << RECOMU_PT[iL[i]] << " has associated a photon with pT= " << RECOPFPHOT_PT[iLp[p]] <<  endl;
 	    // RECOMU_PFX_dB_new[iL[i]]=
 	    //   (RECOMU_PFchHad[iL[i]]+
 	    //    max(0.,RECOMU_PFneuHad[iL[i]]+
@@ -3776,7 +4144,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 	}
 	
 	if (flagFSR==1){
-	  cout << "Before correcting for FSR; muon pT= " << RECOMU_PT[iL[i]] << " Eta= " << RECOMU_ETA[iL[i]] << " Phi= " << RECOMU_PHI[iL[i]] << endl;
+	  //tolto//cout << "Before correcting for FSR; muon pT= " << RECOMU_PT[iL[i]] << " Eta= " << RECOMU_ETA[iL[i]] << " Phi= " << RECOMU_PHI[iL[i]] << endl;
 	  TLorentzVector Lept,LeptCorrection;
 	  Lept.SetPtEtaPhiM(RECOMU_PT[iL[i]], RECOMU_ETA[iL[i]], RECOMU_PHI[iL[i]], 0.105);
 	  LeptCorrection.SetPtEtaPhiM(RECOPFPHOT_PT[iLp[pfsr]],RECOPFPHOT_ETA[iLp[pfsr]],RECOPFPHOT_PHI[iLp[pfsr]],0);
@@ -3784,17 +4152,17 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 	  RECOMU_PT[iL[i]]=Lept.Pt();
 	  RECOMU_ETA[iL[i]]=Lept.Eta();
 	  RECOMU_PHI[iL[i]]=Lept.Phi();
-	  cout << "After correcting for FSR; muon pT= " << RECOMU_PT[iL[i]] << " Eta= " << RECOMU_ETA[iL[i]] << " Phi= " << RECOMU_PHI[iL[i]] << endl;
+	  //tolto//cout << "After correcting for FSR; muon pT= " << RECOMU_PT[iL[i]] << " Eta= " << RECOMU_ETA[iL[i]] << " Phi= " << RECOMU_PHI[iL[i]] << endl;
 	}
       }
-      cout << "Kinematics of leptons corrected for FSR photons (if existing)" << endl;
+      //tolto//cout << "Kinematics of leptons corrected for FSR photons (if existing)" << endl;
 
       // sort index by pt (kinematics is now corrected for FSR)
       int iptcorr[4] ;
       double tmp_ptcorr[4];
-      cout << "PTs= " << RECOMU_PT[indexlep1Z1] << " " << RECOMU_PT[indexlep2Z1] << " " <<  RECOMU_PT[indexlep1Z2] << " " << RECOMU_PT[indexlep2Z2]<< endl;
+      //tolto//cout << "PTs= " << RECOMU_PT[indexlep1Z1] << " " << RECOMU_PT[indexlep2Z1] << " " <<  RECOMU_PT[indexlep1Z2] << " " << RECOMU_PT[indexlep2Z2]<< endl;
       int indexleptonfinalcorr[4]={indexlep1Z1,indexlep2Z1,indexlep1Z2,indexlep2Z2};
-      cout << "PTs= " << RECOMU_PT[indexleptonfinalcorr[0]] << " " << RECOMU_PT[indexleptonfinalcorr[1]] << " " <<  RECOMU_PT[indexleptonfinalcorr[2]] << " " << RECOMU_PT[indexleptonfinalcorr[3]]<< endl;
+      //tolto//cout << "PTs= " << RECOMU_PT[indexleptonfinalcorr[0]] << " " << RECOMU_PT[indexleptonfinalcorr[1]] << " " <<  RECOMU_PT[indexleptonfinalcorr[2]] << " " << RECOMU_PT[indexleptonfinalcorr[3]]<< endl;
 
       for(int i = 0; i < 4; ++i) tmp_ptcorr[i] =  RECOMU_PT[indexleptonfinalcorr[i]];
       for(int i = 0; i < 4; ++i){
@@ -3961,7 +4329,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
                              (RECOMU_PHI[ ipt[i]]-MC_PHI[imc]) * (RECOMU_PHI[ ipt[i]]-MC_PHI[imc]));
             }
             else if ( datasetName.Contains("GluGluToZZ") || datasetName.Contains("ZZTo4L_13TeV_powheg_pythia8") ) {
-	      cout << "This is ZZTo4L= " << endl;
+	      //tolto//cout << "This is ZZTo4L= " << endl;
               if (abs(MC_ZZ_PDGID[0][imc])!=13) continue;
               d = sqrt( (RECOMU_ETA[ipt[i]]-MC_ZZ_ETA[0][imc]) * (RECOMU_ETA[ ipt[i]]-MC_ZZ_ETA[0][imc]) +
                         (RECOMU_PHI[ ipt[i]]-MC_ZZ_PHI[0][imc]) * (RECOMU_PHI[ ipt[i]]-MC_ZZ_PHI[0][imc]));
@@ -4179,7 +4547,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
      
      ++N_8 ;  // fill counter     
      N_8_w=N_8_w+newweight;
-     cout << " N_8_w= " << N_8_w << " " << newweight << endl;
+     //tolto//cout << " N_8_w= " << N_8_w << " " << newweight << endl;
           
      hM4l_8->Fill( mass4l,newweight );
      if (mass4l>=100. && mass4l<=800.) hM4l_8_100_800->Fill( mass4l,newweight );
@@ -4242,10 +4610,10 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
      hLogLinXPFMET_8->Fill(RECO_PFMET,newweight);
 
      // //VBF
-     cout << "Starting VBF analysis " << endl;
+     //tolto//cout << "Starting VBF analysis " << endl;
      
      //Basic cuts to jets AND delta R section
-   int njets_pass=0;
+   //int njets_pass=0;
      //int njets2=0;
    int n_loose =0;
    int n_loose1 =0;
@@ -4259,7 +4627,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
    int n_totjetp4 =0;
    int n_totjetp5 =0;
    int n_totjetp6 =0;
-   double bdiscr1 = -999.;
+   /*double bdiscr1 = -999.;
    double bdiscr2 = -999.;
    TLorentzVector JET1,JET2;
    int jet1=-999,jet2=-999;      
@@ -4277,7 +4645,7 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
        jetparameters.setJetPt(RECO_PFJET_PT[i]);
        jetparameters.setJetEta(RECO_PFJET_ETA[i]);
        jetparameters.setRho(RHO_mu);
-       
+       */
        /*
 	 float relpterr = jetresolution.getResolution(jetparameters); // jet pt resolution	
 	 
@@ -4285,8 +4653,8 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 	 float factor = jetresolution_sf.getScaleFactor(sf_parameters);
 	 float factorup = jetresolution_sf.getScaleFactor(sf_parameters, Variation::UP);
 	 float factordn = jetresolution_sf.getScaleFactor(sf_parameters, Variation::DOWN);
-         */
-     }
+         
+     }*/
 
        // re-definition of the jet 4 momentum
        //TLorentzVector jet_jer_tmp,jet_jer;
@@ -4300,8 +4668,8 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
        //if(RECO_PFJET_PUID[i]==1 && RECO_PFJET_PT[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){ // NO PU ID temporary
        
        //if(RECO_PFJET_PT[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){
-       
-     if(RECO_PFJET_PT[i]>20. && fabs(RECO_PFJET_ETA[i])<2.4 ){
+    /*   
+     if(RECO_PFJET_PT[i]>30. && fabs(RECO_PFJET_ETA[i])<2.4 ){
 
       	 //Check that jet has deltaR>0.4 away from any tight lepton corrected for FSR
        for(int mu = 0; mu < N_good; ++mu){
@@ -4380,10 +4748,10 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
        jetfail[i]=1;
      }
      //cout<<" JETFAIL "<<jetfail[i]<<endl;
-   }
+   }*/
      
      //Number of jets and mJJ,delta eta cuts // categories
-   cout << "Number of jets passing the VBF selection is = " << njets_pass << endl;
+   //tolto//cout << "Number of jets passing the VBF selection is = " << njets_pass << endl;
 
 
 
@@ -4410,17 +4778,17 @@ if(N_good >= 3){//to suppress DY because DY->2good leptons, I have to take the e
 	}
 */
  //int cont1 =0, cont2 =0;   
-  cout << "Number of muons in the event " << N_loose_mu;
+  //tolto//cout << "Number of muons in the event " << N_loose_mu;
   if (N_loose_mu == 3){
   cont1++;
-  cout << "Number 3 muons event " << N_loose_mu;
+  //tolto//cout << "Number 3 muons event " << N_loose_mu;
   
   } 
   
   
     if (N_loose_mu == 3 && njets_pass >= 2){
   cont2++;
-  cout << "Number 3 muons event + 2 jets " << N_loose_mu;
+  //tolto//cout << "Number 3 muons event + 2 jets " << N_loose_mu;
   
   } 
  
@@ -4547,7 +4915,7 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
 */   
 //}//QUELLA DELL'IF IMPORTANTISSIMA
 
-
+/*
 //------------------------------------------------------------------------------
 
     //ttZ exstimation
@@ -4560,7 +4928,8 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
     //vector<candidateZ> ZcandittZ;
     //ZcandittZ.clear();
 
-    if(N_good >= 3 && njets_pass >= 2){//to suppress DY because DY->2good leptons, I have to take the event with more good leptons
+    //if(N_good >= 3 && njets_pass >= 2){//to suppress DY because DY->2good leptons, I have to take the event with more good leptons
+    if(abs(mass4l -125.)>=10 and njets_pass >= 2){
       for (int indexttZ=0; indexttZ<Zcandisolmassvector.size();indexttZ++){
 	if( fabs(Zcandisolmassvector.at(indexttZ).massvalue - Zmass) < fabs(massttZ - Zmass) ){
 	  massttZ=Zcandisolmassvector.at(indexttZ).massvalue;
@@ -4618,7 +4987,7 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
 	hdeltaphitt_Z -> Fill(deltaphijet_12,newweight);
 
       }
-    }
+      }*/
 
 
 
@@ -4668,30 +5037,33 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
      for(int i = 0; i < N_good; i ++){
        n_muonpasscontrol++;
        hptcontrol->Fill(RECOMU_PT[i],newweight);
+       etacontrol->Fill(RECOMU_ETA[i], newweight);
      }
 
 
      for(int i=0; i<RECO_PFJET_N; i++){
-       //       n_jetpasscontrol++;
-       //hbdisccontrol->Fill(cSV_BTagJet_DISCR[i]);
      if(jetfail[i]==0){
        n_jetpasscontrol++;
        hbdisccontrol->Fill(cSV_BTagJet_DISCR[i],newweight);
-       
+       /*       
        if(flagbmicontrol < cSV_BTagJet_DISCR[i]){
 	 flagbmicontrol = cSV_BTagJet_DISCR[i];
 	 flagicontrol = i;
+	 }*/
+       if(flagbmicontrol < RECO_PFJET_PT[i]){
+         flagbmicontrol = RECO_PFJET_PT[i];
+         flagicontrol = i;
        }
-       
-       if(cSV_BTagJet_DISCR[i] > 0.84){
+
+       if(cSV_BTagJet_DISCR[i] > 0.4941){
 	 n_totjetpcontrol++;
        }
        
-       if(cSV_BTagJet_DISCR[i] > 0.460){
+       if(cSV_BTagJet_DISCR[i] > 0.1522){
 	 n_totjetp2control++;
        }
        
-       if(cSV_BTagJet_DISCR[i] > 0.890){
+       if(cSV_BTagJet_DISCR[i] > 0.8001){
 	 n_totjetp3control++;
        }  
      }
@@ -4706,8 +5078,39 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
      }
    }
    
+   if(flagicontrol != -1){
+
+     hjetcontrol_sideband->Fill(RECO_PFJET_PT[flagicontrol], newweight);
+     hbdisccontrol_sideband->Fill(cSV_BTagJet_DISCR[flagicontrol], newweight);
+   
+     if(flagjcontrol != -1){
+       k1control.SetPtEtaPhiE(RECO_PFJET_PT[flagicontrol],RECO_PFJET_ETA[flagicontrol],RECO_PFJET_PHI[flagicontrol],RECO_PFJET_ET[flagicontrol]*TMath::CosH(RECO_PFJET_ETA[flagicontrol]));
+       k2control.SetPtEtaPhiE(RECO_PFJET_PT[flagjcontrol],RECO_PFJET_ETA[flagjcontrol],RECO_PFJET_PHI[flagjcontrol],RECO_PFJET_ET[flagjcontrol]*TMath::CosH(RECO_PFJET_ETA[flagjcontrol]));
+       masscontrol = k1control+k2control;
+       deltaphicontrol = DELTAPHI(masscontrol.Phi(), hP4.Phi());
+       hdeltaphinormcontrol->Fill(deltaphicontrol, newweight);
+       deltarcontrol = sqrt(deltaphicontrol*deltaphicontrol + (masscontrol.Eta()-hP4.Eta())*(masscontrol.Eta()-hP4.Eta()));
+       hdeltarcontrol->Fill(deltarcontrol,newweight);
+       hptmaxcontrol->Fill(RECO_PFJET_PT[flagjcontrol],newweight);
+       hptmincontrol->Fill(RECO_PFJET_PT[flagicontrol],newweight);
+       hbdiscmaxcontrol->Fill(cSV_BTagJet_DISCR[flagicontrol],newweight);
+       hbdiscmincontrol->Fill(cSV_BTagJet_DISCR[flagjcontrol],newweight);
+       h2nobjetcontrol->Fill(RECO_PFJET_PT[flagjcontrol],cSV_BTagJet_DISCR[flagjcontrol],newweight);
+       h2bjetcontrol->Fill(RECO_PFJET_PT[flagicontrol],cSV_BTagJet_DISCR[flagicontrol],newweight);
+       h2control->Fill(masscontrol.M(),hP4.M(),newweight);
 
 
+       /*hjetcontrol_sideband_2jets->Fill(RECO_PFJET_PT[flagicontrol], newweight);
+       hbdisccontrol_sideband_2jets->Fll(cSV_BTagJet_DISCR[flagicontrol], newweight);
+
+       hsecondjetcontrol_sideband_2jets->Fill(RECO_PFJET_PT[flagjcontrol], newweight);
+       hsecondbdisccontrol_sideband_2jets->Fll(cSV_BTagJet_DISCR[flagjcontrol], newweight);*/
+
+       hmassjetjetcontrol_sideband_2jets->Fill(masscontrol.M() ,newweight);
+     }
+   }
+
+   /*
    k1control.SetPtEtaPhiE(RECO_PFJET_PT[flagicontrol],RECO_PFJET_ETA[flagicontrol],RECO_PFJET_PHI[flagicontrol],RECO_PFJET_ET[flagicontrol]*TMath::CosH(RECO_PFJET_ETA[flagicontrol]));
    k2control.SetPtEtaPhiE(RECO_PFJET_PT[flagjcontrol],RECO_PFJET_ETA[flagjcontrol],RECO_PFJET_PHI[flagjcontrol],RECO_PFJET_ET[flagjcontrol]*TMath::CosH(RECO_PFJET_ETA[flagjcontrol]));
    masscontrol = k1control+k2control; 
@@ -4722,7 +5125,7 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
    h2nobjetcontrol->Fill(RECO_PFJET_PT[flagjcontrol],cSV_BTagJet_DISCR[flagjcontrol],newweight);
    h2bjetcontrol->Fill(RECO_PFJET_PT[flagicontrol],cSV_BTagJet_DISCR[flagicontrol],newweight);
    h2control->Fill(masscontrol.M(),hP4.M(),newweight);
-   
+   */
    
    if(n_totjetpcontrol >= 1){
      n_normpmedcontrol++;
@@ -4836,7 +5239,7 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
        if(cSV_BTagJet_DISCR[i] > 0.1522){
 	 n_totjetp2++;
        }
-       
+
        if(cSV_BTagJet_DISCR[i] > 0.8001){
 	 n_totjetp3++;
        }  
@@ -5003,7 +5406,7 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
      f_deltar = deltarnpm;
      f_MET = RECO_PFMET;
           
-          }
+   }
 
 
 /*cout << "Sto funzionando e ti stampo le variabili che mi hai chiesto: " <<"\n"
@@ -5028,9 +5431,9 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
       }
 
    
-     cout << "massa medium " << flagmass << endl;
+     //tolto//cout << "massa medium " << flagmass << endl;
      hbjetmed -> Fill(mass.M(),newweight);
-     cout << "Pt jet 1 = " << RECO_PFJET_PT[flagi] << "Pt jet 2 = "<< RECO_PFJET_PT[flagj] << "bdiscr jet 1 = " << cSV_BTagJet_DISCR[flagi] << "bdiscr jet 2 = " << cSV_BTagJet_DISCR[flagj] << endl;
+     //tolto//cout << "Pt jet 1 = " << RECO_PFJET_PT[flagi] << "Pt jet 2 = "<< RECO_PFJET_PT[flagj] << "bdiscr jet 1 = " << cSV_BTagJet_DISCR[flagi] << "bdiscr jet 2 = " << cSV_BTagJet_DISCR[flagj] << endl;
      htotjetp->Fill(totjetp,newweight);
      histoMETm->Fill(RECO_PFMET,newweight);
      masstotb = mass + hP4;
@@ -5042,7 +5445,7 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
      f_deltaphi_2med = deltaphim;
      f_MET_2med = RECO_PFMET;
    }
-   cout << "AT:: totjetp # events with 2 b-tag jets medium" << totjetp <<endl;      
+   //tolto//cout << "AT:: totjetp # events with 2 b-tag jets medium" << totjetp <<endl;      
 
    if(n_totjetp2 >= 2){totjetp2++;
      htotjetpl -> Fill(totjetp2,newweight);
@@ -5093,13 +5496,13 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
      for (int i=0;i<50;i++){
        //if (cSV_BTagJet_DISCR[i] > 0.460){ // Loose
        if (cSV_BTagJet_DISCR[i] > 0.8484){ // Medium
-	 if(cSV_BTagJet_PT[i]>30. && fabs(cSV_BTagJet_ETA[i])<4.7 ) cout << "Found a bjet (pT>30 and |eta|<2.4) with pT= " << cSV_BTagJet_PT[i] << endl;	 
+	 if(cSV_BTagJet_PT[i]>30. && fabs(cSV_BTagJet_ETA[i])<4.7 ) //tolto//cout << "Found a bjet (pT>30 and |eta|<2.4) with pT= " << cSV_BTagJet_PT[i] << endl;	 
 	 n_bjets++;
 	 if (n_bjets==1) index_bjets[0]=i; 
 	 if (n_bjets==2) index_bjets[1]=i;	   
        }
      }
-     cout << "Number of b-jets passing the selection= " << n_bjets << endl;
+     //tolto//cout << "Number of b-jets passing the selection= " << n_bjets << endl;
      
      // VBF-tagged category - category 2
      int njets_vbf=0;
@@ -5147,13 +5550,13 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
 	   //if (cSV_BTagJet_PT[j]==RECO_PFJET_PT[i] && cSV_BTagJet_DISCR[j]>0.460 && cSV_BTagJet_PT[j]>30. && fabs(cSV_BTagJet_ETA[j])<4.7) {
 	   //if (cSV_BTagJet_DISCR[j]>0.8484 && cSV_BTagJet_PT[j]>30. && fabs(cSV_BTagJet_ETA[j])<4.7) {
 	   n_match_bjets++;
-	   cout << "Bdiscr jet matched with b = " << cSV_BTagJet_DISCR[j] <<endl;
+	   //tolto//cout << "Bdiscr jet matched with b = " << cSV_BTagJet_DISCR[j] <<endl;
 	   //if (n_match_bjets==1) jet1=i;
 	   //if (n_match_bjets==2) jet2=i;
 	 }
        }
      }
-     cout << "Number of matched b-jets to jets= " << n_match_bjets << endl;
+     //tolto//cout << "Number of matched b-jets to jets= " << n_match_bjets << endl;
      
         
      // VH jets
@@ -5163,19 +5566,19 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
      
      for(int j=0;j<RECO_PFJET_N;j++){
        if (jetfail[j]!=0) continue;
-       cout << "ptjet= " << RECO_PFJET_PT[j] << " eta= " << fabs(RECO_PFJET_ETA[j]) << endl;
+       //tolto//cout << "ptjet= " << RECO_PFJET_PT[j] << " eta= " << fabs(RECO_PFJET_ETA[j]) << endl;
        if(RECO_PFJET_PT[j]>40. && fabs(RECO_PFJET_ETA[j])<2.4){
-	 cout << "Possible jet for VH categories with pT= " << RECO_PFJET_PT[j] << endl;
+	 //tolto//cout << "Possible jet for VH categories with pT= " << RECO_PFJET_PT[j] << endl;
 	 for (int k=j+1;k<RECO_PFJET_N; k++){
 	   if (jetfail[k]!=0) continue;
-	   cout << "Possible jet for VH categories with pT= " << RECO_PFJET_PT[k] << endl;
+	   //tolto//cout << "Possible jet for VH categories with pT= " << RECO_PFJET_PT[k] << endl;
 	   if(RECO_PFJET_PT[k]>40. && fabs(RECO_PFJET_ETA[k])<2.4){	     
 	     JET1_VH.SetPtEtaPhiE(RECO_PFJET_PT[j],RECO_PFJET_ETA[j],RECO_PFJET_PHI[j],RECO_PFJET_ET[j]*TMath::CosH(RECO_PFJET_ETA[j]));
 	     JET2_VH.SetPtEtaPhiE(RECO_PFJET_PT[k],RECO_PFJET_ETA[k],RECO_PFJET_PHI[k],RECO_PFJET_ET[k]*TMath::CosH(RECO_PFJET_ETA[k]));
 	     mJJ_VH=JET1_VH+JET2_VH;
 	     
 	     if (mJJ_VH.M()>60. && mJJ_VH.M()<120.) {
-	       cout << "Jets for VH categories passing, pT>40, |eta|<2.4 and 60<mjj<120 with pT= " << RECO_PFJET_PT[j] << " " << RECO_PFJET_PT[k] << endl;
+	      //tolto//cout << "Jets for VH categories passing, pT>40, |eta|<2.4 and 60<mjj<120 with pT= " << RECO_PFJET_PT[j] << " " << RECO_PFJET_PT[k] << endl;
 	       n_jets_mjj_VH++ ;
 	       if (n_jets_mjj_VH==1) { // always the pair with highest pT jets
 		 index_VHjets[0]=j;
@@ -5187,7 +5590,7 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
 	}
      }	
 
-     cout << "Number of jets for VH category " << n_jets_mjj_VH << endl;
+     //tolto//cout << "Number of jets for VH category " << n_jets_mjj_VH << endl;
 
      // Categorization
      int category=-999;
@@ -5201,11 +5604,11 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
        JET2.SetPtEtaPhiE(RECO_PFJET_PT[jet2],RECO_PFJET_ETA[jet2],RECO_PFJET_PHI[jet2],RECO_PFJET_ET[jet2]*TMath::CosH(RECO_PFJET_ETA[jet2]));
        
        category=2;
-       cout<<"PASS VBF category= "<<Event<<endl;
+       //tolto//cout<<"PASS VBF category= "<<Event<<endl;
        ++N_VBF;
        N_VBF_w=N_VBF_w+newweight;
        
-       cout << "EVENT CANDIDATE VBF: \n" 
+       /*cout << "EVENT CANDIDATE VBF: \n" 
 	    << " N " << jentry 
 	    << " RUN " << Run
 	    << " EVENT " << Event	
@@ -5214,7 +5617,7 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
 	    << " massZ2 " << massZ2
 	    << " mass4l " << mass4l; 
        if( has_FSR_Z1 || has_FSR_Z2 ) cout << " FSR " << endl;	
-       else cout << " noFSR " << endl;
+       else cout << " noFSR " << endl;*/
        
        
        output_txt_vbf << "EVENT CANDIDATE VBF: \n" 
@@ -5237,7 +5640,7 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
 			   cSV_BTagJet_PHI[index_bjets[0]],cSV_BTagJet_ET[index_bjets[0]]*TMath::CosH(cSV_BTagJet_ETA[index_bjets[0]]));
 	 JET2.SetPtEtaPhiE(cSV_BTagJet_PT[index_bjets[1]],cSV_BTagJet_ETA[index_bjets[1]],
 			   cSV_BTagJet_PHI[index_bjets[1]],cSV_BTagJet_ET[index_bjets[1]]*TMath::CosH(cSV_BTagJet_ETA[index_bjets[1]]));
-	 cout << "category 4 with two b-jets with pT" << JET1.Pt() << " and " << JET2.Pt() << endl;
+	 //tolto//cout << "category 4 with two b-jets with pT" << JET1.Pt() << " and " << JET2.Pt() << endl;
        }
        else if (n_jets_mjj_VH>=1) {	 
 	 jet1=index_VHjets[0];
@@ -5264,7 +5667,7 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
      // MonoHiggs category
      if (abs(mass4l-125.)<=10. && N_good==4 && n_bjets<=1 ) category=6;
 
-     cout << "Categorization completed - event category is= " << category << endl;     
+     //tolto//cout << "Categorization completed - event category is= " << category << endl;     
 
 
      // filling branches in the reduced tree
@@ -5374,8 +5777,8 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
      TLorentzVector L11P4,L12P4,L21P4,L22P4;
      float angle_costheta1,angle_costheta2,angle_Phi,angle_costhetastar,angle_Phi1;
 
-     cout << "Final: pT of final leptons from Z1 and Z2 ="
-	  << RECOMU_PT[indexleptonfinal[0]] << " " << RECOMU_PT[indexleptonfinal[1]] << " " << RECOMU_PT[indexleptonfinal[2]] << " " << RECOMU_PT[indexleptonfinal[3]] <<endl;
+  //tolto//cout << "Final: pT of final leptons from Z1 and Z2 ="
+	  //tolto//<< RECOMU_PT[indexleptonfinal[0]] << " " << RECOMU_PT[indexleptonfinal[1]] << " " << RECOMU_PT[indexleptonfinal[2]] << " " << RECOMU_PT[indexleptonfinal[3]] <<endl;
      
      L11P4.SetPtEtaPhiM(RECOMU_PT[indexleptonfinal[0]], RECOMU_ETA[indexleptonfinal[0]], RECOMU_PHI[indexleptonfinal[0]], 0.105);
      L12P4.SetPtEtaPhiM(RECOMU_PT[indexleptonfinal[1]], RECOMU_ETA[indexleptonfinal[1]], RECOMU_PHI[indexleptonfinal[1]], 0.105);
@@ -5422,8 +5825,7 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
        f_lept1_pdgid=13.;
        f_lept2_pdgid=-13.;
      }
-     else cout << "What the hell?!?!"<<endl;
-     if (RECOMU_CHARGE[indexleptonfinal[2]] == 1){
+     else if (RECOMU_CHARGE[indexleptonfinal[2]] == 1){
        L21PID=-13;
        L22PID=13;
        f_lept3_pdgid=-13.;
@@ -5435,8 +5837,8 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
        f_lept3_pdgid=13.;
        f_lept4_pdgid=-13.;
      }
-     else cout << "What the hell?!?!"<<endl;
-     
+     //tolto//else cout << "What the hell?!?!"<<endl;
+    //else //tolto//cout << "What the hell?!?!"<<endl; 
           
      double massofhiggs=hP4.M();
      double massofZ1=Z1P4.M();
@@ -5459,7 +5861,7 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
      hNgood_8->Fill(f_Ngood,newweight);
      hNbjets_8->Fill(f_Nbjets,newweight);
 
-     cout << "Mass of Higgs passed to MELA= " << massofhiggs << endl;
+    //tolto//cout << "Mass of Higgs passed to MELA= " << massofhiggs << endl;
 
      //if(massofhiggs>100. && massofhiggs<1000. && massofZ2>4.){
      if(massofhiggs>0.){
@@ -5487,8 +5889,8 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
        if (JET1.Pt()>0.) partPprod.push_back(JET1);
        if (JET2.Pt()>0.) partPprod.push_back(JET2); // Can also use partPprod.push_back(nullFourVector) instead for integrated VBF MEs
        
-       partIdprod.push_back(L11PID);
        partIdprod.push_back(L12PID);
+       partIdprod.push_back(L11PID);
        partIdprod.push_back(L21PID);
        partIdprod.push_back(L22PID);
        if (JET1.Pt()>0.) partIdprod.push_back(0);
@@ -5499,16 +5901,16 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
        double p0minus_VAJHU, Dgg10_VAMCFM;
        double phjj_VAJHU, pvbf_VAJHU;
        
-       int a=combinedMEM.computeME(MEMNames::kSMHiggs, MEMNames::kJHUGen, partP, partId, p0plus_VAJHU); // Calculation of SM gg->H->4l JHUGen ME      
-       cout << "a= "  << p0plus_VAJHU << endl;
-       int b=combinedMEM.computeME(MEMNames::k0minus, MEMNames::kJHUGen, partP, partId, p0minus_VAJHU); // Calculation of PS (0-, fa3=1) gg->H->4l JHUGen ME 
-       int c=combinedMEM.computeME(MEMNames::kggHZZ_10, MEMNames::kMCFM, partP, partId, Dgg10_VAMCFM); // Direct calculation of Dgg (D^kin for off-shell) from MCFM MEs
-       int d=combinedMEM.computeME(MEMNames::kqqZZ, MEMNames::kMCFM, partP, partId, bkg_VAMCFM); // qq->4l background calculation from MCFM
-       combinedMEM.computePm4l(partP,partId, MEMNames::kNone, p0plus_m4l, bkg_m4l); // m4l probabilities for signal and background, nominal resolution
-       if (njets_pass>=2){
-	 int f=combinedMEM.computeME(MEMNames::kJJ_SMHiggs_GG, MEMNames::kJHUGen, partPprod, partIdprod, phjj_VAJHU); // SM gg->H+2j
-	 int g=combinedMEM.computeME(MEMNames::kJJ_SMHiggs_VBF, MEMNames::kJHUGen, partPprod, partIdprod, pvbf_VAJHU);  // SM VBF->H
-       }
+       //int a=combinedMEM.computeME(MEMNames::kSMHiggs, MEMNames::kJHUGen, partP, partId, p0plus_VAJHU); // Calculation of SM gg->H->4l JHUGen ME      
+       ////tolto//cout << "a= "  << p0plus_VAJHU << endl;
+       //int b=combinedMEM.computeME(MEMNames::k0minus, MEMNames::kJHUGen, partP, partId, p0minus_VAJHU); // Calculation of PS (0-, fa3=1) gg->H->4l JHUGen ME 
+       //int c=combinedMEM.computeME(MEMNames::kggHZZ_10, MEMNames::kMCFM, partP, partId, Dgg10_VAMCFM); // Direct calculation of Dgg (D^kin for off-shell) from MCFM MEs
+       //int d=combinedMEM.computeME(MEMNames::kqqZZ, MEMNames::kMCFM, partP, partId, bkg_VAMCFM); // qq->4l background calculation from MCFM
+       //combinedMEM.computePm4l(partP,partId, MEMNames::kNone, p0plus_m4l, bkg_m4l); // m4l probabilities for signal and background, nominal resolution
+       //if (njets_pass>=2){
+	 //int f=combinedMEM.computeME(MEMNames::kJJ_SMHiggs_GG, MEMNames::kJHUGen, partPprod, partIdprod, phjj_VAJHU); // SM gg->H+2j
+	 //int g=combinedMEM.computeME(MEMNames::kJJ_SMHiggs_VBF, MEMNames::kJHUGen, partPprod, partIdprod, pvbf_VAJHU);  // SM VBF->H
+       //}
 
        f_D_bkg_kin = p0plus_VAJHU / ( p0plus_VAJHU + bkg_VAMCFM ); // D^kin_bkg
        f_D_bkg = p0plus_VAJHU * p0plus_m4l / ( p0plus_VAJHU * p0plus_m4l + bkg_VAMCFM * bkg_m4l ); // D^kin including superMELA
@@ -5580,7 +5982,7 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
 
      }
      else {
-       cout<<endl;
+       //tolto//cout<<endl;
        continue;
      }
      
@@ -5638,7 +6040,7 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
      }
      
      //if( debug )
-     cout << "EVENT CANDIDATE: \n" 
+     /*cout << "EVENT CANDIDATE: \n" 
 	  << " N " << jentry 
 	  << " RUN " << Run
 	  << " EVENT " << Event	
@@ -5652,7 +6054,7 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
        //  << " Sip_max " << Sip_max
 	  << " MELA LD " << f_D_bkg_kin;
      if( has_FSR_Z1 || has_FSR_Z2 ) cout << " FSR " << endl;	
-     else cout << " noFSR " << endl;
+     else cout << " noFSR " << endl;*/
 
      output_txt << "EVENT CANDIDATE: \n" 
 		<< " N " << jentry 
@@ -5889,7 +6291,7 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
    
 
 
-   cout << "N_0 "  << N_0  << " \n" 
+   /*cout << "N_0 "  << N_0  << " \n" 
 	      << "N_01 " << N_01 << " \n"	
 	      << "N_02 " << N_02 << " \n"	
 	      << "N_1 "  << N_1  << " \n"	
@@ -5915,7 +6317,7 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
               << "N_9b_VBF "  << N_9b_VBF << "\n"
 	      << "N_VBF "     << N_VBF << " \n"
               << "N_9_PFMET " << N_9_PFMET << " \n"
-	      << "N_10 " << N_10 << " \n";
+	      << "N_10 " << N_10 << " \n";*/
 
    nEvent_4l->GetXaxis()->SetBinLabel(1,"Init.");
    nEvent_4l->GetXaxis()->SetBinLabel(2,"MCTruth: 4mu");

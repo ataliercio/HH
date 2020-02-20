@@ -1,22 +1,55 @@
 histos:
-  mass_Z1:
+  hMZ_3:
     name_histo: 'hMZ_3'
     Nbins: 200
     Xmin: -0.5
     Xmax: 199.5
-    labelX: 'm_{ll}'
+    labelX: 'M_ll'
     labelY: 'Events / 2 GeV'
     rebin: 2
     frame_Nbins: 200
-    frame_Xmin: 20
-    frame_Xmax: 120
-  metcontrol:
-    name_histo: 'metcontrol'
+    frame_Xmin: 0
+    frame_Xmax: 200
+  hmassttZ:
+    name_histo: 'hmassttZ'
+    Nbins: 100
+    Xmin: 0
+    Xmax: 100
+    labelX: 'MET'
+    labelY: 'Events / 2 GeV'
+    rebin: 2
+    frame_Nbins: 200
+    frame_Xmin: 0
+    frame_Xmax: 200
+  hptjet1:
+    name_histo: 'ptjet1'
+    Nbins: 300
+    Xmin: 0
+    Xmax: 300
+    labelX: 'pT (GeV)'
+    labelY: 'Events / 2 GeV'
+    rebin: 2
+    frame_Nbins: 200
+    frame_Xmin: 0
+    frame_Xmax: 200
+  hbdiscjet1:
+    name_histo: 'bdiscjet1'
+    Nbins: 100
+    Xmin: 0
+    Xmax: 1
+    labelX: 'DeepCSV'
+    labelY: 'Events / 2 GeV'
+    rebin: 2
+    frame_Nbins: 100
+    frame_Xmin: 0
+    frame_Xmax: 1
+  hmassjet_12:
+    name_histo: 'hmassjet_12'
     Nbins: 200
     Xmin: 0
     Xmax: 200
-    labelX: 'MET'
-    labelY: 'Events / 2	GeV'
+    labelX: 'pT (GeV)'
+    labelY: 'Events / 2 GeV'
     rebin: 2
     frame_Nbins: 200
     frame_Xmin: 0

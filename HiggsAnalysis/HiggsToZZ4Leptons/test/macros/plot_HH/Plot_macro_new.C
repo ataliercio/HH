@@ -93,6 +93,12 @@ void Plot_macro_plot(){
   }
   total_data->Merge(list);
   
+  //fake rate
+  TH1D* fake_histo = new TH1D("","", 50, 0, 100);//130, 70, 200
+  TFile *fake = TFile::Open("fake_2017.root");//fake_2017_higgs_new.root
+  fake_histo = (TH1D*)fake->Get("h_4leptonsPt");//h_M4l
+  fake_histo->SetFillColor(kGreen+7);
+
 
   std::vector<string> bkg;
   std::ifstream infile_bkg;
@@ -136,7 +142,7 @@ void Plot_macro_plot(){
   for (unsigned int datasetIdData=0; datasetIdData<bkg.size(); datasetIdData++){    
     char bkgset[328];
     sprintf(bkgset,"%s",bkg.at(datasetIdData).c_str());
-    //cout << "Root-ple= " << bkg.at(datasetIdData) << endl;
+    cout << "Root-ple= " << bkg.at(datasetIdData) << endl;
     TFile *f1_bkg = TFile::Open(bkgset);
    
     
@@ -149,20 +155,20 @@ void Plot_macro_plot(){
     }
 
 
-    if(name.Contains("GluGluHToZZ") || name.Contains("VBF")){
+    if(name.Contains("GluGluHToZZ") || name.Contains("VBF") || name.Contains("GluGluHToWWTo2L2Nu")){
       cout << "Root-ple for H " << bkgset << "\n" << endl; 
       hMZ_3_bkg = (TH1D*)f1_bkg->Get(b); 
       list_H->Add(hMZ_3_bkg);
     }
     			 
-    if(name.Contains("ZZTo4L_13") || name.Contains("GluGluToContinToContinToZZ") || name.Contains("ZZTo2L2Nu")){
+    if(name.Contains("ZZTo4L_13") || name.Contains("GluGluToContinToZZ") || name.Contains("ZZTo2L2Nu")){
       cout << "Root-ple for ZZ " << bkgset << "\n" << endl;
       hMZ_3_bkg = (TH1D*)f1_bkg->Get(b); 
       list_ZZ->Add(hMZ_3_bkg);
     }
     
     
-    if(name.Contains("_WminusH") || name.Contains("_WplusH") || name.Contains("_ZH") || name.Contains("_HZ")){
+    if(name.Contains("_WminusH") || name.Contains("_WplusH") || name.Contains("_ZH") || name.Contains("_HZ") || name.Contains("HWplusJ") || name.Contains("HWminusJ") || name.Contains("GluGluZH")){
       cout << "Root-ple for HV " << bkgset << "\n" << endl;
       hMZ_3_bkg = (TH1D*)f1_bkg->Get(b); 
       list_HV->Add(hMZ_3_bkg);
@@ -198,7 +204,7 @@ void Plot_macro_plot(){
     }
     
     
-    cout << "Root-ple for all bkg " << bkgset << "\n" << endl;
+    //cout << "Root-ple for all bkg " << bkgset << "\n" << endl;
     hMZ_3_bkg = (TH1D*)f1_bkg->Get(b); 
     list_all->Add(hMZ_3_bkg);
 
@@ -336,17 +342,21 @@ void Plot_macro_plot(){
   bkg_others->Rebin(num_rebin);
   bkg_all->Rebin(num_rebin);
   signal_all->Rebin(num_rebin);
+  //fake_histo->Rebin(num_rebin);
 
   //mass4l->Add(bkg_tt);
   //mass4l->Add(bkg_ZZ);
   //mass4l->Add(bkg_DY);
   //mass4l->Add(bkg_ttV);
   //mass4l->Add(bkg_others);
+  
+  mass4l->Add(fake_histo);
+  //mass4l->Add(bkg_tt);
   mass4l->Add(bkg_ttV);
   mass4l->Add(bkg_H);
   mass4l->Add(bkg_others);
   mass4l->Add(bkg_ZZ);
-  mass4l->Add(bkg_DY);
+  //mass4l->Add(bkg_DY);
 
   framemass4l->Draw();
   mass4l->Draw("same HISTO");
@@ -355,7 +365,9 @@ void Plot_macro_plot(){
 
   gPad->Update();
   gPad->RedrawAxis();
-  
+
+  bkg_all->Add(fake_histo);  
+
   TH1D *frame2 = new TH1D("","", frame_bins, frame_min, frame_max);//200, 70, 200);//100 , 0, 10);///280,20,300
   frame2->SetMaximum(2);
   frame2->SetMinimum(0);
@@ -401,13 +413,15 @@ void Plot_macro_plot(){
   legendmass4l->AddEntry(bkg_H,"gg#rightarrowH, qq#rightarrowH m_{H}= 125 GeV","f");
   legendmass4l->AddEntry(bkg_ttV,"ttV where V = W, Z","f");
   legendmass4l->AddEntry(bkg_others,"HV, VVV, VV, where V = Z, W","f");
-  legendmass4l->AddEntry(bkg_DY,"DY","f");
+  //legendmass4l->AddEntry(bkg_DY,"DY","f");
+  //legendmass4l->AddEntry(bkg_tt,"tt","f");
+  legendmass4l->AddEntry(fake_histo, "Z+X", "f");
   legendmass4l->AddEntry(total_data,"Data","lep");
   legendmass4l->Draw("HISTO");
   
   ll->Draw("HISTO");
 
-  ciao->SaveAs("plots/name_canvas.png");
+  ciao->SaveAs("plots_analysis/name_canvas.png");
 
 }
 
