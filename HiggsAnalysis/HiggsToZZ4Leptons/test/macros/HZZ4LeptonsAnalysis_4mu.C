@@ -1386,7 +1386,7 @@ float newweight=1.;
   cout << "Analyzing " << nentries << " entries"  <<endl;     
 
   Long64_t nbytes = 0, nb = 0;
-  for (Long64_t jentry=0; jentry<100000;jentry++) {//nentries
+  for (Long64_t jentry=0; jentry<5000;jentry++) {//nentries
     Long64_t ientry = LoadTree(jentry);
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
@@ -1484,7 +1484,9 @@ float newweight=1.;
 
           
     float pFill[11];for(int pf=0;pf<11;pf++)pFill[11]=-999.;
-    
+    f_run = Run;
+    f_event = Event;
+    f_lumi = LumiSection;
       // ** Step 0:
       // simply number of entries...
     if( debug ) cout << "\n** Step 0: \nAnalyzing entry: " << jentry << " Run: " << Run << " Event: " << Event << " LumiSection: " << LumiSection << endl ;
@@ -5017,6 +5019,8 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
      
    //control region
 
+   //Run:LumiSection:Event:massZ1:massZ2:mass4l:njet:weight
+
 
    TLorentzVector k1control,k2control,masscontrol;
 
@@ -5218,8 +5222,16 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
 
    hmass4l->Fill(mass4l,newweight);  
    histoMETprima->Fill(RECO_PFMET, newweight);
- 
+   f_mass4l = mass4l;
+   f_weight = newweight;
+   cout << "4l " << f_run << ":" << f_lumi << ":" << f_event << ":" << f_mass4l << ":" << njets_pass << ":" << f_weight << "\n";
+
+   if(N_good >= 4 && abs(mass4l - 125.) <=10  && njets_pass >=1){
+     cout << "4l + |mass4l - 125| <= 10 >= 1jet " << f_run << ":" << f_lumi << ":" << f_event << ":" << f_mass4l << ":" << njets_pass << ":" << f_weight << "\n";
+   }
+
    if(N_good >= 4 && abs(mass4l - 125.) <=10  && njets_pass >=2){
+     cout << "4l + |mass4l - 125| <= 10 >= 2jet " << f_run << ":" << f_lumi << ":" << f_event << ":" << f_mass4l << ":" << njets_pass << ":" << f_weight << "\n";
      hmass4lafter->Fill(mass4l,newweight);
      njets4l++;
      histoMETsel->Fill(RECO_PFMET, newweight);
