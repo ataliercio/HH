@@ -1,8 +1,8 @@
 #!/bin/bash
 
 
-mkdir -p /lustre/cms/store/user/atalierc/HH_signal_2017_new/jobdir
-mkdir -p /lustre/cms/store/user/atalierc/HH_signal_2017_new/histodir
+mkdir -p /lustre/cms/store/user/atalierc/HH_2017_mc_data_signal/jobdir
+mkdir -p /lustre/cms/store/user/atalierc/HH_2017_mc_data_signal/histodir
 
 echo "Running HtoZZto4Leptons Analysis with executables RunHZZ4LeptonsAnalysis"
 
@@ -29,7 +29,7 @@ cd ${workdir}
 
 export LD_LIBRARY_PATH=${CMSSW_BASE}/src/ZZMatrixElement/MELA/data/$SCRAM_ARCH:$LD_LIBRARY_PATH
 
-savedir=`echo /lustre/cms/store/user/atalierc/HH_signal_2017_new/histodir`
+savedir=`echo /lustre/cms/store/user/atalierc/HH_2017_mc_data_signal/histodir`
 
 echo "Working dir is $workdir"
 #echo "Executable dir is $exedir"
@@ -40,7 +40,7 @@ bash compilereference.sh 4mu
 
 
 ./RunReferenceAnalysis ./sig_input_h150.txt 1 ./bkg_input.txt 1 ./data_input.txt 1 site year mc >& ${workdir}/HZZ4LeptonsAnalysis_log
-cp -f ${workdir}/HZZ4LeptonsAnalysis_log /lustre/cms/store/user/atalierc/HH_signal_2017_new/jobdir/HZZ4LeptonsAnalysis_log
+cp -f ${workdir}/HZZ4LeptonsAnalysis_log /lustre/cms/store/user/atalierc/HH_2017_mc_data_signal/jobdir/HZZ4LeptonsAnalysis_log
 
 mv ${workdir}/output.root    ${savedir}/.
 mv ${workdir}/output_bnn.txt ${savedir}/.

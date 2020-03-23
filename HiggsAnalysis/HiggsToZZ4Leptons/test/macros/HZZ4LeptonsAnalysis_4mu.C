@@ -263,7 +263,9 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
   int contatore2 =0;
   int cont1 =0, cont2 =0;   
   int bho=0;
-  
+  int cout_jet_match = 0;
+  int  cout_jet_match_bdisc = 0;  
+
   int leptons2bjets =0;
   int atleast4leptons2bjets=0;
   // counter weighted
@@ -1066,7 +1068,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 
   TH1D *hmassp = new TH1D("massp","massp",200,0,200);
   TH1D *hdeltaphip = new TH1D("deltaphip","deltaphip",100,0,10);
-  TH1D *hmassd = new TH1D("hmassd","hmassd",200,0,200);
+  TH1D *hmassd = new TH1D("hmassd","hmassd",500,0,500);
   TH1D *histobdiscnpm = new TH1D("bdiscnpm","bdiscnpm",100,0,1);
 
   //control region
@@ -1122,7 +1124,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
   TH1D *etacontrol = new TH1D("etacontrol", "etacontrol", 100, -5, 5);
 
   TH1D *kpt = new TH1D("kpt","kpt",300,0,300);
-  TH1D *prova = new TH1D("prova","prova",200,0,200);
+  TH1D *prova = new TH1D("prova","prova",500,0,500);
   TH1D *kpt2 = new TH1D("kpt2","kpt2",300,0,300);
   TH1D *hmassnpm2 = new TH1D("massnpm2","massnpm2",200,0,200);
   TH1D *kpt3 = new TH1D("kpt3","kpt3",300,0,300);
@@ -1234,6 +1236,93 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    Float_t f_genmet, f_pfmet,f_mT,f_dphi;
    Int_t f_lept1_pdgid,f_lept2_pdgid,f_lept3_pdgid,f_lept4_pdgid;
    Int_t f_category,f_Ngood, f_Nbjets;
+
+  //Add branches for syst electrons
+   /*
+   Float_t f_RECOELE_PT_uncorr, //RECOELE_PT_uncorr;
+   f_RECOELE_TLE_ParentSC_X, //RECOELE_TLE_ParentSC_X;
+   f_RECOELE_TLE_ParentSC_Y, //RECOELE_TLE_ParentSC_Y;
+   f_RECOELE_TLE_ParentSC_Z, //RECOELE_TLE_ParentSC_Z;
+   f_RECOELE_ecalTrkEnergyPreCorr, //RECOELE_ecalTrkEnergyPreCorr;
+   f_RECOELE_ecalTrkEnergyErrPreCorr, //RECOELE_ecalTrkEnergyErrPreCorr;
+   f_RECOELE_ecalTrkEnergyErrPostCorr, //RECOELE_ecalTrkEnergyErrPostCorr;
+   f_RECOELE_energyScaleValue, //RECOELE_energyScaleValue;
+   f_RECOELE_energySigmaValue, //RECOELE_energySigmaValue;
+   f_RECOELE_energyScaleUp, //RECOELE_energyScaleUp;
+   f_RECOELE_energyScaleDown, //RECOELE_energyScaleDown;
+   f_RECOELE_energyScaleStatUp, //RECOELE_energyScaleStatUp;
+   f_RECOELE_energyScaleStatDown, //RECOELE_energyScaleStatDown;
+   f_RECOELE_energyScaleSystUp, //RECOELE_energyScaleSystUp;
+   f_RECOELE_energyScaleSystDown, //RECOELE_energyScaleSystDown;
+   f_RECOELE_energyScaleGainUp, //RECOELE_energyScaleGainUp;
+   f_RECOELE_energyScaleGainDown, //ECOELE_energyScaleGainDown;
+   f_RECOELE_energyScaleEtUp,//RECOELE_energyScaleEtUp;
+   f_RECOELE_energyScaleEtDown, //RECOELE_energyScaleEtDown;
+   f_RECOELE_energySigmaUp, //RECOELE_energySigmaUp;
+   f_RECOELE_energySigmaDown, //RECOELE_energySigmaDown;
+   f_RECOELE_energySigmaPhiUp, //RECOELE_energySigmaPhiUp;
+   f_RECOELE_energySigmaPhiDown, //RECOELE_energySigmaPhiDown;
+   f_RECOELE_energySigmaRhoUp, //RECOELE_energySigmaRhoUp;
+   f_RECOELE_energySigmaRhoDown; //RECOELE_energySigmaRhoDown;
+*/
+   //Muons syst
+   Float_t f_RECOMU_PT_uncorr_lept1,
+   f_RECOMU_Rochester_Error_lept1,
+   f_RECOMU_mubesttrkPTError_lept1,
+   f_RECOMU_PT_uncorr_lept2,
+   f_RECOMU_Rochester_Error_lept2,
+   f_RECOMU_mubesttrkPTError_lept2,
+   f_RECOMU_PT_uncorr_lept3,
+   f_RECOMU_Rochester_Error_lept3,
+   f_RECOMU_mubesttrkPTError_lept3,
+   f_RECOMU_PT_uncorr_lept4,
+   f_RECOMU_Rochester_Error_lept4,
+   f_RECOMU_mubesttrkPTError_lept4;
+
+  //Photos syst
+  /*
+  Float_t f_RECOPFPHOT_PT_uncorr,
+  f_RECOPFPHOT_ecalEnergyPreCorr,
+  f_RECOPFPHOT_ecalEnergyErrPreCorr,
+  f_RECOPFPHOT_ecalEnergyErrPostCorr,
+  f_RECOPFPHOT_energyScaleValue,
+  f_RECOPFPHOT_energySigmaValue,
+  f_RECOPFPHOT_energyScaleUp,
+  f_RECOPFPHOT_energyScaleDown,
+  f_RECOPFPHOT_energyScaleStatUp,
+  f_RECOPFPHOT_energyScaleStatDown,
+  f_RECOPFPHOT_energyScaleSystUp,
+  f_RECOPFPHOT_energyScaleSystDown,
+  f_RECOPFPHOT_energyScaleGainUp,
+  f_RECOPFPHOT_energyScaleGainDown,
+  f_RECOPFPHOT_energyScaleEtUp,
+  f_RECOPFPHOT_energyScaleEtDown,
+  f_RECOPFPHOT_energySigmaUp,
+  f_RECOPFPHOT_energySigmaDown,
+  f_RECOPFPHOT_energySigmaPhiUp,
+  f_RECOPFPHOT_energySigmaPhiDown,
+  f_RECOPFPHOT_energySigmaRhoUp,
+  f_RECOPFPHOT_energySigmaRhoDown;*/
+
+  //MET syst
+   Float_t f_RECO_PFMET_JetEnUp,
+   f_RECO_PFMET_JetEnDn,
+   f_RECO_PFMET_ElectronEnUp,
+   f_RECO_PFMET_ElectronEnDn,
+   f_RECO_PFMET_MuonEnUp,
+   f_RECO_PFMET_MuonEnDn,
+   f_RECO_PFMET_JetResUp,
+   f_RECO_PFMET_JetResDn,
+   f_RECO_PFMET_UnclusteredEnUp,
+   f_RECO_PFMET_UnclusteredEnDn,
+   f_RECO_PFMET_PhotonEnUp,
+   f_RECO_PFMET_PhotonEnDn;
+
+  //jet sys
+  Float_t f_RECO_PFJET_PT_UncUp_jet1,
+  f_RECO_PFJET_PT_UncDn_jet1,
+  f_RECO_PFJET_PT_UncUp_jet2,
+  f_RECO_PFJET_PT_UncDn_jet2;
 
    Int_t f_run, f_lumi, f_event;
    TBranch *b_crjetjet= newtree->Branch("f_crjetjet", &f_crjetjet,"f_crjetjet/B");
@@ -1371,6 +1460,94 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    TBranch *b_f_Nbjets=newtree->Branch("f_Nbjets", &f_Nbjets, "f_Nbjets/I");
 
 
+   //Add branches for syst electrons
+   /*
+   TBranch *b_RECOELE_PT_uncorr = newtree->Branch("f_RECOELE_PT_uncorr", &f_RECOELE_PT_uncorr, "f_RECOELE_PT_uncorr/F");
+   TBranch *b_RECOELE_TLE_ParentSC_X = newtree->Branch("f_RECOELE_TLE_ParentSC_X", &f_RECOELE_TLE_ParentSC_X, "f_RECOELE_TLE_ParentSC_X/F");
+   TBranch *b_RECOELE_TLE_ParentSC_Y = newtree->Branch("f_RECOELE_TLE_ParentSC_Y", &f_RECOELE_TLE_ParentSC_Y, "f_RECOELE_TLE_ParentSC_Y/F");
+   TBranch *b_RECOELE_TLE_ParentSC_Z = newtree->Branch("f_RECOELE_TLE_ParentSC_Z", &f_RECOELE_TLE_ParentSC_Z, "f_RECOELE_TLE_ParentSC_Z/F");
+   TBranch *b_RECOELE_ecalTrkEnergyPreCorr = newtree->Branch("f_RECOELE_ecalTrkEnergyPreCorr", &f_RECOELE_ecalTrkEnergyPreCorr, "f_RECOELE_ecalTrkEnergyPreCorr/F");
+   TBranch *b_RECOELE_ecalTrkEnergyErrPreCorr = newtree->Branch("f_RECOELE_ecalTrkEnergyErrPreCorr", &f_RECOELE_ecalTrkEnergyErrPreCorr, "f_RECOELE_ecalTrkEnergyErrPreCorr/F");
+   TBranch *b_RECOELE_ecalTrkEnergyErrPostCorr = newtree->Branch("f_RECOELE_ecalTrkEnergyErrPostCorr", &f_RECOELE_ecalTrkEnergyErrPostCorr, "f_RECOELE_ecalTrkEnergyErrPostCorr/F");
+   TBranch *b_RECOELE_energyScaleValue = newtree->Branch("f_RECOELE_energyScaleValue", &f_RECOELE_energyScaleValue, "f_RECOELE_energyScaleValue/F");
+   TBranch *b_RECOELE_energySigmaValue = newtree->Branch("f_RECOELE_energySigmaValue", &f_RECOELE_energySigmaValue, "f_RECOELE_energySigmaValue/F");
+   TBranch *b_RECOELE_energyScaleUp = newtree->Branch("f_RECOELE_energyScaleUp", &f_RECOELE_energyScaleUp, "f_RECOELE_energyScaleUp/F");
+   TBranch *b_RECOELE_energyScaleDown = newtree->Branch("f_RECOELE_energyScaleDown", &f_RECOELE_energyScaleDown, "f_RECOELE_energyScaleDown/F");
+   TBranch *b_RECOELE_energyScaleStatUp = newtree->Branch("f_RECOELE_energyScaleStatUp", &f_RECOELE_energyScaleStatUp, "f_RECOELE_energyScaleStatUp/F");
+   TBranch *b_RECOELE_energyScaleStatDown = newtree->Branch("f_RECOELE_energyScaleStatDown", &f_RECOELE_energyScaleStatDown, "f_RECOELE_energyScaleStatDown/F");
+   TBranch *b_RECOELE_energyScaleSystUp = newtree->Branch("f_RECOELE_energyScaleSystUp", &f_RECOELE_energyScaleSystUp, "f_RECOELE_energyScaleSystUp/F");
+   TBranch *b_RECOELE_energyScaleSystDown = newtree->Branch("f_RECOELE_energyScaleSystDown", &f_RECOELE_energyScaleSystDown, "f_RECOELE_energyScaleSystDown/F");
+   TBranch *b_RECOELE_energyScaleGainUp = newtree->Branch("f_RECOELE_energyScaleGainUp", &f_RECOELE_energyScaleGainUp, "f_RECOELE_energyScaleGainUp/F");
+   TBranch *b_RECOELE_energyScaleGainDown = newtree->Branch("f_RECOELE_energyScaleGainDown", &f_ECOELE_energyScaleGainDown, "f_RECOELE_energyScaleGainDown/F");
+   TBranch *b_RECOELE_energyScaleEtUp = newtree->Branch("f_RECOELE_energyScaleEtUp", &f_ECOELE_energyScaleEtUp, "f_RECOELE_energyScaleEtUp/F");
+   TBranch *b_RECOELE_energyScaleEtDown = newtree->Branch("f_RECOELE_energyScaleEtDown", &f_RECOELE_energyScaleEtDown, "f_RECOELE_energyScaleEtDown/F");
+   TBranch *b_RECOELE_energySigmaUp = newtree->Branch("f_RECOELE_energySigmaUp", &f_RECOELE_energySigmaUp, "f_RECOELE_energySigmaUp/F");
+   TBranch *b_RECOELE_energySigmaDown = newtree->Branch("f_RECOELE_energySigmaDown", &f_RECOELE_energySigmaDown, "f_RECOELE_energySigmaDown/F");
+   TBranch *b_RECOELE_energySigmaPhiUp = newtree->Branch("f_RECOELE_energySigmaPhiUp", &f_RECOELE_energySigmaPhiUp, "f_RECOELE_energySigmaPhiUp/F");
+   TBranch *b_RECOELE_energySigmaPhiDown = newtree->Branch("f_RECOELE_energySigmaPhiDown", &f_RECOELE_energySigmaPhiDown, "f_RECOELE_energySigmaPhiDown/F");
+   TBranch *b_RECOELE_energySigmaRhoUp = newtree->Branch("f_RECOELE_energySigmaRhoUp", &f_RECOELE_energySigmaRhoUp, "f_RECOELE_energySigmaRhoUp/F");
+   TBranch *b_RECOELE_energySigmaRhoDown = newtree->Branch("f_RECOELE_energySigmaRhoDown", &f_RECOELE_energySigmaRhoDown, "f_RECOELE_energySigmaRhoDown/F");
+*/
+   //Muons syst
+   TBranch *b_RECOMU_PT_uncorr_lept1 = newtree->Branch("f_RECOMU_PT_uncorr_lept1", &f_RECOMU_PT_uncorr_lept1, "f_RECOMU_PT_uncorr_lept1/F");
+   TBranch *b_RECOMU_Rochester_Error_lept1 = newtree->Branch("RECOMU_Rochester_Error_lept1", &f_RECOMU_Rochester_Error_lept1, "f_RECOMU_Rochester_Error_lept1/F");
+   TBranch *b_RECOMU_mubesttrkPTError_lept1 = newtree->Branch("f_RECOMU_mubesttrkPTError_lept1", &f_RECOMU_mubesttrkPTError_lept1, "f_RECOMU_mubesttrkPTError_lept1/F");
+   TBranch *b_RECOMU_PT_uncorr_lept2 = newtree->Branch("f_RECOMU_PT_uncorr_lept2", &f_RECOMU_PT_uncorr_lept2, "f_RECOMU_PT_uncorr_lept2/F");
+   TBranch *b_RECOMU_Rochester_Error_lept2 = newtree->Branch("RECOMU_Rochester_Error_lept2", &f_RECOMU_Rochester_Error_lept2, "f_RECOMU_Rochester_Error_lept2/F");
+   TBranch *b_RECOMU_mubesttrkPTError_lept2 = newtree->Branch("f_RECOMU_mubesttrkPTError_lept2", &f_RECOMU_mubesttrkPTError_lept2, "f_RECOMU_mubesttrkPTError_lept2/F");
+   TBranch *b_RECOMU_PT_uncorr_lept3 = newtree->Branch("f_RECOMU_PT_uncorr_lept3", &f_RECOMU_PT_uncorr_lept3, "f_RECOMU_PT_uncorr_lept3/F");
+   TBranch *b_RECOMU_Rochester_Error_lept3 = newtree->Branch("RECOMU_Rochester_Error_lept3", &f_RECOMU_Rochester_Error_lept3, "f_RECOMU_Rochester_Error_lept3/F");
+   TBranch *b_RECOMU_mubesttrkPTError_lept3 = newtree->Branch("f_RECOMU_mubesttrkPTError_lept3", &f_RECOMU_mubesttrkPTError_lept3, "f_RECOMU_mubesttrkPTError_lept3/F");
+   TBranch *b_RECOMU_PT_uncorr_lept4 = newtree->Branch("f_RECOMU_PT_uncorr_lept4", &f_RECOMU_PT_uncorr_lept4, "f_RECOMU_PT_uncorr_lept4/F");
+   TBranch *b_RECOMU_Rochester_Error_lept4 = newtree->Branch("RECOMU_Rochester_Error_lept4", &f_RECOMU_Rochester_Error_lept4, "f_RECOMU_Rochester_Error_lept4/F");
+   TBranch *b_RECOMU_mubesttrkPTError_lept4 = newtree->Branch("f_RECOMU_mubesttrkPTError_lept4", &f_RECOMU_mubesttrkPTError_lept4, "f_RECOMU_mubesttrkPTError_lept4/F");
+  //Photos syst
+  /*
+  TBranch *b_RECOPFPHOT_PT_uncorr = newtree->Branch("f_RECOPFPHOT_PT_uncorr", &f_RECOPFPHOT_PT_uncorr, "f_RECOPFPHOT_PT_uncorr/F");
+  TBranch *b_RECOPFPHOT_ecalEnergyPreCorr = newtree->Branch("f_RECOPFPHOT_ecalEnergyPreCorr", &f_RECOPFPHOT_ecalEnergyPreCorr, "f_RECOPFPHOT_ecalEnergyPreCorr/F");
+  TBranch *b_RECOPFPHOT_ecalEnergyErrPreCorr = newtree->Branch("f_RECOPFPHOT_ecalEnergyErrPreCorr", &f_RECOPFPHOT_ecalEnergyErrPreCorr, "f_RECOPFPHOT_ecalEnergyErrPreCorr/F");
+  TBranch *b_RECOPFPHOT_ecalEnergyErrPostCorr = newtree->Branch("f_RECOPFPHOT_ecalEnergyErrPostCorr", &f_RECOPFPHOT_ecalEnergyErrPostCorr, "f_RECOPFPHOT_ecalEnergyErrPostCorr/F");
+  TBranch *b_RECOPFPHOT_energyScaleValue = newtree->Branch("f_RECOPFPHOT_energyScaleValue", &f_RECOPFPHOT_energyScaleValue, "f_RECOPFPHOT_energyScaleValue/F");
+  TBranch *b_RECOPFPHOT_energySigmaValue = newtree->Branch("f_RECOPFPHOT_energySigmaValue", &f_RECOPFPHOT_energySigmaValue, "f_RECOPFPHOT_energySigmaValue/F");
+  TBranch *b_RECOPFPHOT_energyScaleUp = newtree->Branch("f_RECOPFPHOT_energyScaleUp", &f_RECOPFPHOT_energyScaleUp, "f_RECOPFPHOT_energyScaleUp/F");
+  TBranch *b_RECOPFPHOT_energyScaleDown = newtree->Branch("f_RECOPFPHOT_energyScaleDown", &f_RECOPFPHOT_energyScaleDown, "f_RECOPFPHOT_energyScaleDown/F");
+  TBranch *b_RECOPFPHOT_energyScaleStatUp = newtree->Branch("f_RECOPFPHOT_energyScaleStatUp", &f_RECOPFPHOT_energyScaleStatUp, "f_RECOPFPHOT_energyScaleStatUp/F");
+  TBranch *b_RECOPFPHOT_energyScaleStatDown = newtree->Branch("f_RECOPFPHOT_energyScaleStatDown", &f_RECOPFPHOT_energyScaleStatDown, "f_RECOPFPHOT_energyScaleStatDown/F");
+  TBranch *b_RECOPFPHOT_energyScaleSystUp = newtree->Branch("f_RECOPFPHOT_energyScaleSystUp", &f_RECOPFPHOT_energyScaleSystUp, "f_RECOPFPHOT_energyScaleSystUp/F");
+  TBranch *b_RECOPFPHOT_energyScaleSystDown = newtree->Branch("f_RECOPFPHOT_energyScaleSystDown", &f_RECOPFPHOT_energyScaleSystDown, "f_RECOPFPHOT_energyScaleSystDown/F");
+  TBranch *b_RECOPFPHOT_energyScaleGainUp = newtree->Branch("f_RECOPFPHOT_energyScaleGainUp", &f_RECOPFPHOT_energyScaleGainUp, "f_RECOPFPHOT_energyScaleGainUp/F");
+  TBranch *b_RECOPFPHOT_energyScaleGainDown = newtree->Branch("f_RECOPFPHOT_energyScaleGainDown", &f_RECOPFPHOT_energyScaleGainDown, "f_RECOPFPHOT_energyScaleGainDown/F");
+  TBranch *b_RECOPFPHOT_energyScaleEtUp = newtree->Branch("f_RECOPFPHOT_energyScaleEtUp", &f_RECOPFPHOT_energyScaleEtUp, "f_RECOPFPHOT_energyScaleEtUp/F");
+  TBranch *b_RECOPFPHOT_energyScaleEtDown = newtree->Branch("f_RECOPFPHOT_energyScaleEtDown", &f_RECOPFPHOT_energyScaleEtDown, "f_RECOPFPHOT_energyScaleEtDown/F");
+  TBranch *b_RECOPFPHOT_energySigmaUp = newtree->Branch("f_RECOPFPHOT_energySigmaUp", &f_RECOPFPHOT_energySigmaUp, "f_RECOPFPHOT_energySigmaUp/F");
+  TBranch *b_RECOPFPHOT_energySigmaDown = newtree->Branch("f_RECOPFPHOT_energySigmaDown", &f_RECOPFPHOT_energySigmaDown, "f_RECOPFPHOT_energySigmaDown/F");
+  TBranch *b_RECOPFPHOT_energySigmaPhiUp = newtree->Branch("f_RECOPFPHOT_energySigmaPhiUp", &f_RECOPFPHOT_energySigmaPhiUp, "f_RECOPFPHOT_energySigmaPhiUp/F");
+  TBranch *b_RECOPFPHOT_energySigmaPhiDown = newtree->Branch("f_RECOPFPHOT_energySigmaPhiDown", &f_RECOPFPHOT_energySigmaPhiDown, "f_RECOPFPHOT_energySigmaPhiDown/F");
+  TBranch *b_RECOPFPHOT_energySigmaRhoUp = newtree->Branch("f_RECOPFPHOT_energySigmaRhoUp", &f_RECOPFPHOT_energySigmaRhoUp, "f_RECOPFPHOT_energySigmaRhoUp/F");
+  TBranch *b_RECOPFPHOT_energySigmaRhoDown = newtree->Branch("f_RECOPFPHOT_energySigmaRhoDown", &f_RECOPFPHOT_energySigmaRhoDown, "f_RECOPFPHOT_energySigmaRhoDown/F");
+*/
+  //Met syst
+   TBranch *b_RECO_PFMET_JetEnUp = newtree->Branch("f_RECO_PFMET_JetEnUp", &f_RECO_PFMET_JetEnUp, "f_RECO_PFMET_JetEnUp/F");
+   TBranch *b_RECO_PFMET_JetEnDn = newtree->Branch("f_RECO_PFMET_JetEnDn", &f_RECO_PFMET_JetEnDn, "f_RECO_PFMET_JetEnDn/F");
+   TBranch *b_RECO_PFMET_ElectronEnUp = newtree->Branch("f_RECO_PFMET_ElectronEnUp", &f_RECO_PFMET_ElectronEnUp, "f_RECO_PFMET_ElectronEnUp/F");
+   TBranch *b_RECO_PFMET_ElectronEnDn = newtree->Branch("f_RECO_PFMET_ElectronEnDn", &f_RECO_PFMET_ElectronEnDn, "f_RECO_PFMET_ElectronEnDn/F");
+   TBranch *b_RECO_PFMET_MuonEnUp = newtree->Branch("f_RECO_PFMET_MuonEnUp", &f_RECO_PFMET_MuonEnUp, "f_RECO_PFMET_MuonEnUp/F");
+   TBranch *b_RECO_PFMET_MuonEnDn = newtree->Branch("f_RECO_PFMET_MuonEnDn", &f_RECO_PFMET_MuonEnDn, "f_RECO_PFMET_MuonEnDn/F");
+   TBranch *b_RECO_PFMET_JetResUp = newtree->Branch("f_RECO_PFMET_JetResUp", &f_RECO_PFMET_JetResUp, "f_RECO_PFMET_JetResUp/F");
+   TBranch *b_RECO_PFMET_JetResDn = newtree->Branch("f_RECO_PFMET_JetResDn", &f_RECO_PFMET_JetResDn, "f_RECO_PFMET_JetResDn/F");
+   TBranch *b_RECO_PFMET_UnclusteredEnUp = newtree->Branch("f_RECO_PFMET_UnclusteredEnUp", &f_RECO_PFMET_UnclusteredEnUp, "f_RECO_PFMET_UnclusteredEnUp/F");
+   TBranch *b_RECO_PFMET_UnclusteredEnDn = newtree->Branch("f_RECO_PFMET_UnclusteredEnDn", &f_RECO_PFMET_UnclusteredEnDn, "f_RECO_PFMET_UnclusteredEnDn/F");
+   TBranch *b_RECO_PFMET_PhotonEnUp = newtree->Branch("f_RECO_PFMET_PhotonEnUp", &f_RECO_PFMET_PhotonEnUp, "f_RECO_PFMET_PhotonEnUp/F");
+   TBranch *b_RECO_PFMET_PhotonEnDn = newtree->Branch("f_RECO_PFMET_PhotonEnDn", &f_RECO_PFMET_PhotonEnDn, "f_RECO_PFMET_PhotonEnDn/F");
+
+  //jet syst
+  TBranch *b_RECO_PFJET_PT_UncUp_jet1 = newtree->Branch("f_RECO_PFJET_PT_UncUp_jet1", &f_RECO_PFJET_PT_UncUp_jet1, "f_RECO_PFJET_PT_UncUp_jet1/F");
+  TBranch *b_RECO_PFJET_PT_UncDn_jet1 = newtree->Branch("f_RECO_PFJET_PT_UncDn_jet1", &f_RECO_PFJET_PT_UncDn_jet1, "f_RECO_PFJET_PT_UncDn_jet1/F");
+
+  TBranch *b_RECO_PFJET_PT_UncDn_jet2 = newtree->Branch("f_RECO_PFJET_PT_UncDn_jet2", &f_RECO_PFJET_PT_UncDn_jet2, "f_RECO_PFJET_PT_UncDn_jet2/F");
+  TBranch *b_RECO_PFJET_PT_UncUp_jet2 = newtree->Branch("f_RECO_PFJET_PT_UncUp_jet2", &f_RECO_PFJET_PT_UncUp_jet2, "f_RECO_PFJET_PT_UncUp_jet2/F");
+//
+
 float newweight=1.;
    
    // New tree with clone of events passing the final selection
@@ -1386,7 +1563,7 @@ float newweight=1.;
   cout << "Analyzing " << nentries << " entries"  <<endl;     
 
   Long64_t nbytes = 0, nb = 0;
-  for (Long64_t jentry=0; jentry<5000;jentry++) {//nentries
+  for (Long64_t jentry=0; jentry<nentries;jentry++) {//nentries
     Long64_t ientry = LoadTree(jentry);
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
@@ -1402,6 +1579,97 @@ float newweight=1.;
     f_deltaphi_jethighestpt=-999., f_deltar_jethighestpt=-999., f_bdiscjet1_h = -999., f_bdiscjet2_h = -999, f_massjetjet_h = -999., f_ptjet1_h = -999., f_ptjet2_h = -999., f_etajet1_h = -999., f_etajet2_h = -999., f_phijet1_h = -999., f_phijet2_h = -999.;
     
     f_totbjet = -999.;
+
+  //Add branches for syst electrons
+  /*
+   f_RECOELE_PT_uncorr = -999;
+   f_RECOELE_TLE_ParentSC_X = -999;
+   f_RECOELE_TLE_ParentSC_Y = -999;
+   f_RECOELE_TLE_ParentSC_Z = -999;
+   f_RECOELE_ecalTrkEnergyPreCorr = -999;
+   f_RECOELE_ecalTrkEnergyErrPreCorr = -999;
+   f_RECOELE_ecalTrkEnergyErrPostCorr = -999;
+   f_RECOELE_energyScaleValue = -999;
+   f_RECOELE_energySigmaValue = -999;
+   f_RECOELE_energyScaleUp = -999;
+   f_RECOELE_energyScaleDown = -999;
+   f_RECOELE_energyScaleStatUp = -999;
+   f_RECOELE_energyScaleStatDown = -999;
+   f_RECOELE_energyScaleSystUp = -999;
+   f_RECOELE_energyScaleSystDown = -999;
+   f_RECOELE_energyScaleGainUp = -999;
+   f_RECOELE_energyScaleGainDown = -999;
+   f_RECOELE_energyScaleEtUp = -999;
+   f_RECOELE_energyScaleEtDown = -999;
+   f_RECOELE_energySigmaUp = -999;
+   f_RECOELE_energySigmaDown = -999;
+   f_RECOELE_energySigmaPhiUp = -999;
+   f_RECOELE_energySigmaPhiDown = -999;
+   f_RECOELE_energySigmaRhoUp = -999;
+   f_RECOELE_energySigmaRhoDown = -999;
+   */
+
+   //Muons syst
+   f_RECOMU_PT_uncorr_lept1 = -999;
+   f_RECOMU_Rochester_Error_lept1 = -999;
+   f_RECOMU_mubesttrkPTError_lept1 = -999;
+   f_RECOMU_PT_uncorr_lept2 = -999;
+   f_RECOMU_Rochester_Error_lept2 = -999;
+   f_RECOMU_mubesttrkPTError_lept2 = -999;
+   f_RECOMU_PT_uncorr_lept3 = -999;
+   f_RECOMU_Rochester_Error_lept3 = -999;
+   f_RECOMU_mubesttrkPTError_lept3 = -999;
+   f_RECOMU_PT_uncorr_lept4 = -999;
+   f_RECOMU_Rochester_Error_lept4 = -999;
+   f_RECOMU_mubesttrkPTError_lept4 = -999;
+
+  //Photos syst
+  /*
+  f_RECOPFPHOT_PT_uncorr = -999;
+  f_RECOPFPHOT_ecalEnergyPreCorr = -999;
+  f_RECOPFPHOT_ecalEnergyErrPreCorr = -999;
+  f_RECOPFPHOT_ecalEnergyErrPostCorr = -999;
+  f_RECOPFPHOT_energyScaleValue = -999;
+  f_RECOPFPHOT_energySigmaValue = -999;
+  f_RECOPFPHOT_energyScaleUp = -999;
+  f_RECOPFPHOT_energyScaleDown = -999;
+  f_RECOPFPHOT_energyScaleStatUp = -999;
+  f_RECOPFPHOT_energyScaleStatDown = -999;
+  f_RECOPFPHOT_energyScaleSystUp = -999;
+  f_RECOPFPHOT_energyScaleSystDown = -999;
+  f_RECOPFPHOT_energyScaleGainUp = -999;
+  f_RECOPFPHOT_energyScaleGainDown = -999;
+  f_RECOPFPHOT_energyScaleEtUp = -999;
+  f_RECOPFPHOT_energyScaleEtDown = -999;
+  f_RECOPFPHOT_energySigmaUp = -999;
+  f_RECOPFPHOT_energySigmaDown = -999;
+  f_RECOPFPHOT_energySigmaPhiUp = -999;
+  f_RECOPFPHOT_energySigmaPhiDown = -999;
+  f_RECOPFPHOT_energySigmaRhoUp = -999;
+  f_RECOPFPHOT_energySigmaRhoDown = -999;*/
+
+  //MET syst
+   f_RECO_PFMET_JetEnUp = -999;
+   f_RECO_PFMET_JetEnDn = -999;
+   f_RECO_PFMET_ElectronEnUp = -999;
+   f_RECO_PFMET_ElectronEnDn = -999;
+   f_RECO_PFMET_MuonEnUp = -999;
+   f_RECO_PFMET_MuonEnDn = -999;
+   f_RECO_PFMET_JetResUp = -999;
+   f_RECO_PFMET_JetResDn = -999;
+   f_RECO_PFMET_UnclusteredEnUp = -999;
+   f_RECO_PFMET_UnclusteredEnDn = -999;
+   f_RECO_PFMET_PhotonEnUp = -999;
+   f_RECO_PFMET_PhotonEnDn = -999;
+
+  //jet syst
+
+    //jet syst
+   f_RECO_PFJET_PT_UncUp_jet1 = -999;
+   f_RECO_PFJET_PT_UncDn_jet1 = -999;
+
+   f_RECO_PFJET_PT_UncUp_jet2 = -999;
+   f_RECO_PFJET_PT_UncDn_jet2 = -999;
 
     f_crjetjet = false;
 
@@ -1980,7 +2248,8 @@ float newweight=1.;
 		     << endl ;
       
     // Define a new isolation array to allocate the contribution of photons
-    //float RECOMU_PFX_dB_new[100],RECOELE_PFX_rho_new[100];
+    ////////sync valentina//////
+    float RECOMU_PFX_dB_new[100],RECOELE_PFX_rho_new[100];
     for (int i=0;i<100;i++){
       RECOMU_PFX_dB_new[i]=RECOMU_PFX_dB[i];
       RECOELE_PFX_rho_new[i]=RECOELE_PFX_rho[i];
@@ -2504,12 +2773,12 @@ float newweight=1.;
       } // end loop on pairs
       
     
-      /*
+      
       if (Zcandvector.size()<2) {
-       	cout << "Less than two Z pairs with isolated leptons...exiting" << endl;
+       	//cout << "Less than two Z pairs with isolated leptons...exiting" << endl;
 	continue; 
       }
-      */
+      
       ++N_3a ;  // fill counter
       N_3a_w=N_3a_w+newweight;
       
@@ -2524,10 +2793,12 @@ float newweight=1.;
 	Zcandisolmassvector.push_back(Zcandvector.at(index));
       };
       
-      if (Zcandisolmassvector.size()<2) {
+///////sync valentina///////
+
+      /*if (Zcandisolmassvector.size()<2) {
 	//tolto//cout << "No ZZ passing the mass cut"<< endl;
 	continue;
-      }
+      }*/
       //
       //tolto//cout << "Number of Z passing the isolation and the 12 << mll < 120 cut is= " << Zcandisolmassvector.size() << endl;
                 
@@ -2954,12 +3225,10 @@ if (fabs( RECOMU_SIP[iL_loose_mu[i]] ) < 4. && deltar_fake_1 > 0.02 && deltar_fa
    int jet1=-999,jet2=-999;      
    int jetfail[100];
    
-   for(int i=0;i<100;i++) jetfail[i]=0;
+   for(int i=0;i<100;i++) jetfail[i]=0;//cambio la logica
      
    for(int i=0;i<RECO_PFJET_N;i++){
-     //tolto//cout<<i<<" Jet with pt= "<<RECO_PFJET_PT[i]<<" ETA "<<RECO_PFJET_ETA[i]<<" PUID "<<RECO_PFJET_PUID[i] << " PUID_MVA "<< RECO_PFJET_PUID_MVA[i]<<endl;
-     
-     // JET smearing
+    
      double jercorr = 1.0; double jercorrup = 1.0; double jercorrdn = 1.0;
      
      if (MC_type == "Fall17"){// || MC_type== "Moriond17") {
@@ -2986,27 +3255,27 @@ if (fabs( RECOMU_SIP[iL_loose_mu[i]] ) < 4. && deltar_fake_1 > 0.02 && deltar_fa
        //RECO_PFJET_PHI[i]=jet_jer.Phi();
        //RECO_PFJET_ET[i]=jet_jer.Et();
 
-       //if(RECO_PFJET_PUID[i]==1 && RECO_PFJET_PT[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){ // NO PU ID temporary
-       
-       //if(RECO_PFJET_PT[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){
-       
-     if(RECO_PFJET_PUID[i]==1 && RECO_PFJET_PT[i]>20. && fabs(RECO_PFJET_ETA[i])<2.4 ){
+    //if(fabs(RECO_PFJET_ETA[i])>2.4) continue;
+    //if(RECO_PFJET_PT[i]>50.){ //&& fabs(RECO_PFJET_ETA[i])<2.4){
+      //if(RECO_PFJET_PUID[i]==0) continue;
 
+    if(RECO_PFJET_PUID[i]==1 && RECO_PFJET_PT[i]>20. && RECO_PFJET_PT[i]<50. && fabs(RECO_PFJET_ETA[i])<2.4){
       	 //Check that jet has deltaR>0.4 away from any tight lepton corrected for FSR
-       for(int mu = 0; mu < N_good; ++mu){
-	 if (fabs(RECOMU_SIP[iL[mu]])>=4.) continue;
-	 if (RECOMU_PFX_dB_new[iL[mu]]>=0.35) continue;
-	 double deltaR = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOMU_PHI[iL[mu]]),2) + pow(RECO_PFJET_ETA[i] - RECOMU_ETA[iL[mu]],2));
-	 //tolto//cout << "1st lepton muon: " << " pT=" << RECOMU_PT[iL[mu]] <<" deltaR "<< deltaR <<endl;	   
-	 if (deltaR<0.3){ //0.4
+    for(int mu = 0; mu < N_good; ++mu){
+	  if (fabs(RECOMU_SIP[iL[mu]])>=4.) continue;
+	  if (RECOMU_PFX_dB_new[iL[mu]]>=0.35) continue;
+	  double deltaR = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOMU_PHI[iL[mu]]),2) + pow(RECO_PFJET_ETA[i] - RECOMU_ETA[iL[mu]],2));
+	  //tolto//cout << "1st lepton muon: " << " pT=" << RECOMU_PT[iL[mu]] <<" deltaR "<< deltaR <<endl;	   
+	  if (deltaR<0.3){ //0.4
 	   jetfail[i]=1;
 	   //tolto//cout << " jetfail " << jetfail[i] <<endl;
 	   break;
 	 }
        }
-	 
+  //  }
+  //  }
        for(int ele = 0; ele < Ne_good; ++ele){
-	 if (fabs(RECOELE_SIP[iLe[ele]])>=4.) continue;
+	 if (fabs(RECOELE_SIP[iLe[ele]]>=4.)) continue;
 	 if (RECOELE_PFX_rho_new[iLe[ele]]>=0.35) continue;
 	 double deltaR = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOELE_PHI[iLe[ele]]),2) + pow(RECO_PFJET_ETA[i] - RECOELE_ETA[iLe[ele]],2));
 	 //tolto//cout << "1st lepton electron: " << " pT=" << RECOELE_PT[iLe[ele]] <<" deltaR "<< deltaR <<endl;
@@ -3016,7 +3285,8 @@ if (fabs( RECOMU_SIP[iL_loose_mu[i]] ) < 4. && deltar_fake_1 > 0.02 && deltar_fa
 	   break;
 	 }
        }
-
+  // }
+  // }
 	 // cleaning w.r.t FSR photons attached to leptons
        for(int j=0.;j<Nphotons;j++) {
 	 if (iLp_l[j]!=-1 && (iLp_tagEM[j]==0 || iLp_tagEM[j]==1) ) {
@@ -3031,8 +3301,8 @@ if (fabs( RECOMU_SIP[iL_loose_mu[i]] ) < 4. && deltar_fake_1 > 0.02 && deltar_fa
 	 }
        }
 	 // 
-	 
-       if (jetfail[i]==0){
+     
+    /*      if (jetfail[i]==0){
 	 //tolto//cout<< " PASS jet " <<i<<" PT= "<<RECO_PFJET_PT[i]<<" ETA= "<<RECO_PFJET_ETA[i]<<" PUID= "<<RECO_PFJET_PUID[i]<<endl;
 	 njets_pass++;
 	 if (njets_pass==1){
@@ -3064,13 +3334,161 @@ if (fabs( RECOMU_SIP[iL_loose_mu[i]] ) < 4. && deltar_fake_1 > 0.02 && deltar_fa
 	   
        }
        
+       }
+      else{
+       jetfail[i]=1;
+     }*/
+   //}
+     /*
+     for(int i=0;i<RECO_PFJET_N;i++){
+                 if(jetfail[i] == 0)
+       cout << "jet pt " << RECO_PFJET_PT[i] << " jet eta " << RECO_PFJET_ETA[i] << " jet pu id " << RECO_PFJET_PUID[i] << " jet fail " << jetfail[i] << "\n";
+
+     }*/
+     
+     /*
+     }
+     else{
+       jetfail[i]=1;
+     }*/
+     //else 
+   }else if(RECO_PFJET_PT[i]>=50. && fabs(RECO_PFJET_ETA[i])<2.4){
+
+
+/*
+   for(int i=0;i<RECO_PFJET_N;i++){
+    
+     double jercorr = 1.0; double jercorrup = 1.0; double jercorrdn = 1.0;
+     
+     if (MC_type == "Fall17"){// || MC_type== "Moriond17") {
+       jetparameters.setJetPt(RECO_PFJET_PT[i]);
+       jetparameters.setJetEta(RECO_PFJET_ETA[i]);
+       jetparameters.setRho(RHO_mu);
+  */     
+       /*
+	 float relpterr = jetresolution.getResolution(jetparameters); // jet pt resolution	
+	 
+	 JME::JetParameters sf_parameters = {{JME::Binning::JetEta, RECO_PFJET_ETA[i]}, {JME::Binning::Rho, RHO_mu}};
+	 float factor = jetresolution_sf.getScaleFactor(sf_parameters);
+	 float factorup = jetresolution_sf.getScaleFactor(sf_parameters, Variation::UP);
+	 float factordn = jetresolution_sf.getScaleFactor(sf_parameters, Variation::DOWN);
+         */
+   /*  }
+      if(RECO_PFJET_PT[i]>=20. && RECO_PFJET_PT[i]<50. && RECO_PFJET_PUID[i]==1 && fabs(RECO_PFJET_ETA[i])<2.4){
+*/
+       //if(RECO_PFJET_PUID[i]==1 && RECO_PFJET_PT[i]>20. && fabs(RECO_PFJET_ETA[i])<2.4 ){
+       //Check that jet has deltaR>0.4 away from any tight lepton corrected for FSR
+       for(int mu = 0; mu < N_good; ++mu){
+         if (fabs(RECOMU_SIP[iL[mu]])>=4.) continue;
+         if (RECOMU_PFX_dB_new[iL[mu]]>=0.35) continue;
+         double deltaR = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOMU_PHI[iL[mu]]),2) + pow(RECO_PFJET_ETA[i] - RECOMU_ETA[iL[mu]],2));
+         //tolto//cout << "1st lepton muon: " << " pT=" << RECOMU_PT[iL[mu]] <<" deltaR "<< deltaR <<endl;
+         if (deltaR<0.3){ //0.4
+           jetfail[i]=1;
+           //tolto//cout << " jetfail " << jetfail[i] <<endl;
+           break;
+         }
+       }
+	 for(int ele = 0; ele < Ne_good; ++ele){
+	   if (fabs(RECOELE_SIP[iLe[ele]])>=4.) continue;
+	   if (RECOELE_PFX_rho_new[iLe[ele]]>=0.35) continue;
+	   double deltaR = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOELE_PHI[iLe[ele]]),2) + pow(RECO_PFJET_ETA[i] - RECOELE_ETA[iLe[ele]],2));
+	   //tolto//cout << "1st lepton electron: " << " pT=" << RECOELE_PT[iLe[ele]] <<" deltaR "<< deltaR <<endl;
+	   if (deltaR<0.3){ //0.4
+	     jetfail[i]=1;
+	     //tolto//cout << " jetfail " << jetfail[i] <<endl;
+	     break;
+	   }
+	 }
+
+         // cleaning w.r.t FSR photons attached to leptons
+	 for(int j=0.;j<Nphotons;j++) {
+	   if (iLp_l[j]!=-1 && (iLp_tagEM[j]==0 || iLp_tagEM[j]==1) ) {
+	     //tolto//if (iLp_tagEM[j]==0) cout << "There is photon with pT= " << RECOPFPHOT_PT[iLp[j]] << " attached to a muon with pT= " << RECOMU_PT[iLp_l[j]] << endl;
+	     //tolto//if (iLp_tagEM[j]==1) cout << "There is photon with pT= " << RECOPFPHOT_PT[iLp[j]] << " attached to a electron with pT= " << RECOELE_PT[iLp_l[j]] << endl;
+	     double deltaR = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOPFPHOT_PHI[iLp[j]]),2) + pow(RECO_PFJET_ETA[i] - RECOPFPHOT_ETA[iLp[j]],2));
+	     if (deltaR<0.3){ //0.4
+	       jetfail[i]=1;
+	       //tolto//cout << " jetfail " << jetfail[i] <<endl;
+	       break;
+	     }
+	   }
+	 }
+
+	/* if (jetfail[i]==0){
+	   //tolto//cout<< " PASS jet " <<i<<" PT= "<<RECO_PFJET_PT[i]<<" ETA= "<<RECO_PFJET_ETA[i]<<" PUID= "<<RECO_PFJET_PUID[i]<<endl;
+	   njets_pass++;
+	   if (njets_pass==1){
+             jet1=i;
+             bdiscr1 = cSV_BTagJet_DISCR[i];
+             JET1.SetPtEtaPhiE(RECO_PFJET_PT[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
+
+             f_jet1_highpt_pt = RECO_PFJET_PT[i];
+             f_jet1_highpt_eta = RECO_PFJET_ETA[i];
+             f_jet1_highpt_phi = RECO_PFJET_PHI[i];
+             f_jet1_highpt_e = RECO_PFJET_ET[i];
+           }
+           if (njets_pass==2){
+             jet2=i;
+             bdiscr2 = cSV_BTagJet_DISCR[i];
+             JET2.SetPtEtaPhiE(RECO_PFJET_PT[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
+
+             f_jet2_highpt_pt = RECO_PFJET_PT[i];
+             f_jet2_highpt_eta = RECO_PFJET_ETA[i];
+             f_jet2_highpt_phi = RECO_PFJET_PHI[i];
+             f_jet2_highpt_e = RECO_PFJET_ET[i];
+           }
+           if (njets_pass==3){
+             f_jet3_highpt_pt = RECO_PFJET_PT[i];
+             f_jet3_highpt_eta = RECO_PFJET_ETA[i];
+             f_jet3_highpt_phi = RECO_PFJET_PHI[i];
+             f_jet3_highpt_e = RECO_PFJET_ET[i];
+           }
+   }*/
      }
      else{
        jetfail[i]=1;
      }
-     //cout<<" JETFAIL "<<jetfail[i]<<endl;
    }
-      
+
+        for(int i=0;i<RECO_PFJET_N;i++){
+          if (jetfail[i]==0){
+	   //tolto//cout<< " PASS jet " <<i<<" PT= "<<RECO_PFJET_PT[i]<<" ETA= "<<RECO_PFJET_ETA[i]<<" PUID= "<<RECO_PFJET_PUID[i]<<endl;
+	   njets_pass++;
+	   if (njets_pass==1){
+             jet1=i;
+             bdiscr1 = cSV_BTagJet_DISCR[i];
+             JET1.SetPtEtaPhiE(RECO_PFJET_PT[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
+
+             f_jet1_highpt_pt = RECO_PFJET_PT[i];
+             f_jet1_highpt_eta = RECO_PFJET_ETA[i];
+             f_jet1_highpt_phi = RECO_PFJET_PHI[i];
+             f_jet1_highpt_e = RECO_PFJET_ET[i];
+           }
+           if (njets_pass==2){
+             jet2=i;
+             bdiscr2 = cSV_BTagJet_DISCR[i];
+             JET2.SetPtEtaPhiE(RECO_PFJET_PT[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
+
+             f_jet2_highpt_pt = RECO_PFJET_PT[i];
+             f_jet2_highpt_eta = RECO_PFJET_ETA[i];
+             f_jet2_highpt_phi = RECO_PFJET_PHI[i];
+             f_jet2_highpt_e = RECO_PFJET_ET[i];
+           }
+           if (njets_pass==3){
+             f_jet3_highpt_pt = RECO_PFJET_PT[i];
+             f_jet3_highpt_eta = RECO_PFJET_ETA[i];
+             f_jet3_highpt_phi = RECO_PFJET_PHI[i];
+             f_jet3_highpt_e = RECO_PFJET_ET[i];
+           }
+        }
+
+          //if(jetfail[i] == 0)
+       //cout << "jet pt " << RECO_PFJET_PT[i] << " jet eta " << RECO_PFJET_ETA[i] << " jet pu id " << RECO_PFJET_PUID[i] << " jet fail " << jetfail[i] << "\n";
+
+     }
+   //}
+        
 //------------------------------------------------------------------------------
 
     //ttZ exstimation
@@ -3485,7 +3903,7 @@ if (fabs( RECOMU_SIP[iL_loose_mu[i]] ) < 4. && deltar_fake_1 > 0.02 && deltar_fa
 	
 	for (int j=i+1;j<Zcandisolmassvector.size();j++){
 	  //tolto//cout << "Checking mass j= " << Zcandisolmassvector.at(j).massvalue << endl;
-	  if (!(Zcandisolmassvector.at(i).massvalue > 12. && Zcandisolmassvector.at(i).massvalue < 120.)) continue;
+	  if (!(Zcandisolmassvector.at(j).massvalue > 12. && Zcandisolmassvector.at(j).massvalue < 120.)) continue;
 	  //tolto//cout <<Zcandisolmassvector.at(i).pt1 << " " << Zcandisolmassvector.at(j).pt1 << " " << Zcandisolmassvector.at(j).pt2 << endl;
 	  //tolto//cout <<Zcandisolmassvector.at(i).pt2 << " " << Zcandisolmassvector.at(j).pt1 << " " << Zcandisolmassvector.at(j).pt2 << endl;
 	  if (Zcandisolmassvector.at(i).pt1==Zcandisolmassvector.at(j).pt1 || Zcandisolmassvector.at(i).pt1==Zcandisolmassvector.at(j).pt2) continue;
@@ -3592,10 +4010,10 @@ if (fabs( RECOMU_SIP[iL_loose_mu[i]] ) < 4. && deltar_fake_1 > 0.02 && deltar_fa
       vector<candidateZ> pTcleanedgoodZ; 
       
       for (int l=0;l<ileptonspTcleanedgoodZsv.size();l++){
-	/*cout << "checking masses for QCD suppression= " 
+	cout << "checking masses for QCD suppression= " 
 	     << Zcandisolmassvector.at( (ileptonspTcleanedgoodZsv.at(l)).at(0)).massvalue << " and " 
 	     << Zcandisolmassvector.at( (ileptonspTcleanedgoodZsv.at(l)).at(1)).massvalue
-	     << endl;*/
+	     << endl;
 	min_mass_2L = 10000.;
 	ileptonsmumu.clear();
        
@@ -3659,7 +4077,7 @@ if (fabs( RECOMU_SIP[iL_loose_mu[i]] ) < 4. && deltar_fake_1 > 0.02 && deltar_fa
       for (int i=0;i<pTcleanedgoodZ.size();++i){
 	
 	if( fabs(pTcleanedgoodZ.at(i).massvalue - Zmass) < fabs(massZ1 - Zmass) ){
-	  
+	
 	  massZ1 = pTcleanedgoodZ.at(i).massvalue;
 	  indexZ1=i;
 	  
@@ -3753,7 +4171,7 @@ if (fabs( RECOMU_SIP[iL_loose_mu[i]] ) < 4. && deltar_fake_1 > 0.02 && deltar_fa
 	
 	for (int j=i+1;j<pTcleanedgoodZ.size();j++){
 	  float massZa=-999.,massZb=-999.;	 	 
-	  //tolto//cout << "Masses= " << pTcleanedgoodZ.at(i).massvalue << " " << pTcleanedgoodZ.at(j).massvalue << endl;
+	  cout << "Masses= " << pTcleanedgoodZ.at(i).massvalue << " " << pTcleanedgoodZ.at(j).massvalue << endl;
 	  
 	  float lepton3ch=-999., lepton4ch=-999.;
 	  lepton3ch=pTcleanedgoodZ.at(j).charge1;
@@ -3852,12 +4270,12 @@ if (fabs( RECOMU_SIP[iL_loose_mu[i]] ) < 4. && deltar_fake_1 > 0.02 && deltar_fa
       
       // If more than one Z2 (couple to the same Z1), choose the one with the highest-pT Z2 leptons
       if (vindexZZ.size()==1){
-	//tolto//cout << "Just one Z1+Z2 pair" << endl;
+	cout << "Just one Z1+Z2 pair" << endl;
 	if (icleanedgoodZsv.at(vindexZZ.at(0)).at(0)==indexZ1) indexZ2=icleanedgoodZsv.at(vindexZZ.at(0)).at(1); 
 	if (icleanedgoodZsv.at(vindexZZ.at(0)).at(1)==indexZ1) indexZ2=icleanedgoodZsv.at(vindexZZ.at(0)).at(0);
       }
       else {
-	//tolto//cout << "more than one Z2 (couple to the same Z1), choose the one with the highest-pT Z2 leptons" << endl;
+	cout << "more than one Z2 (couple to the same Z1), choose the one with the highest-pT Z2 leptons" << endl;
 	int indexZ2tmp=-999;
 	float sumpT=-999.,tmpsumpT=-999.;
 	
@@ -5224,14 +5642,16 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
    histoMETprima->Fill(RECO_PFMET, newweight);
    f_mass4l = mass4l;
    f_weight = newweight;
-   cout << "4l " << f_run << ":" << f_lumi << ":" << f_event << ":" << f_mass4l << ":" << njets_pass << ":" << f_weight << "\n";
+   /*   cout << "4l " << f_run << ":" << f_lumi << ":" << f_event << ":" << f_mass4l << ":" << njets_pass << ":" << f_weight << "\n";
 
    if(N_good >= 4 && abs(mass4l - 125.) <=10  && njets_pass >=1){
      cout << "4l + |mass4l - 125| <= 10 >= 1jet " << f_run << ":" << f_lumi << ":" << f_event << ":" << f_mass4l << ":" << njets_pass << ":" << f_weight << "\n";
-   }
+     }
+   */
+
 
    if(N_good >= 4 && abs(mass4l - 125.) <=10  && njets_pass >=2){
-     cout << "4l + |mass4l - 125| <= 10 >= 2jet " << f_run << ":" << f_lumi << ":" << f_event << ":" << f_mass4l << ":" << njets_pass << ":" << f_weight << "\n";
+     //cout << "4l + |mass4l - 125| <= 10 >= 2jet " << f_run << ":" << f_lumi << ":" << f_event << ":" << f_mass4l << ":" << njets_pass << ":" << f_weight << "\n";
      hmass4lafter->Fill(mass4l,newweight);
      njets4l++;
      histoMETsel->Fill(RECO_PFMET, newweight);
@@ -5282,13 +5702,14 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
    }
    kpt->Fill(RECO_PFJET_PT[flagk],newweight);
    */
-   int flagil = -999., flagill = -999, flagl = -99, flagll = -99;
+   float flagil = -999., flagill = -999;
+   int flagl = -99, flagll = -99;
    TLorentzVector g1,g2,massprova;
 
    for(int l =0; l< RECO_PFJET_N; l++){
      if(jetfail[l]==0){
-       if(flagil < RECO_PFJET_PT[l]){
-       flagil = RECO_PFJET_PT[l];
+       if(flagil < cSV_BTagJet_DISCR[l]){
+       flagil = cSV_BTagJet_DISCR[l];
        flagl = l;
        }
      }
@@ -5296,13 +5717,21 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
 
    for(int ll =0; ll< RECO_PFJET_N; ll++){
      if(ll != flagl && jetfail[ll]==0){
-       if(flagill < RECO_PFJET_PT[ll]){
-       flagill = RECO_PFJET_PT[ll];
+       if(flagill < cSV_BTagJet_DISCR[ll]){
+       flagill = cSV_BTagJet_DISCR[ll];
        flagll = ll;
        }
      }
    }
 
+
+   if(flagi == flagl){//cout << "i due jet con piu alto b disc sono gli stessi" << "\n";
+     cout_jet_match_bdisc++;
+   }
+
+   if(flagj == flagll){//cout << "il jet con piu alto pt e quello con secondo piu alto b disc sono gli stessi" << "\n";
+     cout_jet_match++;
+   }
 
    g1.SetPtEtaPhiE(RECO_PFJET_PT[flagl],RECO_PFJET_ETA[flagl],RECO_PFJET_PHI[flagl],RECO_PFJET_ET[flagl]*TMath::CosH(RECO_PFJET_ETA[flagl]));
    g2.SetPtEtaPhiE(RECO_PFJET_PT[flagll],RECO_PFJET_ETA[flagll],RECO_PFJET_PHI[flagll],RECO_PFJET_ET[flagll]*TMath::CosH(RECO_PFJET_ETA[flagll]));
@@ -5363,6 +5792,31 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
   f_etajet2 = RECO_PFJET_ETA[flagj];
   f_phijet1 = RECO_PFJET_PHI[flagi];
   f_phijet2 = RECO_PFJET_PHI[flagj];
+ 
+  
+  //syst for MET
+
+   f_RECO_PFMET_JetEnUp = RECO_PFMET_JetEnUp;
+   f_RECO_PFMET_JetEnDn = RECO_PFMET_JetEnDn;
+   f_RECO_PFMET_ElectronEnUp = RECO_PFMET_ElectronEnUp;
+   f_RECO_PFMET_ElectronEnDn = RECO_PFMET_ElectronEnDn;
+   f_RECO_PFMET_MuonEnUp = RECO_PFMET_MuonEnUp;
+   f_RECO_PFMET_MuonEnDn = RECO_PFMET_MuonEnDn;
+   f_RECO_PFMET_JetResUp = RECO_PFMET_JetResUp;
+   f_RECO_PFMET_JetResDn = RECO_PFMET_JetResDn;
+   f_RECO_PFMET_UnclusteredEnUp = RECO_PFMET_UnclusteredEnUp;
+   f_RECO_PFMET_UnclusteredEnDn = RECO_PFMET_UnclusteredEnDn;
+   f_RECO_PFMET_PhotonEnUp = RECO_PFMET_PhotonEnUp;
+   f_RECO_PFMET_PhotonEnDn = RECO_PFMET_PhotonEnDn;
+
+
+   //jet syst
+
+   f_RECO_PFJET_PT_UncUp_jet1 = RECO_PFJET_PT_UncUp[flagi];
+   //f_RECO_PFJET_PT_jet1 = RECO_PFJET_PT[flagi];
+
+   f_RECO_PFJET_PT_UncUp_jet2 = RECO_PFJET_PT_UncUp[flagj];
+   //f_RECO_PFJET_PT_jet2 = RECO_PFJET_PT[flagj];
 
 
   f_totbjet = n_totjetp;	       
@@ -5702,12 +6156,22 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
      f_lept1_sip = RECOMU_SIP[iptcorr[0]];
      //    f_lept1_mvaid = RECOMU_mvaNonTrigV0[iptcorr[0]];
      
+    //syst
+   f_RECOMU_PT_uncorr_lept1 = RECOMU_PT_uncorr[iptcorr[0]];
+   f_RECOMU_Rochester_Error_lept1 = RECOMU_Rochester_Error[iptcorr[0]];
+   f_RECOMU_mubesttrkPTError_lept1 = RECOMU_mubesttrkPTError[iptcorr[0]];
+
      f_lept2_pt = RECOMU_PT[iptcorr[1]] ;
      f_lept2_eta = RECOMU_ETA[iptcorr[1]] ;
      f_lept2_phi = RECOMU_PHI[iptcorr[1]];
      f_lept2_charge = RECOMU_CHARGE[iptcorr[1]];
      f_lept2_pfx = RECOMU_PFX_dB_new[iptcorr[1]];
      f_lept2_sip = RECOMU_SIP[iptcorr[1]];
+     //syst
+    f_RECOMU_PT_uncorr_lept2 = RECOMU_PT_uncorr[iptcorr[1]];
+    f_RECOMU_Rochester_Error_lept2 = RECOMU_Rochester_Error[iptcorr[1]];
+    f_RECOMU_mubesttrkPTError_lept2 = RECOMU_mubesttrkPTError[iptcorr[1]];
+
      //    f_lept2_mvaid = RECOMU_mvaNonTrigV0[iptcorr[1]];
      f_lept3_pt = RECOMU_PT[iptcorr[2]] ;
      f_lept3_eta = RECOMU_ETA[iptcorr[2]] ;
@@ -5715,6 +6179,10 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
      f_lept3_charge = RECOMU_CHARGE[iptcorr[2]];
      f_lept3_pfx = RECOMU_PFX_dB_new[iptcorr[2]];
      f_lept3_sip = RECOMU_SIP[iptcorr[2]];
+    //syst
+    f_RECOMU_PT_uncorr_lept3 = RECOMU_PT_uncorr[iptcorr[2]];
+    f_RECOMU_Rochester_Error_lept3 = RECOMU_Rochester_Error[iptcorr[2]];
+    f_RECOMU_mubesttrkPTError_lept3 = RECOMU_mubesttrkPTError[iptcorr[2]];
      //    f_lept3_mvaid = RECOMU_mvaNonTrigV0[iptcorr[2]];
      f_lept4_pt = RECOMU_PT[iptcorr[3]] ;
      f_lept4_eta = RECOMU_ETA[iptcorr[3]] ;
@@ -5722,6 +6190,11 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
      f_lept4_charge = RECOMU_CHARGE[iptcorr[3]];
      f_lept4_pfx = RECOMU_PFX_dB_new[iptcorr[3]];
      f_lept4_sip = RECOMU_SIP[iptcorr[3]];
+    //syst
+    f_RECOMU_PT_uncorr_lept4 = RECOMU_PT_uncorr[iptcorr[3]];
+    f_RECOMU_Rochester_Error_lept4 = RECOMU_Rochester_Error[iptcorr[3]];
+    f_RECOMU_mubesttrkPTError_lept4 = RECOMU_mubesttrkPTError[iptcorr[3]];
+
      //    f_lept4_mvaid = RECOMU_mvaNonTrigV0[ipt[3]];
      //    f_iso_max = Iso_max;
      //    f_sip_max = Sip_max;
@@ -6260,8 +6733,9 @@ if(N_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insid
 	       << "Numero eventi |...| <= 10 && nlept ==4 && nbjet >=1 && 3 jet <= 50 "<<contatore2<<"\n"
 	       << "Numero eventi |...| <= 10 && nlept >=4 && nbjet >=1 && 3 jet <= 50 "<<contatore<< "\n"
 	       << "Numero di eventi con 3 muoni " <<cont1 << "\n"
-	       << "Numero di eventi con 3 muoni più 2 jets " << cont2;
-
+	       << "Numero di eventi con 3 muoni più 2 jets " << cont2
+	       << "cout_jet_match_bdisc " << cout_jet_match_bdisc << "\n"
+	       << "cout_jet_match " << cout_jet_match << "\n";
 
 	
 

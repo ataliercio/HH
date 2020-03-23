@@ -369,7 +369,6 @@ public :
    Float_t         RECOMU_mubesttrkDxyError[100];
    Float_t         RECOMU_mubesttrkDz[100];
    Float_t         RECOMU_mubesttrkDzError[100];
-   Float_t         RECOMU_mubesttrkPTError[100];
    Double_t        ftsigma[100];
    Double_t        gdX[100];
    Double_t        gdY[100];
@@ -634,6 +633,62 @@ public :
    Int_t           RECO_PFMET_EEBadScNoiseFilter;
    Int_t           RECO_PFMET_EcalBadCalibFilter;
 
+   //Electrons syst
+    Float_t         RECOELE_PT_uncorr[100];
+    Float_t         RECOELE_TLE_ParentSC_X[20];
+    Float_t         RECOELE_TLE_ParentSC_Y[20];
+    Float_t         RECOELE_TLE_ParentSC_Z[20];
+    Float_t         RECOELE_ecalTrkEnergyPreCorr[100];
+    Float_t         RECOELE_ecalTrkEnergyErrPreCorr[100];
+    Float_t         RECOELE_ecalTrkEnergyErrPostCorr[100];
+    Float_t         RECOELE_energyScaleValue[100];
+    Float_t         RECOELE_energySigmaValue[100];
+    Float_t         RECOELE_energyScaleUp[100];
+    Float_t         RECOELE_energyScaleDown[100];
+    Float_t         RECOELE_energyScaleStatUp[100];
+    Float_t         RECOELE_energyScaleStatDown[100];
+    Float_t         RECOELE_energyScaleSystUp[100];
+    Float_t         RECOELE_energyScaleSystDown[100];
+    Float_t         RECOELE_energyScaleGainUp[100];
+    Float_t         RECOELE_energyScaleGainDown[100];
+    Float_t         RECOELE_energyScaleEtUp[100];
+    Float_t         RECOELE_energyScaleEtDown[100];
+    Float_t         RECOELE_energySigmaUp[100];
+    Float_t         RECOELE_energySigmaDown[100];
+    Float_t         RECOELE_energySigmaPhiUp[100];
+    Float_t         RECOELE_energySigmaPhiDown[100];
+    Float_t         RECOELE_energySigmaRhoUp[100];
+    Float_t         RECOELE_energySigmaRhoDown[100];
+
+   //Muons syst
+   Float_t         RECOMU_mubesttrkPTError[100];
+   Float_t         RECOMU_Rochester_Error[100];
+   Float_t         RECOMU_PT_uncorr[100];
+   
+   //Photons syst
+   Float_t         RECOPFPHOT_PT_uncorr[20];
+   Float_t         RECOPFPHOT_ecalEnergyPreCorr[20];
+   Float_t         RECOPFPHOT_ecalEnergyErrPreCorr[20];
+   Float_t         RECOPFPHOT_ecalEnergyErrPostCorr[20];
+   Float_t         RECOPFPHOT_energyScaleValue[20];
+   Float_t         RECOPFPHOT_energySigmaValue[20];
+   Float_t         RECOPFPHOT_energyScaleUp[20];
+   Float_t         RECOPFPHOT_energyScaleDown[20];
+   Float_t         RECOPFPHOT_energyScaleStatUp[20];
+   Float_t         RECOPFPHOT_energyScaleStatDown[20];
+   Float_t         RECOPFPHOT_energyScaleSystUp[20];
+   Float_t         RECOPFPHOT_energyScaleSystDown[20];
+   Float_t         RECOPFPHOT_energyScaleGainUp[20];
+   Float_t         RECOPFPHOT_energyScaleGainDown[20];
+   Float_t         RECOPFPHOT_energyScaleEtUp[20];
+   Float_t         RECOPFPHOT_energyScaleEtDown[20];
+   Float_t         RECOPFPHOT_energySigmaUp[20];
+   Float_t         RECOPFPHOT_energySigmaDown[20];
+   Float_t         RECOPFPHOT_energySigmaPhiUp[20];
+   Float_t         RECOPFPHOT_energySigmaPhiDown[20];
+   Float_t         RECOPFPHOT_energySigmaRhoUp[20];
+   Float_t         RECOPFPHOT_energySigmaRhoDown[20];
+   
    // List of branches
    TBranch        *b_irun;   //!
    TBranch        *b_ievt;   //!
@@ -974,7 +1029,6 @@ public :
    TBranch        *b_RECOMU_mubesttrkDxyError;   //!
    TBranch        *b_RECOMU_mubesttrkDz;   //!
    TBranch        *b_RECOMU_mubesttrkDzError;   //!
-   TBranch        *b_RECOMU_mubesttrkPTError; //!
    TBranch        *b_ftsigma;   //!
    TBranch        *b_gdX;   //!
    TBranch        *b_gdY;   //!
@@ -1239,6 +1293,62 @@ public :
    TBranch        *b_tCHighPur_BTagJet_DISCR;   //!
    TBranch        *b_cSV_BTagJet_DISCR;   //!
    TBranch        *b_cSV_BTagJet_ET;   //!
+
+   //Electorns syst
+   TBranch        *b_RECOELE_PT_uncorr;   //!
+   TBranch        *b_RECOELE_TLE_ParentSC_X;   //!
+   TBranch        *b_RECOELE_TLE_ParentSC_Y;   //!
+   TBranch        *b_RECOELE_TLE_ParentSC_Z;   //!
+   TBranch        *b_RECOELE_ecalTrkEnergyPreCorr;   //!
+   TBranch        *b_RECOELE_ecalTrkEnergyErrPreCorr;   //!
+   TBranch        *b_RECOELE_ecalTrkEnergyErrPostCorr;   //!
+   TBranch        *b_RECOELE_energyScaleValue;   //!
+   TBranch        *b_RECOELE_energySigmaValue;   //!
+   TBranch        *b_RECOELE_energyScaleUp;   //!
+   TBranch        *b_RECOELE_energyScaleDown;   //!
+   TBranch        *b_RECOELE_energyScaleStatUp;   //!
+   TBranch        *b_RECOELE_energyScaleStatDown;   //!
+   TBranch        *b_RECOELE_energyScaleSystUp;   //!
+   TBranch        *b_RECOELE_energyScaleSystDown;   //!
+   TBranch        *b_RECOELE_energyScaleGainUp;   //!
+   TBranch        *b_RECOELE_energyScaleGainDown;   //!
+   TBranch        *b_RECOELE_energyScaleEtUp;   //!
+   TBranch        *b_RECOELE_energyScaleEtDown;   //!
+   TBranch        *b_RECOELE_energySigmaUp;   //!
+   TBranch        *b_RECOELE_energySigmaDown;   //!
+   TBranch        *b_RECOELE_energySigmaPhiUp;   //!
+   TBranch        *b_RECOELE_energySigmaPhiDown;   //!
+   TBranch        *b_RECOELE_energySigmaRhoUp;   //!
+   TBranch        *b_RECOELE_energySigmaRhoDown;   //!
+
+   //Muons syst
+   TBranch        *b_RECOMU_Rochester_Error;
+   TBranch        *b_RECOMU_PT_uncorr;
+   TBranch        *b_RECOMU_mubesttrkPTError;
+
+   //Photons syst
+   TBranch        *b_RECOPFPHOT_PT_uncorr;   //!
+   TBranch        *b_RECOPFPHOT_ecalEnergyPreCorr;   //!
+   TBranch        *b_RECOPFPHOT_ecalEnergyErrPreCorr;   //!
+   TBranch        *b_RECOPFPHOT_ecalEnergyErrPostCorr;   //!
+   TBranch        *b_RECOPFPHOT_energyScaleValue;   //!
+   TBranch        *b_RECOPFPHOT_energySigmaValue;   //!
+   TBranch        *b_RECOPFPHOT_energyScaleUp;   //!
+   TBranch        *b_RECOPFPHOT_energyScaleDown;   //!
+   TBranch        *b_RECOPFPHOT_energyScaleStatUp;   //!
+   TBranch        *b_RECOPFPHOT_energyScaleStatDown;   //!
+   TBranch        *b_RECOPFPHOT_energyScaleSystUp;   //!
+   TBranch        *b_RECOPFPHOT_energyScaleSystDown;   //!
+   TBranch        *b_RECOPFPHOT_energyScaleGainUp;   //!
+   TBranch        *b_RECOPFPHOT_energyScaleGainDown;   //!
+   TBranch        *b_RECOPFPHOT_energyScaleEtUp;   //!
+   TBranch        *b_RECOPFPHOT_energyScaleEtDown;   //!
+   TBranch        *b_RECOPFPHOT_energySigmaUp;   //!
+   TBranch        *b_RECOPFPHOT_energySigmaDown;   //!
+   TBranch        *b_RECOPFPHOT_energySigmaPhiUp;   //!
+   TBranch        *b_RECOPFPHOT_energySigmaPhiDown;   //!
+   TBranch        *b_RECOPFPHOT_energySigmaRhoUp;   //!
+   TBranch        *b_RECOPFPHOT_energySigmaRhoDown;   //!
 
 
    HZZ4LeptonsAnalysis(TTree *tree=0,Double_t weight_=1.,string DATA_type_="DATA",string MC_type_="MC");
@@ -1665,7 +1775,6 @@ void HZZ4LeptonsAnalysis::Init(TTree *tree)
    fChain->SetBranchAddress("RECOMU_mubesttrkDxyError", RECOMU_mubesttrkDxyError, &b_RECOMU_mubesttrkDxyError);
    fChain->SetBranchAddress("RECOMU_mubesttrkDz", RECOMU_mubesttrkDz, &b_RECOMU_mubesttrkDz);
    fChain->SetBranchAddress("RECOMU_mubesttrkDzError", RECOMU_mubesttrkDzError, &b_RECOMU_mubesttrkDzError);
-   fChain->SetBranchAddress("RECOMU_mubesttrkPTError", RECOMU_mubesttrkPTError, &b_RECOMU_mubesttrkPTError);
    fChain->SetBranchAddress("ftsigma", ftsigma, &b_ftsigma);
    fChain->SetBranchAddress("gdX", gdX, &b_gdX);
    fChain->SetBranchAddress("gdY", gdY, &b_gdY);
@@ -1833,7 +1942,7 @@ void HZZ4LeptonsAnalysis::Init(TTree *tree)
    fChain->SetBranchAddress("RHO_ele", &RHO_ele, &b_RHO_ele);
    fChain->SetBranchAddress("RHO_mu", &RHO_mu, &b_RHO_mu);
 
-  fChain->SetBranchAddress("RECO_PFJET_PT_UncUp",  RECO_PFJET_PT_UncUp,  &b_RECO_PFJET_PT_UncUp);
+   fChain->SetBranchAddress("RECO_PFJET_PT_UncUp",  RECO_PFJET_PT_UncUp,  &b_RECO_PFJET_PT_UncUp);
    fChain->SetBranchAddress("RECO_PFJET_PT_UncDn",  RECO_PFJET_PT_UncDn,  &b_RECO_PFJET_PT_UncDn);   
    fChain->SetBranchAddress("RECO_PFJET_AREA", RECO_PFJET_AREA, &b_RECO_PFJET_AREA);
    fChain->SetBranchAddress("RECO_PFJET_PTD", RECO_PFJET_PTD, &b_RECO_PFJET_PTD);
@@ -1931,7 +2040,64 @@ void HZZ4LeptonsAnalysis::Init(TTree *tree)
    fChain->SetBranchAddress("tCHighPur_BTagJet_DISCR", tCHighPur_BTagJet_DISCR, &b_tCHighPur_BTagJet_DISCR);
    fChain->SetBranchAddress("cSV_BTagJet_DISCR", cSV_BTagJet_DISCR, &b_cSV_BTagJet_DISCR);
    fChain->SetBranchAddress("cSV_BTagJet_ET", cSV_BTagJet_ET, &b_cSV_BTagJet_ET);
- 
+
+   //Electons syst
+   fChain->SetBranchAddress("RECOELE_PT_uncorr", RECOELE_PT_uncorr, &b_RECOELE_PT_uncorr);
+   fChain->SetBranchAddress("RECOELE_TLE_ParentSC_X", RECOELE_TLE_ParentSC_X, &b_RECOELE_TLE_ParentSC_X);
+   fChain->SetBranchAddress("RECOELE_TLE_ParentSC_Y", RECOELE_TLE_ParentSC_Y, &b_RECOELE_TLE_ParentSC_Y);
+   fChain->SetBranchAddress("RECOELE_TLE_ParentSC_Z", RECOELE_TLE_ParentSC_Z, &b_RECOELE_TLE_ParentSC_Z);
+   fChain->SetBranchAddress("RECOELE_ecalTrkEnergyPreCorr", RECOELE_ecalTrkEnergyPreCorr, &b_RECOELE_ecalTrkEnergyPreCorr);
+   fChain->SetBranchAddress("RECOELE_ecalTrkEnergyErrPreCorr", RECOELE_ecalTrkEnergyErrPreCorr, &b_RECOELE_ecalTrkEnergyErrPreCorr);
+   fChain->SetBranchAddress("RECOELE_ecalTrkEnergyErrPostCorr", RECOELE_ecalTrkEnergyErrPostCorr, &b_RECOELE_ecalTrkEnergyErrPostCorr);
+   fChain->SetBranchAddress("RECOELE_energyScaleValue", RECOELE_energyScaleValue, &b_RECOELE_energyScaleValue);
+   fChain->SetBranchAddress("RECOELE_energySigmaValue", RECOELE_energySigmaValue, &b_RECOELE_energySigmaValue);
+   fChain->SetBranchAddress("RECOELE_energyScaleUp", RECOELE_energyScaleUp, &b_RECOELE_energyScaleUp);
+   fChain->SetBranchAddress("RECOELE_energyScaleDown", RECOELE_energyScaleDown, &b_RECOELE_energyScaleDown);
+   fChain->SetBranchAddress("RECOELE_energyScaleStatUp", RECOELE_energyScaleStatUp, &b_RECOELE_energyScaleStatUp);
+   fChain->SetBranchAddress("RECOELE_energyScaleStatDown", RECOELE_energyScaleStatDown, &b_RECOELE_energyScaleStatDown);
+   fChain->SetBranchAddress("RECOELE_energyScaleSystUp", RECOELE_energyScaleSystUp, &b_RECOELE_energyScaleSystUp);
+   fChain->SetBranchAddress("RECOELE_energyScaleSystDown", RECOELE_energyScaleSystDown, &b_RECOELE_energyScaleSystDown);
+   fChain->SetBranchAddress("RECOELE_energyScaleGainUp", RECOELE_energyScaleGainUp, &b_RECOELE_energyScaleGainUp);
+   fChain->SetBranchAddress("RECOELE_energyScaleGainDown", RECOELE_energyScaleGainDown, &b_RECOELE_energyScaleGainDown);
+   fChain->SetBranchAddress("RECOELE_energyScaleEtUp", RECOELE_energyScaleEtUp, &b_RECOELE_energyScaleEtUp);
+   fChain->SetBranchAddress("RECOELE_energyScaleEtDown", RECOELE_energyScaleEtDown, &b_RECOELE_energyScaleEtDown);
+   fChain->SetBranchAddress("RECOELE_energySigmaUp", RECOELE_energySigmaUp, &b_RECOELE_energySigmaUp);
+   fChain->SetBranchAddress("RECOELE_energySigmaDown", RECOELE_energySigmaDown, &b_RECOELE_energySigmaDown);
+   fChain->SetBranchAddress("RECOELE_energySigmaPhiUp", RECOELE_energySigmaPhiUp, &b_RECOELE_energySigmaPhiUp);
+   fChain->SetBranchAddress("RECOELE_energySigmaPhiDown", RECOELE_energySigmaPhiDown, &b_RECOELE_energySigmaPhiDown);
+   fChain->SetBranchAddress("RECOELE_energySigmaRhoUp", RECOELE_energySigmaRhoUp, &b_RECOELE_energySigmaRhoUp);
+   fChain->SetBranchAddress("RECOELE_energySigmaRhoDown", RECOELE_energySigmaRhoDown, &b_RECOELE_energySigmaRhoDown);
+
+   //Muons syst
+   fChain->SetBranchAddress("RECOMU_PT_uncorr", RECOMU_PT_uncorr, &b_RECOMU_PT_uncorr);
+   fChain->SetBranchAddress("RECOMU_Rochester_Error", RECOMU_Rochester_Error, &b_RECOMU_Rochester_Error);
+   fChain->SetBranchAddress("RECOMU_mubesttrkPTError", RECOMU_mubesttrkPTError, &b_RECOMU_mubesttrkPTError);
+   
+   //Photons syst
+   fChain->SetBranchAddress("RECOPFPHOT_PT_uncorr", RECOPFPHOT_PT_uncorr, &b_RECOPFPHOT_PT_uncorr);
+   fChain->SetBranchAddress("RECOPFPHOT_ecalEnergyPreCorr", RECOPFPHOT_ecalEnergyPreCorr, &b_RECOPFPHOT_ecalEnergyPreCorr);
+   fChain->SetBranchAddress("RECOPFPHOT_ecalEnergyErrPreCorr", RECOPFPHOT_ecalEnergyErrPreCorr, &b_RECOPFPHOT_ecalEnergyErrPreCorr);
+   fChain->SetBranchAddress("RECOPFPHOT_ecalEnergyErrPostCorr", RECOPFPHOT_ecalEnergyErrPostCorr, &b_RECOPFPHOT_ecalEnergyErrPostCorr);
+   fChain->SetBranchAddress("RECOPFPHOT_energyScaleValue", RECOPFPHOT_energyScaleValue, &b_RECOPFPHOT_energyScaleValue);
+   fChain->SetBranchAddress("RECOPFPHOT_energySigmaValue", RECOPFPHOT_energySigmaValue, &b_RECOPFPHOT_energySigmaValue);
+   fChain->SetBranchAddress("RECOPFPHOT_energyScaleUp", RECOPFPHOT_energyScaleUp, &b_RECOPFPHOT_energyScaleUp);
+   fChain->SetBranchAddress("RECOPFPHOT_energyScaleDown", RECOPFPHOT_energyScaleDown, &b_RECOPFPHOT_energyScaleDown);
+   fChain->SetBranchAddress("RECOPFPHOT_energyScaleStatUp", RECOPFPHOT_energyScaleStatUp, &b_RECOPFPHOT_energyScaleStatUp);
+   fChain->SetBranchAddress("RECOPFPHOT_energyScaleStatDown", RECOPFPHOT_energyScaleStatDown, &b_RECOPFPHOT_energyScaleStatDown);
+   fChain->SetBranchAddress("RECOPFPHOT_energyScaleSystUp", RECOPFPHOT_energyScaleSystUp, &b_RECOPFPHOT_energyScaleSystUp);
+   fChain->SetBranchAddress("RECOPFPHOT_energyScaleSystDown", RECOPFPHOT_energyScaleSystDown, &b_RECOPFPHOT_energyScaleSystDown);
+   fChain->SetBranchAddress("RECOPFPHOT_energyScaleGainUp", RECOPFPHOT_energyScaleGainUp, &b_RECOPFPHOT_energyScaleGainUp);
+   fChain->SetBranchAddress("RECOPFPHOT_energyScaleGainDown", RECOPFPHOT_energyScaleGainDown, &b_RECOPFPHOT_energyScaleGainDown);
+   fChain->SetBranchAddress("RECOPFPHOT_energyScaleEtUp", RECOPFPHOT_energyScaleEtUp, &b_RECOPFPHOT_energyScaleEtUp);
+   fChain->SetBranchAddress("RECOPFPHOT_energyScaleEtDown", RECOPFPHOT_energyScaleEtDown, &b_RECOPFPHOT_energyScaleEtDown);
+   fChain->SetBranchAddress("RECOPFPHOT_energySigmaUp", RECOPFPHOT_energySigmaUp, &b_RECOPFPHOT_energySigmaUp);
+   fChain->SetBranchAddress("RECOPFPHOT_energySigmaDown", RECOPFPHOT_energySigmaDown, &b_RECOPFPHOT_energySigmaDown);
+   fChain->SetBranchAddress("RECOPFPHOT_energySigmaPhiUp", RECOPFPHOT_energySigmaPhiUp, &b_RECOPFPHOT_energySigmaPhiUp);
+   fChain->SetBranchAddress("RECOPFPHOT_energySigmaPhiDown", RECOPFPHOT_energySigmaPhiDown, &b_RECOPFPHOT_energySigmaPhiDown);
+   fChain->SetBranchAddress("RECOPFPHOT_energySigmaRhoUp", RECOPFPHOT_energySigmaRhoUp, &b_RECOPFPHOT_energySigmaRhoUp);
+   fChain->SetBranchAddress("RECOPFPHOT_energySigmaRhoDown", RECOPFPHOT_energySigmaRhoDown, &b_RECOPFPHOT_energySigmaRhoDown);
+
+   
    Notify();
 }
 

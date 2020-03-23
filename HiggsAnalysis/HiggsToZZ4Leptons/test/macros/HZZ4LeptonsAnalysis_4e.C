@@ -268,6 +268,9 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    int n_normptightcontrol=0;
    int contatore =0;
    int contatore2=0;
+
+   int cout_jet_match = 0;
+   int  cout_jet_match_bdisc = 0;
    // counter weighted
    double N_0_w = 0;	  // MC truth & acceptance
    double N_01_w = 0;
@@ -876,8 +879,11 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    TH1D *htotjetl = new TH1D("totjetl","totjetl",100,0,100);
    TH1D *htotjettpm = new TH1D("totjettpm","totjettpm",100,0,100);
 
-   TH1D *hbdiscmin = new TH1D("bdiscmin","bdiscmin",100,0,1);
-   TH1D *hbdiscmax = new TH1D("bdiscmax","bdiscmax",100,0,1);
+   TH1D *hbdiscmin = new TH1D("bdiscmin","bdiscmin",300,-3,1);
+   TH1D *hbdiscmax = new TH1D("bdiscmax","bdiscmax",300,-3,1);
+   TH1D *hbdiscmin_hbdisc = new TH1D("bdiscmin_hbdisc","bdiscmin_hbdisc",300,-3,1);
+   TH1D *hbdiscmax_hbdisc = new TH1D("bdiscmax_hbdisc","bdiscmax_hbdisc",300,-3,1);
+
    TH1D *histobdiscnpm = new TH1D("bdiscnpm","bdiscnpm",100,0,1);
 
    TH1D *hdeltaphi = new TH1D("deltaphi","deltaphi",100,0,10);
@@ -919,6 +925,8 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
  
   TH1D *hptmax = new TH1D("hptmax","hptmax",400,0,400);
   TH1D *hptmin = new TH1D("hptmin","hptmin",400,0,400);
+  TH1D *hptmax_hbdisc = new TH1D("hptmax_hbdisc","hptmax_hbdisc",400,0,400);
+  TH1D *hptmin_hbdisc = new TH1D("hptmin_hbdisc","hptmin_hbdisc",400,0,400);
   TH1D *hbdiscmin2 = new TH1D("hbdiscmin2","hbdiscmin2",100,0,1);
   TH2 *h2nobjet = new TH2D("h2nobjet","h2nobjet",300,0,300,100,0,1);
   TH2 *h2bjet = new TH2D("h2bjet","h2bjet",300,0,300,100,0,1);
@@ -1079,6 +1087,56 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 
    Int_t f_run, f_lumi, f_event;
 
+     Float_t f_RECOELE_PT_uncorr_lept1,
+   f_RECOELE_PT_uncorr_lept2,
+   f_RECOELE_PT_uncorr_lept3,
+   f_RECOELE_PT_uncorr_lept4;
+   /*
+   f_RECOELE_TLE_ParentSC_X, //RECOELE_TLE_ParentSC_X;
+   f_RECOELE_TLE_ParentSC_Y, //RECOELE_TLE_ParentSC_Y;
+   f_RECOELE_TLE_ParentSC_Z, //RECOELE_TLE_ParentSC_Z;
+   f_RECOELE_ecalTrkEnergyPreCorr, //RECOELE_ecalTrkEnergyPreCorr;
+   f_RECOELE_ecalTrkEnergyErrPreCorr, //RECOELE_ecalTrkEnergyErrPreCorr;
+   f_RECOELE_ecalTrkEnergyErrPostCorr, //RECOELE_ecalTrkEnergyErrPostCorr;
+   f_RECOELE_energyScaleValue, //RECOELE_energyScaleValue;
+   f_RECOELE_energySigmaValue, //RECOELE_energySigmaValue;
+   f_RECOELE_energyScaleUp, //RECOELE_energyScaleUp;
+   f_RECOELE_energyScaleDown, //RECOELE_energyScaleDown;
+   f_RECOELE_energyScaleStatUp, //RECOELE_energyScaleStatUp;
+   f_RECOELE_energyScaleStatDown, //RECOELE_energyScaleStatDown;
+   f_RECOELE_energyScaleSystUp, //RECOELE_energyScaleSystUp;
+   f_RECOELE_energyScaleSystDown, //RECOELE_energyScaleSystDown;
+   f_RECOELE_energyScaleGainUp, //RECOELE_energyScaleGainUp;
+   f_RECOELE_energyScaleGainDown, //ECOELE_energyScaleGainDown;
+   f_RECOELE_energyScaleEtUp,//RECOELE_energyScaleEtUp;
+   f_RECOELE_energyScaleEtDown, //RECOELE_energyScaleEtDown;
+   f_RECOELE_energySigmaUp, //RECOELE_energySigmaUp;
+   f_RECOELE_energySigmaDown, //RECOELE_energySigmaDown;
+   f_RECOELE_energySigmaPhiUp, //RECOELE_energySigmaPhiUp;
+   f_RECOELE_energySigmaPhiDown, //RECOELE_energySigmaPhiDown;
+   f_RECOELE_energySigmaRhoUp, //RECOELE_energySigmaRhoUp;
+   f_RECOELE_energySigmaRhoDown; //RECOELE_energySigmaRhoDown;*/
+
+     //MET syst
+   Float_t f_RECO_PFMET_JetEnUp,
+   f_RECO_PFMET_JetEnDn,
+   f_RECO_PFMET_ElectronEnUp,
+   f_RECO_PFMET_ElectronEnDn,
+   f_RECO_PFMET_MuonEnUp,
+   f_RECO_PFMET_MuonEnDn,
+   f_RECO_PFMET_JetResUp,
+   f_RECO_PFMET_JetResDn,
+   f_RECO_PFMET_UnclusteredEnUp,
+   f_RECO_PFMET_UnclusteredEnDn,
+   f_RECO_PFMET_PhotonEnUp,
+   f_RECO_PFMET_PhotonEnDn;
+
+  //jet sys
+  Float_t f_RECO_PFJET_PT_UncUp_jet1,
+  f_RECO_PFJET_PT_UncDn_jet1,
+  f_RECO_PFJET_PT_UncUp_jet2,
+  f_RECO_PFJET_PT_UncDn_jet2;
+
 //Add other branches
    TBranch *b_crjetjet= newtree->Branch("f_crjetjet", &f_crjetjet,"f_crjetjet/B");
    TBranch *b_deltaphi= newtree->Branch("f_deltaphi", &f_deltaphi,"f_deltaphi/F");
@@ -1214,6 +1272,57 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    TBranch *b_f_category= newtree->Branch("f_category", &f_category,"f_category/I");
    TBranch *b_f_Ngood= newtree->Branch("f_Ngood", &f_Ngood,"f_Ngood/I");
    TBranch *b_f_Nbjets=newtree->Branch("f_Nbjets", &f_Nbjets, "f_Nbjets/I");
+//electrons syst
+
+  TBranch *b_RECOELE_PT_uncorr_lept1 = newtree->Branch("f_RECOELE_PT_uncorr_lept1", &f_RECOELE_PT_uncorr_lept1, "f_RECOELE_PT_uncorr_lept1/F");
+  TBranch *b_RECOELE_PT_uncorr_lept2 = newtree->Branch("f_RECOELE_PT_uncorr_lept2", &f_RECOELE_PT_uncorr_lept2, "f_RECOELE_PT_uncorr_lept2/F");
+  TBranch *b_RECOELE_PT_uncorr_lept3 = newtree->Branch("f_RECOELE_PT_uncorr_lept3", &f_RECOELE_PT_uncorr_lept3, "f_RECOELE_PT_uncorr_lept3/F");
+  TBranch *b_RECOELE_PT_uncorr_lept4 = newtree->Branch("f_RECOELE_PT_uncorr_lept4", &f_RECOELE_PT_uncorr_lept4, "f_RECOELE_PT_uncorr_lept4/F");
+   /*TBranch *b_RECOELE_TLE_ParentSC_X = newtree->Branch("f_RECOELE_TLE_ParentSC_X", &f_RECOELE_TLE_ParentSC_X, "f_RECOELE_TLE_ParentSC_X/F");
+   TBranch *b_RECOELE_TLE_ParentSC_Y = newtree->Branch("f_RECOELE_TLE_ParentSC_Y", &f_RECOELE_TLE_ParentSC_Y, "f_RECOELE_TLE_ParentSC_Y/F");
+   TBranch *b_RECOELE_TLE_ParentSC_Z = newtree->Branch("f_RECOELE_TLE_ParentSC_Z", &f_RECOELE_TLE_ParentSC_Z, "f_RECOELE_TLE_ParentSC_Z/F");
+   TBranch *b_RECOELE_ecalTrkEnergyPreCorr = newtree->Branch("f_RECOELE_ecalTrkEnergyPreCorr", &f_RECOELE_ecalTrkEnergyPreCorr, "f_RECOELE_ecalTrkEnergyPreCorr/F");
+   TBranch *b_RECOELE_ecalTrkEnergyErrPreCorr = newtree->Branch("f_RECOELE_ecalTrkEnergyErrPreCorr", &f_RECOELE_ecalTrkEnergyErrPreCorr, "f_RECOELE_ecalTrkEnergyErrPreCorr/F");
+   TBranch *b_RECOELE_ecalTrkEnergyErrPostCorr = newtree->Branch("f_RECOELE_ecalTrkEnergyErrPostCorr", &f_RECOELE_ecalTrkEnergyErrPostCorr, "f_RECOELE_ecalTrkEnergyErrPostCorr/F");
+   TBranch *b_RECOELE_energyScaleValue = newtree->Branch("f_RECOELE_energyScaleValue", &f_RECOELE_energyScaleValue, "f_RECOELE_energyScaleValue/F");
+   TBranch *b_RECOELE_energySigmaValue = newtree->Branch("f_RECOELE_energySigmaValue", &f_RECOELE_energySigmaValue, "f_RECOELE_energySigmaValue/F");
+   TBranch *b_RECOELE_energyScaleUp = newtree->Branch("f_RECOELE_energyScaleUp", &f_RECOELE_energyScaleUp, "f_RECOELE_energyScaleUp/F");
+   TBranch *b_RECOELE_energyScaleDown = newtree->Branch("f_RECOELE_energyScaleDown", &f_RECOELE_energyScaleDown, "f_RECOELE_energyScaleDown/F");
+   TBranch *b_RECOELE_energyScaleStatUp = newtree->Branch("f_RECOELE_energyScaleStatUp", &f_RECOELE_energyScaleStatUp, "f_RECOELE_energyScaleStatUp/F");
+   TBranch *b_RECOELE_energyScaleStatDown = newtree->Branch("f_RECOELE_energyScaleStatDown", &f_RECOELE_energyScaleStatDown, "f_RECOELE_energyScaleStatDown/F");
+   TBranch *b_RECOELE_energyScaleSystUp = newtree->Branch("f_RECOELE_energyScaleSystUp", &f_RECOELE_energyScaleSystUp, "f_RECOELE_energyScaleSystUp/F");
+   TBranch *b_RECOELE_energyScaleSystDown = newtree->Branch("f_RECOELE_energyScaleSystDown", &f_RECOELE_energyScaleSystDown, "f_RECOELE_energyScaleSystDown/F");
+   TBranch *b_RECOELE_energyScaleGainUp = newtree->Branch("f_RECOELE_energyScaleGainUp", &f_RECOELE_energyScaleGainUp, "f_RECOELE_energyScaleGainUp/F");
+   TBranch *b_RECOELE_energyScaleGainDown = newtree->Branch("f_RECOELE_energyScaleGainDown", &f_ECOELE_energyScaleGainDown, "f_RECOELE_energyScaleGainDown/F");
+   TBranch *b_RECOELE_energyScaleEtUp = newtree->Branch("f_RECOELE_energyScaleEtUp", &f_ECOELE_energyScaleEtUp, "f_RECOELE_energyScaleEtUp/F");
+   TBranch *b_RECOELE_energyScaleEtDown = newtree->Branch("f_RECOELE_energyScaleEtDown", &f_RECOELE_energyScaleEtDown, "f_RECOELE_energyScaleEtDown/F");
+   TBranch *b_RECOELE_energySigmaUp = newtree->Branch("f_RECOELE_energySigmaUp", &f_RECOELE_energySigmaUp, "f_RECOELE_energySigmaUp/F");
+   TBranch *b_RECOELE_energySigmaDown = newtree->Branch("f_RECOELE_energySigmaDown", &f_RECOELE_energySigmaDown, "f_RECOELE_energySigmaDown/F");
+   TBranch *b_RECOELE_energySigmaPhiUp = newtree->Branch("f_RECOELE_energySigmaPhiUp", &f_RECOELE_energySigmaPhiUp, "f_RECOELE_energySigmaPhiUp/F");
+   TBranch *b_RECOELE_energySigmaPhiDown = newtree->Branch("f_RECOELE_energySigmaPhiDown", &f_RECOELE_energySigmaPhiDown, "f_RECOELE_energySigmaPhiDown/F");
+   TBranch *b_RECOELE_energySigmaRhoUp = newtree->Branch("f_RECOELE_energySigmaRhoUp", &f_RECOELE_energySigmaRhoUp, "f_RECOELE_energySigmaRhoUp/F");
+   TBranch *b_RECOELE_energySigmaRhoDown = newtree->Branch("f_RECOELE_energySigmaRhoDown", &f_RECOELE_energySigmaRhoDown, "f_RECOELE_energySigmaRhoDown/F");*/
+
+  //Met syst
+   TBranch *b_RECO_PFMET_JetEnUp = newtree->Branch("f_RECO_PFMET_JetEnUp", &f_RECO_PFMET_JetEnUp, "f_RECO_PFMET_JetEnUp/F");
+   TBranch *b_RECO_PFMET_JetEnDn = newtree->Branch("f_RECO_PFMET_JetEnDn", &f_RECO_PFMET_JetEnDn, "f_RECO_PFMET_JetEnDn/F");
+   TBranch *b_RECO_PFMET_ElectronEnUp = newtree->Branch("f_RECO_PFMET_ElectronEnUp", &f_RECO_PFMET_ElectronEnUp, "f_RECO_PFMET_ElectronEnUp/F");
+   TBranch *b_RECO_PFMET_ElectronEnDn = newtree->Branch("f_RECO_PFMET_ElectronEnDn", &f_RECO_PFMET_ElectronEnDn, "f_RECO_PFMET_ElectronEnDn/F");
+   TBranch *b_RECO_PFMET_MuonEnUp = newtree->Branch("f_RECO_PFMET_MuonEnUp", &f_RECO_PFMET_MuonEnUp, "f_RECO_PFMET_MuonEnUp/F");
+   TBranch *b_RECO_PFMET_MuonEnDn = newtree->Branch("f_RECO_PFMET_MuonEnDn", &f_RECO_PFMET_MuonEnDn, "f_RECO_PFMET_MuonEnDn/F");
+   TBranch *b_RECO_PFMET_JetResUp = newtree->Branch("f_RECO_PFMET_JetResUp", &f_RECO_PFMET_JetResUp, "f_RECO_PFMET_JetResUp/F");
+   TBranch *b_RECO_PFMET_JetResDn = newtree->Branch("f_RECO_PFMET_JetResDn", &f_RECO_PFMET_JetResDn, "f_RECO_PFMET_JetResDn/F");
+   TBranch *b_RECO_PFMET_UnclusteredEnUp = newtree->Branch("f_RECO_PFMET_UnclusteredEnUp", &f_RECO_PFMET_UnclusteredEnUp, "f_RECO_PFMET_UnclusteredEnUp/F");
+   TBranch *b_RECO_PFMET_UnclusteredEnDn = newtree->Branch("f_RECO_PFMET_UnclusteredEnDn", &f_RECO_PFMET_UnclusteredEnDn, "f_RECO_PFMET_UnclusteredEnDn/F");
+   TBranch *b_RECO_PFMET_PhotonEnUp = newtree->Branch("f_RECO_PFMET_PhotonEnUp", &f_RECO_PFMET_PhotonEnUp, "f_RECO_PFMET_PhotonEnUp/F");
+   TBranch *b_RECO_PFMET_PhotonEnDn = newtree->Branch("f_RECO_PFMET_PhotonEnDn", &f_RECO_PFMET_PhotonEnDn, "f_RECO_PFMET_PhotonEnDn/F");
+
+  //jet syst
+  TBranch *b_RECO_PFJET_PT_UncUp_jet1 = newtree->Branch("f_RECO_PFJET_PT_UncUp_jet1", &f_RECO_PFJET_PT_UncUp_jet1, "f_RECO_PFJET_PT_UncUp_jet1/F");
+  TBranch *b_RECO_PFJET_PT_UncDn_jet1 = newtree->Branch("f_RECO_PFJET_PT_UncDn_jet1", &f_RECO_PFJET_PT_UncDn_jet1, "f_RECO_PFJET_PT_UncDn_jet1/F");
+
+  TBranch *b_RECO_PFJET_PT_UncDn_jet2 = newtree->Branch("f_RECO_PFJET_PT_UncDn_jet2", &f_RECO_PFJET_PT_UncDn_jet2, "f_RECO_PFJET_PT_UncDn_jet2/F");
+  TBranch *b_RECO_PFJET_PT_UncUp_jet2 = newtree->Branch("f_RECO_PFJET_PT_UncUp_jet2", &f_RECO_PFJET_PT_UncUp_jet2, "f_RECO_PFJET_PT_UncUp_jet2/F");
 
    float newweight=1.;
    
@@ -1230,7 +1339,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
    //cout << "Analyzing " << nentries << " entries"  <<endl;     
 
    Long64_t nbytes = 0, nb = 0;
-   for (Long64_t jentry=0; jentry<100000;jentry++) {
+   for (Long64_t jentry=0; jentry<nentries;jentry++) {
       Long64_t ientry = LoadTree(jentry);
       if (ientry < 0) break;
       nb = fChain->GetEntry(jentry);   nbytes += nb;
@@ -1242,17 +1351,72 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       //Added variables for TMVA
     f_deltaphi=-999., f_deltar=-999., f_MET=-999., f_deltar_2med =-999., f_deltaphi_2med = -999., f_MET_2med = -999., f_deltar_norm= -999., f_deltaphi_norm = -999., f_MET_norm = -999., f_pt3 = -999.;
 
-    f_mass_4l=-999., f_bdiscjet1 = -999., f_bdiscjet2 = -999, f_massjetjet = -999., f_ptjet1 = -999., f_ptjet2 = -999., f_etajet1 = -999., f_etajet2 = -999., f_phijet1 = -999., f_phijet2 = -999.;
+    f_mass_4l=-999., f_bdiscjet1 = -999., f_bdiscjet2 = -999, f_bdiscjet1_h = -999., f_bdiscjet2_h = -999, f_massjetjet = -999., f_ptjet1 = -999., f_ptjet2 = -999., f_etajet1 = -999., f_etajet2 = -999., f_phijet1 = -999., f_phijet2 = -999.;
 
     f_deltaphi_jethighestpt=-999., f_deltar_jethighestpt=-999., f_massjetjet_h = -999., f_ptjet1_h = -999., f_ptjet2_h = -999., f_etajet1_h = -999., f_etajet2_h = -999., f_phijet1_h = -999., f_phijet2_h = -999.;
 
     f_totbjet = -999.;
 
+
+//electrons syst
+  f_RECOELE_PT_uncorr_lept1 = -999;
+  f_RECOELE_PT_uncorr_lept2 = -999;
+  f_RECOELE_PT_uncorr_lept3 = -999;
+  f_RECOELE_PT_uncorr_lept4 = -999;/*
+   f_RECOELE_TLE_ParentSC_X = -999;
+   f_RECOELE_TLE_ParentSC_Y = -999;
+   f_RECOELE_TLE_ParentSC_Z = -999;
+   f_RECOELE_ecalTrkEnergyPreCorr = -999;
+   f_RECOELE_ecalTrkEnergyErrPreCorr = -999;
+   f_RECOELE_ecalTrkEnergyErrPostCorr = -999;
+   f_RECOELE_energyScaleValue = -999;
+   f_RECOELE_energySigmaValue = -999;
+   f_RECOELE_energyScaleUp = -999;
+   f_RECOELE_energyScaleDown = -999;
+   f_RECOELE_energyScaleStatUp = -999;
+   f_RECOELE_energyScaleStatDown = -999;
+   f_RECOELE_energyScaleSystUp = -999;
+   f_RECOELE_energyScaleSystDown = -999;
+   f_RECOELE_energyScaleGainUp = -999;
+   f_RECOELE_energyScaleGainDown = -999;
+   f_RECOELE_energyScaleEtUp = -999;
+   f_RECOELE_energyScaleEtDown = -999;
+   f_RECOELE_energySigmaUp = -999;
+   f_RECOELE_energySigmaDown = -999;
+   f_RECOELE_energySigmaPhiUp = -999;
+   f_RECOELE_energySigmaPhiDown = -999;
+   f_RECOELE_energySigmaRhoUp = -999;
+   f_RECOELE_energySigmaRhoDown = -999;*/
+
+  //MET syst
+   f_RECO_PFMET_JetEnUp = -999;
+   f_RECO_PFMET_JetEnDn = -999;
+   f_RECO_PFMET_ElectronEnUp = -999;
+   f_RECO_PFMET_ElectronEnDn = -999;
+   f_RECO_PFMET_MuonEnUp = -999;
+   f_RECO_PFMET_MuonEnDn = -999;
+   f_RECO_PFMET_JetResUp = -999;
+   f_RECO_PFMET_JetResDn = -999;
+   f_RECO_PFMET_UnclusteredEnUp = -999;
+   f_RECO_PFMET_UnclusteredEnDn = -999;
+   f_RECO_PFMET_PhotonEnUp = -999;
+   f_RECO_PFMET_PhotonEnDn = -999;
+
+  //jet syst
+
+    //jet syst
+   f_RECO_PFJET_PT_UncUp_jet1 = -999;
+   f_RECO_PFJET_PT_UncDn_jet1 = -999;
+
+   f_RECO_PFJET_PT_UncUp_jet2 = -999;
+   f_RECO_PFJET_PT_UncDn_jet2 = -999;
+
     f_crjetjet=false;
 
       //if (!(Run==1 && LumiSection==2355 && Event==451989)) continue;
       //if(!(Run==257531 && LumiSection==121 && Event==178979541)) continue;
- 
+       cout<<"This is run= "<<Run<<"Lumi= "<<LumiSection<<"Event= "<<Event<<endl;
+
       if(jentry%1 == 5000) //cout << "Analyzing entry: " << jentry << endl;
       
 
@@ -1343,7 +1507,9 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 
                  
       float pFill[11];for(int pf=0;pf<11;pf++)pFill[11]=-999.;
-
+    f_run = Run;
+    f_event = Event;
+    f_lumi = LumiSection;
       // ** Step 0:
       // simply number of entries...
       //if( debug ) //cout << "\n** Step 0: \nAnalyzing entry: " << jentry << " Run: " << Run << " Event: " << Event << " LumiSection: " << LumiSection << endl ;
@@ -1635,27 +1801,38 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	else continue ;
 	
 	bool BDT_ok = 0; // Spring16 with CMSSW_8_2_0
-	if( RECOELE_PT[i] > 7. &&  RECOELE_PT[i] <= 10. ){
-	  	if( fabs(RECOELE_scl_Eta[i]) < .8 && RECOELE_mvaNonTrigV0[i] > -0.211 ) BDT_ok = 1 ;
-		if( ( fabs(RECOELE_scl_Eta[i]) >= .8 && fabs(RECOELE_scl_Eta[i]) < 1.479 )
-						 && RECOELE_mvaNonTrigV0[i] > -0.396 ) BDT_ok = 1 ;
-		if( fabs(RECOELE_scl_Eta[i]) >= 1.479 && RECOELE_mvaNonTrigV0[i] > -0.215 ) BDT_ok = 1 ;
-	}
-	else { 
-		if( fabs(RECOELE_scl_Eta[i]) < .8 && RECOELE_mvaNonTrigV0[i] > -0.870 ) BDT_ok = 1 ;
-		if( ( fabs(RECOELE_scl_Eta[i]) >= .8 && fabs(RECOELE_scl_Eta[i]) <= 1.479 )
-						 && RECOELE_mvaNonTrigV0[i] > -0.838 ) BDT_ok = 1 ;
-		if( fabs(RECOELE_scl_Eta[i]) > 1.479 && RECOELE_mvaNonTrigV0[i] > -0.763 ) BDT_ok = 1 ;
-	}
-	if( !BDT_ok ) continue ;
+	//if( RECOELE_PT[i] > 7. &&  RECOELE_PT[i] <= 10. ){
+	//  	if( fabs(RECOELE_scl_Eta[i]) < .8 && RECOELE_mvaNonTrigV0[i] > -0.211 ) BDT_ok = 1 ;
+	//	if( ( fabs(RECOELE_scl_Eta[i]) >= .8 && fabs(RECOELE_scl_Eta[i]) < 1.479 )
+	//					 && RECOELE_mvaNonTrigV0[i] > -0.396 ) BDT_ok = 1 ;
+	//	if( fabs(RECOELE_scl_Eta[i]) >= 1.479 && RECOELE_mvaNonTrigV0[i] > -0.215 ) BDT_ok = 1 ;
+	//}
+	//else { 
+	//	if( fabs(RECOELE_scl_Eta[i]) < .8 && RECOELE_mvaNonTrigV0[i] > -0.870 ) BDT_ok = 1 ;
+	//	if( ( fabs(RECOELE_scl_Eta[i]) >= .8 && fabs(RECOELE_scl_Eta[i]) <= 1.479 )
+	//					 && RECOELE_mvaNonTrigV0[i] > -0.838 ) BDT_ok = 1 ;
+	//	if( fabs(RECOELE_scl_Eta[i]) > 1.479 && RECOELE_mvaNonTrigV0[i] > -0.763 ) BDT_ok = 1 ;
+	//}
+	//if( !BDT_ok ) continue ;
 	//if( RECOELE_PT[i] > 7. && RECOELE_ID[i]==1 ){BDT_ok =1;};
 	//if( !BDT_ok ) continue ;	
 
 
+	//if( fabs(RECOELE_gsftrack_dxy[i]) < .5 
+	// && fabs(RECOELE_gsftrack_dz[i])  < 1. ) /* ok */ ;
+	//else continue ; 
+	//	
+	//iLe[ Ne_good ] = i ;
+	//++Ne_good ;
+
+	if( RECOELE_PT[i] > 7. && RECOELE_ID[i]==1 ){BDT_ok =1;};
+	if( !BDT_ok ) continue ;
+	//cout<<"step1"<<endl;
+	
 	if( fabs(RECOELE_gsftrack_dxy[i]) < .5 
 	 && fabs(RECOELE_gsftrack_dz[i])  < 1. ) /* ok */ ;
 	else continue ; 
-		
+	//cout<<"step2"<<endl;
 	iLe[ Ne_good ] = i ;
 	++Ne_good ;
 
@@ -2007,7 +2184,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 
       // a) pair #1: mass closest to Z1
       // b) mLL in ] 40,120 [
-      //      if( debug ) //cout  << "\nStep 3: Number of good leptons: " << Ne_good << endl;
+     if( debug ) cout  << "\nStep 3: Number of good leptons: " << Ne_good << endl;
  
       if( Ne_good < 2 ) continue ; 	
 
@@ -2019,13 +2196,26 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       bool has_FSR_Z1 = 0;
       TLorentzVector Lepton1,Lepton2,DiLepton,LeptonCorrection;
 
+      for (int i=0; i<4; i++){
+	cout<<"Electron properties PT= "<<RECOELE_PT[ iLe[i] ]
+	    <<"\n SIP = "<<RECOELE_SIP[iLe[i]]
+	    <<"\n ISO = "<<RECOELE_PFX_rho_new[iLe[i]]<<endl; }
+
       for(int i = 0; i < Ne_good; ++i){
         for(int j = i + 1; j < Ne_good; ++j){
-	  if (fabs(RECOELE_SIP[iLe[i]])>=4.) continue;
+	/*  if (fabs(RECOELE_SIP[iLe[i]])>=4.) continue;
 	  if (fabs(RECOELE_SIP[iLe[j]])>=4.) continue;
 	  if (fabs(RECOELE_PFX_rho_new[iLe[i]])>=0.35) continue; // Isolation cut
 	  if (fabs(RECOELE_PFX_rho_new[iLe[j]])>=0.35) continue;
-	  
+	 */
+
+   	if (fabs(RECOELE_SIP[iLe[i]])>=4.) continue;
+	  if (fabs(RECOELE_SIP[iLe[j]])>=4.) continue;
+	  //if (fabs(RECOELE_PFX_rho_new[iLe[i]])>=0.35) continue; // Isolation cut //reham
+	  // if (fabs(RECOELE_PFX_rho_new[iLe[j]])>=0.35) continue; //reham
+	  if (RECOELE_PFX_rho[iLe[i]]== -999) continue; // Isolation cut //reham
+	  if (RECOELE_PFX_rho[iLe[j]]== -999) continue; //reham
+
 	  if(RECOELE_CHARGE[ iLe[j] ] == RECOELE_CHARGE[ iLe[i] ]) continue; // opposite charge
 
 	  //cout << "Pairing electrons with pT= " << RECOELE_PT[ iLe[i] ] << " and " <<  RECOELE_PT[ iLe[j] ] << endl;
@@ -2045,14 +2235,14 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	  DiLepton=Lepton1+Lepton2;	  
 	  massZ = DiLepton.M();	  
 	  massZ_noFSR = massZ;
-	  //	  if (debug) //cout << "Mass Z= " << massZ << endl;
+	  if (debug) cout << "Mass Z= " << massZ << endl;
 	  pxZ=DiLepton.Px();
 	  pyZ=DiLepton.Py();
 	  pzZ=DiLepton.Pz();
 	  EZ=DiLepton.E();
 	  	  	 
 	  // ** Association of FSR to Z
-	  //	  if( debug ) //cout  << "Step Z+FSR  " << endl;
+	  if( debug ) cout  << "Step Z+FSR  " << endl;
 	  
 	  bool has_FSR_Z = 0;
 	  int N_FSR_Z = 0;
@@ -2132,7 +2322,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	    if( debug ) cout  << "Z Isolation (not corrected for photon): "
                               << "\n RECOELE_PFX_rho[ iLe[i] ] " << RECOELE_PFX_rho[ iLe[i] ]
                               << "\n RECOELE_PFX_rho[ iLe[j] ] " << RECOELE_PFX_rho[ iLe[j] ]
-                              << endl;
+                  			      << endl;
 	    	   
 	    if( pi != -1 ){
 	      //double deltaR_i = sqrt( pow( DELTAPHI( RECOPFPHOT_PHI[iLp[pi]] , RECOELE_PHI[iLe[i]] ),2) + pow(RECOPFPHOT_ETA[iLp[pi]] - RECOELE_ETA[iLe[i]],2) );
@@ -2194,11 +2384,13 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	}
       } // end loop on couples
       
-     
-      if (Zcandvector.size()<2) {
+cout << "prima di size < 1  " << Zcandvector.size() << "\n";
+      if (Zcandvector.size()<1) {
 	//cout << "Less than two Z pairs with isolated leptons...exiting" << endl;
 	continue; 
       }
+
+cout << "dopo di size < 1  " << "\n";
 
       ++N_3a ;  // fill counter
       N_3a_w=N_3a_w+newweight;
@@ -2214,7 +2406,7 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
 	Zcandisolmassvector.push_back(Zcandvector.at(index));
       };
       
-      if (Zcandisolmassvector.size()<2) {
+      if (Zcandisolmassvector.size()<1) {//cambialo poi
 	//cout << "No ZZ passing the mass cut"<< endl;
 	continue;
       }
@@ -2312,87 +2504,6 @@ void HZZ4LeptonsAnalysis::Loop(Char_t *output)
       //cout << "Starting weight + pileup + efficiency= " << newweight << endl;
       //      if(debug) //cout << "Efficiency Weight for the Z1: " << eff_weight_3 << " Final weight for Z1= " << newweight << endl;
 
- 
-//------------------------------------------------------------------------------
-//FR calculation
-//------------------------------------------------------------------------------
-
- 
- 
-     double massfr = -999.; //initial value
-    int index = -1;
-
-    for (int indexfr=0; indexfr<Zcandisolmassvector.size();indexfr++){	
-      if( fabs(Zcandisolmassvector.at(indexfr).massvalue - Zmass) < fabs(massfr - Zmass) ){
-	massfr=Zcandisolmassvector.at(indexfr).massvalue;
-	index = indexfr;
-      }       
-    }
-    //ZcandittZ.push_back(Zcandisolmassvector.at(indexgood));
-    if(index >= 0){
-    //ZcandittZ.push_back(Zcandisolmassvector.at(indexgood));  
-    if(Zcandisolmassvector.at(index).massvalue > 60 && Zcandisolmassvector.at(index).massvalue < 120){
-   Z1_mass->Fill(Zcandisolmassvector.at(index).massvalue,newweight); 
-	}
- 
-float deltar_fake_1, deltar_fake_2;
-float delta_R_1, delta_R_2;
-
-int ngood_jets =0;
-
-   for(int j=0;j<RECO_PFJET_N;j++){
-      delta_R_1 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[j],Zcandisolmassvector.at(index).phi1),2) + pow(RECO_PFJET_ETA[j] - Zcandisolmassvector.at(index).eta1,2));
-      delta_R_2 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[j],Zcandisolmassvector.at(index).phi2),2) + pow(RECO_PFJET_ETA[j] - Zcandisolmassvector.at(index).eta2,2));
-      if(RECO_PFJET_PT[j] > 20 && fabs(RECO_PFJET_ETA[j]) < 2.4 && delta_R_1 > 0.3 && delta_R_2 > 0.3)
-	{ngood_jets++;}
-	}
-//cout << "good jets before fr calculation "<< ngood_jets;
-
-
-
-for(int i = 0; i < N_loose_e; i++){//cycle on loose muons
-
-if(N_loose_e == 3 && ngood_jets >=2){//control region 2 good leptons + 1 fake leptons + 2 good jets
-
- if(iL_loose_e[i] != (Zcandisolmassvector.at(index).ilept1 && Zcandisolmassvector.at(index).ilept2)){
-
-  deltar_fake_1 = sqrt( pow(DELTAPHI(RECOMU_PHI[iL_loose_e[i]],Zcandisolmassvector.at(index).phi1),2) + pow(RECOMU_ETA[iL_loose_e[i]] - Zcandisolmassvector.at(index).eta1,2));
-  deltar_fake_2 = sqrt( pow(DELTAPHI(RECOMU_PHI[iL_loose_e[i]],Zcandisolmassvector.at(index).phi2),2) + pow(RECOMU_ETA[iL_loose_e[i]] - Zcandisolmassvector.at(index).eta2,2));
-  
- if (fabs( RECOMU_SIP[iL_loose_e[i]] ) < 4. && (deltar_fake_1 > 0.02 && deltar_fake_2 > 0.02)){//>0.3
-
-//taking the histogram for the fake muons
-    if(fabs (RECOMU_ETA[iL_loose_e[i]]) <= 1.2){ //barrel
-       PT_fake_loose_barrel->Fill(RECOMU_PT[iL_loose_e[i]], newweight);
-       MET_fake_loose_barrel->Fill(RECO_PFMET,newweight);
-       Z1_fakemassloose_barrel->Fill(Zcandisolmassvector.at(index).massvalue, newweight);
-       }else{//endcap
-         PT_fake_loose_endcap->Fill(RECOMU_PT[iL_loose_e[i]], newweight);
-         MET_fake_loose_endcap->Fill(RECO_PFMET,newweight);
-         Z1_fakemassloose_endcap->Fill(Zcandisolmassvector.at(index).massvalue, newweight); 
-         }
-         
-//if the fake muon pass also the tight criteria...
-	 if( ( RECOMU_isPFMu[iL_loose_e[i]] || (RECOMU_isTrackerHighPtMu[iL_loose_e[i]] && RECOMU_PT[iL_loose_e[i]] > 200.) ) && RECOMU_PFX_dB_new[iL_loose_e[i]]<0.35  ){
-
-    if(fabs (RECOMU_ETA[iL_loose_e[i]]) <= 1.2){ //barrel
-       PT_fake_tight_barrel->Fill(RECOMU_PT[iL_loose_e[i]], newweight);
-       MET_fake_tight_barrel->Fill(RECO_PFMET,newweight);
-       Z1_fakemasstight_barrel->Fill(Zcandisolmassvector.at(index).massvalue, newweight);
-       }else{//endcap
-         PT_fake_tight_endcap->Fill(RECOMU_PT[iL_loose_e[i]], newweight);
-         MET_fake_tight_endcap->Fill(RECO_PFMET,newweight);
-         Z1_fakemasstight_endcap->Fill(Zcandisolmassvector.at(index).massvalue, newweight); 
-                }
-            }
-         }
-      }
-    }
-  }
-    }
- 
- 
-
      int njets_pass=0;
      TLorentzVector JET1,JET2;
      int jet1=-999,jet2=-999;      
@@ -2402,14 +2513,13 @@ if(N_loose_e == 3 && ngood_jets >=2){//control region 2 good leptons + 1 fake le
      int n_jett=0;
 
      for(int i=0;i<100;i++) jetfail[i]=0;
-     
+     /*
      for(int i=0;i<RECO_PFJET_N;i++){
-       //cout<<i<<" Jet with pt= "<<RECO_PFJET_PT[i]<<" ETA "<<RECO_PFJET_ETA[i]<<" PUID "<<RECO_PFJET_PUID[i] << " PUID_MVA "<< RECO_PFJET_PUID_MVA[i]<<endl;
-       //if(RECO_PFJET_PUID[i]==1 && RECO_PFJET_PT[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){ // NO PU ID temporary
-       //if(RECO_PFJET_PT[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){       
+       //cout<<i<<" Jet with pt= "<<RECO_PFJET_PT_UncUp[i]<<" ETA "<<RECO_PFJET_ETA[i]<<" PUID "<<RECO_PFJET_PUID[i] << " PUID_MVA "<< RECO_PFJET_PUID_MVA[i]<<endl;
+       //if(RECO_PFJET_PUID[i]==1 && RECO_PFJET_PT_UncUp[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){ // NO PU ID temporary
+       //if(RECO_PFJET_PT_UncUp[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){       
        if(RECO_PFJET_PUID[i]==1 && RECO_PFJET_PT[i]>20. && fabs(RECO_PFJET_ETA[i])<2.4 ){       
-
-
+       //       if(RECO_PFJET_PUID[i]==1 && RECO_PFJET_PT[i]>20. && fabs(RECO_PFJET_ETA[i])<2.4 ){
 
       	 //Check that jet has deltaR>0.4 away from any tight lepton corrected for FSR
 	 for(int mu = 0; mu < N_good; ++mu){
@@ -2427,7 +2537,8 @@ if(N_loose_e == 3 && ngood_jets >=2){//control region 2 good leptons + 1 fake le
 	 
       	 for(int ele = 0; ele < Ne_good; ++ele){
       	   if (fabs(RECOELE_SIP[iLe[ele]])>=4.) continue;
-	   if (RECOELE_PFX_rho_new[iLe[ele]]>=0.35) continue;
+	   //if (RECOELE_PFX_rho_new[iLe[ele]]>=0.35) continue;
+     if (RECOELE_PFX_rho[iLe[ele]]== -999) continue;
       	   double deltaR = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOELE_PHI[iLe[ele]]),2) + pow(RECO_PFJET_ETA[i] - RECOELE_ETA[iLe[ele]],2));
      	   //cout << "1st lepton electron: " << " pT=" << RECOELE_PT[iLe[ele]] <<" deltaR "<< deltaR <<endl;
           deltaR_jets_electrons->Fill(deltaR, newweight);
@@ -2454,7 +2565,7 @@ if(N_loose_e == 3 && ngood_jets >=2){//control region 2 good leptons + 1 fake le
 	 // 
 	 
 	 if (jetfail[i]==0){
-	   //cout<< " PASS jet " <<i<<" PT= "<<RECO_PFJET_PT[i]<<" ETA= "<<RECO_PFJET_ETA[i]<<" PUID= "<<RECO_PFJET_PUID[i]<<endl;
+	   //cout<< " PASS jet " <<i<<" PT= "<<RECO_PFJET_PT_UncUp[i]<<" ETA= "<<RECO_PFJET_ETA[i]<<" PUID= "<<RECO_PFJET_PUID[i]<<endl;
 	   njets_pass++;
 	   if (njets_pass==1){
 	     jet1=i;
@@ -2489,7 +2600,148 @@ if(N_loose_e == 3 && ngood_jets >=2){//control region 2 good leptons + 1 fake le
        }
        ////cout<<" JETFAIL "<<jetfail[i]<<endl;
      }
-     
+    */
+
+for(int i=0;i<RECO_PFJET_N;i++){
+    
+       // re-definition of the jet 4 momentum
+       //TLorentzVector jet_jer_tmp,jet_jer;
+       //jet_jer_tmp.SetPtEtaPhiE(RECO_PFJET_PT[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
+       //jet_jer.SetPxPyPzE(jercorr*jet_jer_tmp.Px(),jercorr*jet_jer_tmp.Py(),jercorr*jet_jer_tmp.Pz(),jercorr*jet_jer_tmp.E());
+       //RECO_PFJET_PT[i]=jet_jer.Perp(); // pt jet corrected
+       //RECO_PFJET_ETA[i]=jet_jer.Eta();
+       //RECO_PFJET_PHI[i]=jet_jer.Phi();
+       //RECO_PFJET_ET[i]=jet_jer.Et();
+
+    //if(fabs(RECO_PFJET_ETA[i])>2.4) continue;
+    //if(RECO_PFJET_PT[i]>50.){ //&& fabs(RECO_PFJET_ETA[i])<2.4){
+      //if(RECO_PFJET_PUID[i]==0) continue;
+
+    if(RECO_PFJET_PUID[i]==1 && RECO_PFJET_PT[i]>20. && RECO_PFJET_PT[i]<50. && fabs(RECO_PFJET_ETA[i])<2.4){
+      	 //Check that jet has deltaR>0.4 away from any tight lepton corrected for FSR
+    for(int mu = 0; mu < N_good; ++mu){
+	  if (fabs(RECOMU_SIP[iL[mu]])>=4.) continue;
+	  if (RECOMU_PFX_dB_new[iL[mu]]>=0.35) continue;
+	  double deltaR = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOMU_PHI[iL[mu]]),2) + pow(RECO_PFJET_ETA[i] - RECOMU_ETA[iL[mu]],2));
+	  //tolto//cout << "1st lepton muon: " << " pT=" << RECOMU_PT[iL[mu]] <<" deltaR "<< deltaR <<endl;	   
+	  if (deltaR<0.3){ //0.4
+	   jetfail[i]=1;
+	   //tolto//cout << " jetfail " << jetfail[i] <<endl;
+	   break;
+	 }
+       }
+  //  }
+  //  }
+       for(int ele = 0; ele < Ne_good; ++ele){
+	 if (fabs(RECOELE_SIP[iLe[ele]]>=4.)) continue;
+	 if (RECOELE_PFX_rho_new[iLe[ele]]==-999) continue;
+	 double deltaR = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOELE_PHI[iLe[ele]]),2) + pow(RECO_PFJET_ETA[i] - RECOELE_ETA[iLe[ele]],2));
+	 //tolto//cout << "1st lepton electron: " << " pT=" << RECOELE_PT[iLe[ele]] <<" deltaR "<< deltaR <<endl;
+	 if (deltaR<0.3){ //0.4
+	   jetfail[i]=1;
+	   //tolto//cout << " jetfail " << jetfail[i] <<endl;
+	   break;
+	 }
+       }
+  // }
+  // }
+	 // cleaning w.r.t FSR photons attached to leptons
+       for(int j=0.;j<Nphotons;j++) {
+	 if (iLp_l[j]!=-1 && (iLp_tagEM[j]==0 || iLp_tagEM[j]==1) ) {
+	   //tolto//if (iLp_tagEM[j]==0) cout << "There is photon with pT= " << RECOPFPHOT_PT[iLp[j]] << " attached to a muon with pT= " << RECOMU_PT[iLp_l[j]] << endl;
+	   //tolto//if (iLp_tagEM[j]==1) cout << "There is photon with pT= " << RECOPFPHOT_PT[iLp[j]] << " attached to a electron with pT= " << RECOELE_PT[iLp_l[j]] << endl;
+	   double deltaR = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOPFPHOT_PHI[iLp[j]]),2) + pow(RECO_PFJET_ETA[i] - RECOPFPHOT_ETA[iLp[j]],2));
+	   if (deltaR<0.3){ //0.4
+	     jetfail[i]=1;
+	     //tolto//cout << " jetfail " << jetfail[i] <<endl;
+	     break;
+	   }
+	 }
+       }
+
+   }else if(RECO_PFJET_PT[i]>=50. && fabs(RECO_PFJET_ETA[i])<2.4){
+
+       for(int mu = 0; mu < N_good; ++mu){
+         if (fabs(RECOMU_SIP[iL[mu]])>=4.) continue;
+         if (RECOMU_PFX_dB_new[iL[mu]]==-999) continue;
+         double deltaR = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOMU_PHI[iL[mu]]),2) + pow(RECO_PFJET_ETA[i] - RECOMU_ETA[iL[mu]],2));
+         //tolto//cout << "1st lepton muon: " << " pT=" << RECOMU_PT[iL[mu]] <<" deltaR "<< deltaR <<endl;
+         if (deltaR<0.3){ //0.4
+           jetfail[i]=1;
+           //tolto//cout << " jetfail " << jetfail[i] <<endl;
+           break;
+         }
+       }
+	 for(int ele = 0; ele < Ne_good; ++ele){
+	   if (fabs(RECOELE_SIP[iLe[ele]])>=4.) continue;
+	   if (RECOELE_PFX_rho_new[iLe[ele]]>=0.35) continue;
+	   double deltaR = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOELE_PHI[iLe[ele]]),2) + pow(RECO_PFJET_ETA[i] - RECOELE_ETA[iLe[ele]],2));
+	   //tolto//cout << "1st lepton electron: " << " pT=" << RECOELE_PT[iLe[ele]] <<" deltaR "<< deltaR <<endl;
+	   if (deltaR<0.3){ //0.4
+	     jetfail[i]=1;
+	     //tolto//cout << " jetfail " << jetfail[i] <<endl;
+	     break;
+	   }
+	 }
+
+         // cleaning w.r.t FSR photons attached to leptons
+	 for(int j=0.;j<Nphotons;j++) {
+	   if (iLp_l[j]!=-1 && (iLp_tagEM[j]==0 || iLp_tagEM[j]==1) ) {
+	     //tolto//if (iLp_tagEM[j]==0) cout << "There is photon with pT= " << RECOPFPHOT_PT[iLp[j]] << " attached to a muon with pT= " << RECOMU_PT[iLp_l[j]] << endl;
+	     //tolto//if (iLp_tagEM[j]==1) cout << "There is photon with pT= " << RECOPFPHOT_PT[iLp[j]] << " attached to a electron with pT= " << RECOELE_PT[iLp_l[j]] << endl;
+	     double deltaR = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOPFPHOT_PHI[iLp[j]]),2) + pow(RECO_PFJET_ETA[i] - RECOPFPHOT_ETA[iLp[j]],2));
+	     if (deltaR<0.3){ //0.4
+	       jetfail[i]=1;
+	       //tolto//cout << " jetfail " << jetfail[i] <<endl;
+	       break;
+	     }
+	   }
+	 }
+     }
+     else{
+       jetfail[i]=1;
+     }
+   }
+
+        for(int i=0;i<RECO_PFJET_N;i++){
+          if (jetfail[i]==0){
+	   //tolto//cout<< " PASS jet " <<i<<" PT= "<<RECO_PFJET_PT[i]<<" ETA= "<<RECO_PFJET_ETA[i]<<" PUID= "<<RECO_PFJET_PUID[i]<<endl;
+	   njets_pass++;
+	   if (njets_pass==1){
+             jet1=i;
+             //bdiscr1 = cSV_BTagJet_DISCR[i];
+             JET1.SetPtEtaPhiE(RECO_PFJET_PT[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
+
+             f_jet1_highpt_pt = RECO_PFJET_PT[i];
+             f_jet1_highpt_eta = RECO_PFJET_ETA[i];
+             f_jet1_highpt_phi = RECO_PFJET_PHI[i];
+             f_jet1_highpt_e = RECO_PFJET_ET[i];
+           }
+           if (njets_pass==2){
+             jet2=i;
+             //bdiscr2 = cSV_BTagJet_DISCR[i];
+             JET2.SetPtEtaPhiE(RECO_PFJET_PT[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
+
+             f_jet2_highpt_pt = RECO_PFJET_PT[i];
+             f_jet2_highpt_eta = RECO_PFJET_ETA[i];
+             f_jet2_highpt_phi = RECO_PFJET_PHI[i];
+             f_jet2_highpt_e = RECO_PFJET_ET[i];
+           }
+           if (njets_pass==3){
+             f_jet3_highpt_pt = RECO_PFJET_PT[i];
+             f_jet3_highpt_eta = RECO_PFJET_ETA[i];
+             f_jet3_highpt_phi = RECO_PFJET_PHI[i];
+             f_jet3_highpt_e = RECO_PFJET_ET[i];
+           }
+        }
+
+          //if(jetfail[i] == 0)
+       //cout << "jet pt " << RECO_PFJET_PT[i] << " jet eta " << RECO_PFJET_ETA[i] << " jet pu id " << RECO_PFJET_PUID[i] << " jet fail " << jetfail[i] << "\n";
+
+     }
+
+
+
     
       //ttZ exstimation
     //>= 2 and >= 1 / 2 jets
@@ -2514,7 +2766,7 @@ if(N_loose_e == 3 && ngood_jets >=2){//control region 2 good leptons + 1 fake le
     for(int i=0;i<RECO_PFJET_N;i++){
       //delta_R1_1 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],Zcandisolmassvector.at(indexgood).phi1),2) + pow(RECO_PFJET_ETA[i] - Zcandisolmassvector.at(indexgood).eta1,2));
       //delta_R1_2 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],Zcandisolmassvector.at(indexgood).phi2),2) + pow(RECO_PFJET_ETA[i] - Zcandisolmassvector.at(indexgood).eta2,2));
-      //if(RECO_PFJET_PT[i] > 30 && fabs(RECO_PFJET_ETA[i]) < 2.4 && delta_R1_1 > 0.3 && delta_R1_2 > 0.3)
+      //if(RECO_PFJET_PT_UncUp[i] > 30 && fabs(RECO_PFJET_ETA[i]) < 2.4 && delta_R1_1 > 0.3 && delta_R1_2 > 0.3)
       if(jetfail[i] == 0)
 	{
 	  if(btag1 <  cSV_BTagJet_DISCR[i]){
@@ -2534,7 +2786,7 @@ if(N_loose_e == 3 && ngood_jets >=2){//control region 2 good leptons + 1 fake le
     for(int j=0;j<RECO_PFJET_N;j++){
       //delta_R2_1 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[j],Zcandisolmassvector.at(indexgood).phi1),2) + pow(RECO_PFJET_ETA[j] - Zcandisolmassvector.at(indexgood).eta1,2));
       //delta_R2_2 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[j],Zcandisolmassvector.at(indexgood).phi2),2) + pow(RECO_PFJET_ETA[j] - Zcandisolmassvector.at(indexgood).eta2,2));
-      //if(ibtag != j && RECO_PFJET_PT[j] > 20 && fabs(RECO_PFJET_ETA[j]) < 2.4 && delta_R2_1 > 0.3 && delta_R2_2 > 0.3)
+      //if(ibtag != j && RECO_PFJET_PT_UncUp[j] > 20 && fabs(RECO_PFJET_ETA[j]) < 2.4 && delta_R2_1 > 0.3 && delta_R2_2 > 0.3)
       if(ibtag != j && jetfail[j] == 0)
 	{
 	  if(btag2 <  cSV_BTagJet_DISCR[j]){
@@ -2723,152 +2975,6 @@ if(N_loose_e == 3 && ngood_jets >=2){//control region 2 good leptons + 1 fake le
 
 
 
-      /*
-      //z1tree->Fill();
-      
-   
-      int ipt1_3;
-      int ipt2_3;
-      if( RECOELE_PT[ iLe[i1] ] > RECOELE_PT[ iLe[j1] ] ){ ipt1_3 = iLe[i1]; ipt2_3  = iLe[j1]; }
-      else { ipt1_3 = iLe[j1]; ipt2_3  = iLe[i1]; }
-      
-      hPtLep1_3->Fill( RECOELE_PT[ ipt1_3 ],newweight );
-      hYLep1_3->Fill( RECOELE_ETA[ ipt1_3 ],newweight );
-      hIsoLep1_3->Fill( RECOELE_PFX_rho[ ipt1_3 ],newweight );
-      hSipLep1_3->Fill( RECOELE_SIP[ ipt1_3 ],newweight );
-      hIpLep1_3->Fill( RECOELE_IP[ ipt1_3 ],newweight );
-      hIpErLep1_3->Fill( RECOELE_IPERROR[ ipt1_3 ],newweight );
-      
-      
-      hPtLep2_3->Fill( RECOELE_PT[ ipt2_3 ],newweight );
-      hYLep2_3->Fill( RECOELE_ETA[ ipt2_3 ],newweight );
-      hIsoLep2_3->Fill( RECOELE_PFX_rho[ ipt2_3 ],newweight );
-      hSipLep2_3->Fill( RECOELE_SIP[ ipt2_3 ],newweight );
-      hIpLep2_3->Fill( RECOELE_IP[ ipt2_3 ],newweight );
-      hIpErLep2_3->Fill( RECOELE_IPERROR[ ipt2_3 ],newweight );
-
-      
-      float max_Iso_3 = -1 ;
-      float max_Sip_3 = -1 ;
-      float max_Ip_3 = -1 ;
-
-      for (int i=0;i<RECO_NELE;i++) {
-	if (i==iLe[i1] || i==iLe[j1]) continue;
-	 if( RECOELE_PT[i] > 7. 
-            && fabs(RECOELE_ETA[i]) < 2.5 
-//            && RECOELE_gsftrack_expected_inner_hits[i]<=1 
-            && fabs(RECOELE_gsftrack_dxy[i]) < .5 
-            && fabs(RECOELE_gsftrack_dz[i]) < 1. 
-            ) {   
-	  if( RECOELE_PFX_rho[i] > max_Iso_3 ) max_Iso_3 = RECOELE_PFX_rho[i] ;
-	  if( fabs( RECOELE_SIP[i] ) > max_Sip_3 ) max_Sip_3 = fabs( RECOELE_SIP[i] ) ;
-	  if( fabs( RECOELE_IP[i] ) > max_Ip_3 ) max_Ip_3 = fabs( RECOELE_IP[i] ) ;
-	}
-      }
-
-      hIso_3->Fill(max_Iso_3,newweight);
-      hSip_3->Fill(max_Sip_3,newweight);
-      hIp_3->Fill(max_Ip_3,newweight);
-
-
-      // Filling plots for VBF analysis
-      int njets_pass_3=0;
-      float deltajj_3=-999.,massjj_3=-999.;
-      float VD_3=-999.; //fisher discriminant
-      int jet1_3,jet2_3;      
-      int jetfail_3[100];
-      double deltaR_3=0.;
-
-      for(int i=0;i<100;i++) jetfail_3[i]=0;
-
-      
-      for(int i=0;i<RECO_PFJET_N;i++){
-	//cout<<i<<" Jet with pt= "<<RECO_PFJET_PT[i]<<" ETA "<<RECO_PFJET_ETA[i]<<" PUID "<<RECO_PFJET_PUID[i]<<endl;
-	if(RECO_PFJET_PUID[i]==1 && RECO_PFJET_PT[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){
-	  //Check that jet has deltaR>0.4 away from any tight lepton 
-	  
-	   for(int mu = 0; mu < N_good; ++mu){
-            if (RECOMU_SIP[iL[mu]]>=4.) continue;
-            if (RECOMU_PFX_dB[iL[mu]]>=0.35) continue;
-            deltaR_3 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOMU_PHI[iL[mu]]),2) + pow(RECO_PFJET_ETA[i] - RECOMU_ETA[iL[mu]],2));
-            cout << "1st lepton: " <<" deltaR "<< deltaR_3 <<endl;
-            if (deltaR_3<0.4){
-              jetfail_3[i]=1;
-              cout << " jetfail " << jetfail_3[i] <<endl;
-            }
-          }
-
-	  for(int ele = 0; ele < Ne_good; ++ele){
-	    if (RECOELE_SIP[iLe[ele]]>=4.) continue;
-	    if (RECOELE_PFX_rho_new[iLe[[ele]]>=0.5) continue;
-	    deltaR_3 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOELE_PHI[iLe[ele]]),2) + pow(RECO_PFJET_ETA[i] - RECOELE_ETA[iLe[ele]],2));
-	    cout << "1st lepton: " <<" deltaR "<< deltaR_3 <<endl;
-	    if (deltaR_3<0.4){
-	      jetfail_3[i]=1;
-	      cout << " jetfail " << jetfail_3[i] <<endl;
-	    }
-	  }
-
-	  
-	  
-	  //Check that jet has deltaR>0.4 away from any FSR photon
-	  //if (FSR_Z1_lepid != -1){
-	  //  //cout<<"photon phi "<<RECOPFPHOT_PHI[FSR_Z1_photid]<<" photon eta "<<RECOPFPHOT_ETA[FSR_Z1_photid]<<endl;
-	  //  deltaR_3 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],RECOPFPHOT_PHI[FSR_Z1_photid]),2) + pow(RECO_PFJET_ETA[i] - RECOPFPHOT_ETA[FSR_Z1_photid],2));
-	  //  //cout<<FSR_Z1_photid<<" deltaR "<<deltaR_3<<endl;
-	  //  if (deltaR_3<0.4){
-	  //    jetfail_3[i]=1;
-	  //  }
-	  //}
-	    
-	  if (jetfail_3[i]==0){
-	    cout<< " PASS jet " <<i<<" PT= "<<RECO_PFJET_PT[i]<<" ETA= "<<RECO_PFJET_ETA[i]<<" PUID= "<<RECO_PFJET_PUID[i]<<endl;
-	    njets_pass_3++;
-	  }
-	}
-	else{
-	  jetfail_3[i]=1;
-	}
-	//cout<<" JETFAIL "<<jetfail_3[i]<<endl;
-      }
-
-      // VBF-tagged category - category 2
-     int njets_vbf_3=0;
-     float deltajj_3=-999.,massjj_3=-999.;
-     float D_jet_3=-999.; //fisher discriminant
-     TLorentzVector JET1_VBF_3, JET2_VBF_3,mJJ_3;
-     int index_VBFjets_3[2]={-999,-999};
-       
-     for (int i=0;i<RECO_PFJET_N;i++){
-       if (jetfail_3[i]!=0 ) continue; 
-       for (int j=i+1;j<RECO_PFJET_N;j++){
-         if (jetfail_3[j]!=0 ) continue;
-         JET1_VBF_3.SetPtEtaPhiE(RECO_PFJET_PT[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
-         JET2_VBF_3.SetPtEtaPhiE(RECO_PFJET_PT[j],RECO_PFJET_ETA[j],RECO_PFJET_PHI[j],RECO_PFJET_ET[j]*TMath::CosH(RECO_PFJET_ETA[j]));
-         mJJ_3=JET1_VBF_3+JET2_VBF_3;
-         //cout<<mJJ.M()<<endl;              
-         
-         deltajj_3=fabs(JET1_VBF_3.Eta()-JET2_VBF_3.Eta());
-         massjj_3=mJJ_3.M();
-         D_jet_£=0.18*fabs(JET1_VBF_3.Eta()-JET2_VBF_3.Eta())+1.92E-4*mJJ_3.M();
-         if (debug) cout << "Mass jet jet= " << massjj_3 << " Delta jet jet= " << deltajj_3 << " Fisher D_jet" << D_jet_3 << endl;
-         if (D_jet_3>0.5) {
-           njets_vbf_3++;
-           if (njets_vbf==1) {
-             index_VBFjets_3[0]=i;
-             index_VBFjets_3[1]=j;    
-             JET1_VBF_3.SetPtEtaPhiE(RECO_PFJET_PT[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
-             JET2_VBF_3.SetPtEtaPhiE(RECO_PFJET_PT[j],RECO_PFJET_ETA[j],RECO_PFJET_PHI[j],RECO_PFJET_ET[j]*TMath::CosH(RECO_PFJET_ETA[j]));
-           }
-         }
-	
-	hDjj_3->Fill( deltajj_3,newweight );
-	hMjj_3->Fill( massjj_3,newweight );
-	hVD_3->Fill( D_jet_3,newweight );
-	
-      }
-      */
-
       
       // **** Step 4:
        // a) 4 leptons
@@ -2877,7 +2983,13 @@ if(N_loose_e == 3 && ngood_jets >=2){//control region 2 good leptons + 1 fake le
       // d) mZ2 in ] 4,120 [
 
       int issamesign = 0;
+cout << "quante Z ci sono " << Zcandisolmassvector.size() << "\n";
+      if (Zcandisolmassvector.size()<2) {
+	//cout << "No ZZ candidate"<< endl;
+        continue;
+      }
 
+cout << "quante Z ci sono dopo " << Zcandisolmassvector.size() << "\n";
       //if( debug ) cout  << "\nStep 4: Number of good leptons: " << N_good << endl;
 
       int N_Z2_pairs = 0;
@@ -2907,9 +3019,9 @@ if(N_loose_e == 3 && ngood_jets >=2){//control region 2 good leptons + 1 fake le
       
       // Ghost removal delta R > 0.02 
       vector<candidateZ> goodZ;
-
+/*
       for (int i=0;i<Zcandisolmassvector.size();i++){
-	//cout << "Checking mass i= " << Zcandisolmassvector.at(i).massvalue << endl;
+	cout << "Checking mass i= " << Zcandisolmassvector.at(i).massvalue << endl;
 	if(!(Zcandisolmassvector.at(i).massvalue > 12. && Zcandisolmassvector.at(i).massvalue < 120.)) continue;
 	//cout << "Ghost removal check 0: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi1, Zcandisolmassvector.at(i).phi2 ),2) 
 	//+ pow(Zcandisolmassvector.at(i).eta1-Zcandisolmassvector.at(i).eta2,2) ) << endl;
@@ -2918,8 +3030,59 @@ if(N_loose_e == 3 && ngood_jets >=2){//control region 2 good leptons + 1 fake le
 	
 	
 	for (int j=i+1;j<Zcandisolmassvector.size();j++){
+	  cout << "Checking mass j= " << Zcandisolmassvector.at(j).massvalue << endl;
+	  if(!(Zcandisolmassvector.at(j).massvalue > 12. && Zcandisolmassvector.at(j).massvalue < 120.)) continue;
+	  //cout <<Zcandisolmassvector.at(i).pt1 << " " << Zcandisolmassvector.at(j).pt1 << " " << Zcandisolmassvector.at(j).pt2 << endl;
+	  //cout <<Zcandisolmassvector.at(i).pt2 << " " << Zcandisolmassvector.at(j).pt1 << " " << Zcandisolmassvector.at(j).pt2 << endl;
+	  if (Zcandisolmassvector.at(i).pt1==Zcandisolmassvector.at(j).pt1 || Zcandisolmassvector.at(i).pt1==Zcandisolmassvector.at(j).pt2) continue;
+	  if (Zcandisolmassvector.at(i).pt2==Zcandisolmassvector.at(j).pt1 || Zcandisolmassvector.at(i).pt2==Zcandisolmassvector.at(j).pt2) continue;
+	 	  
+	  //cout << "Ghost removal check 1: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(j).phi1, Zcandisolmassvector.at(j).phi2 ),2) 
+	  //	    + pow(Zcandisolmassvector.at(j).eta1-Zcandisolmassvector.at(j).eta2,2) )<< endl;
+	  if( sqrt( pow( DELTAPHI(Zcandisolmassvector.at(j).phi1, Zcandisolmassvector.at(j).phi2 ),2) 
+		    + pow(Zcandisolmassvector.at(j).eta1-Zcandisolmassvector.at(j).eta2,2) ) <= 0.02) continue;
+	  
+	  //cout << "Ghost removal check 2: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi1, Zcandisolmassvector.at(j).phi1 ),2) 
+	  //	    + pow(Zcandisolmassvector.at(i).eta1-Zcandisolmassvector.at(j).eta1,2) )<< endl;
+	  if( sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi1, Zcandisolmassvector.at(j).phi1 ),2) 
+		    + pow(Zcandisolmassvector.at(i).eta1-Zcandisolmassvector.at(j).eta1,2) ) <= 0.02) continue;
+
+	  //cout << "Ghost removal check 3: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi1, Zcandisolmassvector.at(j).phi2 ),2) 
+	  //	    + pow(Zcandisolmassvector.at(i).eta1-Zcandisolmassvector.at(j).eta2,2) ) << endl;
+	  if( sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi1, Zcandisolmassvector.at(j).phi2 ),2) 
+		    + pow(Zcandisolmassvector.at(i).eta1-Zcandisolmassvector.at(j).eta2,2) ) <= 0.02) continue;
+
+	  //cout << "Ghost removal check 4: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi2, Zcandisolmassvector.at(j).phi1 ),2) 
+	  //	    + pow(Zcandisolmassvector.at(i).eta2-Zcandisolmassvector.at(j).eta1,2) ) << endl;
+	  if( sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi2, Zcandisolmassvector.at(j).phi1 ),2) 
+		    + pow(Zcandisolmassvector.at(i).eta2-Zcandisolmassvector.at(j).eta1,2) ) <= 0.02) continue;
+
+	  //cout << "Ghost removal check 5: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi2, Zcandisolmassvector.at(j).phi2 ),2) 
+	  //	    + pow(Zcandisolmassvector.at(i).eta2-Zcandisolmassvector.at(j).eta2,2) ) << endl;
+	  if( sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi2, Zcandisolmassvector.at(j).phi2 ),2) 
+		    + pow(Zcandisolmassvector.at(i).eta2-Zcandisolmassvector.at(j).eta2,2) ) <= 0.02) continue;
+
+	  //cout << "There is a set of 4 leptons passing the ghost removal (deltaR > 0.02)" << endl;
+	  goodZ.push_back(Zcandisolmassvector.at(i));
+	  goodZ.push_back(Zcandisolmassvector.at(j));
+	  //cout << "Filling isolgoodZsv vector " << endl;
+	  isolgoodZs={i,j};
+	  isolgoodZsv.push_back(isolgoodZs);
+	}
+      }*/
+
+       for (int i=0;i<Zcandisolmassvector.size();i++){
+	//cout << "Checking mass i= " << Zcandisolmassvector.at(i).massvalue << endl;
+	if (!(Zcandisolmassvector.at(i).massvalue > 12. && Zcandisolmassvector.at(i).massvalue < 120.)) continue;
+	//cout << "Ghost removal check 0: deltaR= " << sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi1, Zcandisolmassvector.at(i).phi2 ),2) 
+	//	  + pow(Zcandisolmassvector.at(i).eta1-Zcandisolmassvector.at(i).eta2,2) ) << endl;
+		if( sqrt( pow( DELTAPHI(Zcandisolmassvector.at(i).phi1, Zcandisolmassvector.at(i).phi2 ),2) 
+		  + pow(Zcandisolmassvector.at(i).eta1-Zcandisolmassvector.at(i).eta2,2) ) <= 0.02) continue;
+	
+	
+	for (int j=i+1;j<Zcandisolmassvector.size();j++){
 	  //cout << "Checking mass j= " << Zcandisolmassvector.at(j).massvalue << endl;
-	  if(!(Zcandisolmassvector.at(i).massvalue > 12. && Zcandisolmassvector.at(i).massvalue < 120.)) continue;
+	  if (!(Zcandisolmassvector.at(j).massvalue > 12. && Zcandisolmassvector.at(j).massvalue < 120.)) continue;
 	  //cout <<Zcandisolmassvector.at(i).pt1 << " " << Zcandisolmassvector.at(j).pt1 << " " << Zcandisolmassvector.at(j).pt2 << endl;
 	  //cout <<Zcandisolmassvector.at(i).pt2 << " " << Zcandisolmassvector.at(j).pt1 << " " << Zcandisolmassvector.at(j).pt2 << endl;
 	  if (Zcandisolmassvector.at(i).pt1==Zcandisolmassvector.at(j).pt1 || Zcandisolmassvector.at(i).pt1==Zcandisolmassvector.at(j).pt2) continue;
@@ -2958,6 +3121,7 @@ if(N_loose_e == 3 && ngood_jets >=2){//control region 2 good leptons + 1 fake le
 	  isolgoodZsv.push_back(isolgoodZs);
 	}
       }
+     
 
       ////cout << "Debug ZZ= " << Zcandisolmassvector.at( (isolgoodZsv.at(0)).at(0) ).massvalue << " " << Zcandisolmassvector.at( (isolgoodZsv.at(0)).at(1)).massvalue << endl;
       if (isolgoodZsv.size()==0) {
@@ -2992,10 +3156,10 @@ if(N_loose_e == 3 && ngood_jets >=2){//control region 2 good leptons + 1 fake le
 	}	 	
       }
       
-      //cout << "Cleaned Good ZZ passing pT cuts are " << ileptonspTcleanedgoodZsv.size() << endl;            
+      cout << "Cleaned Good ZZ passing pT cuts are prima " << ileptonspTcleanedgoodZsv.size() << endl;            
       if (ileptonspTcleanedgoodZsv.size()==0) continue;
 
-
+      cout << "Cleaned Good ZZ passing pT cuts are " << ileptonspTcleanedgoodZsv.size() << endl;  
       // **** Step 6:
       // QCD suppression: mll>4 GeV cut on all OS-SF pairs (4/4)
       
@@ -3044,7 +3208,7 @@ if(N_loose_e == 3 && ngood_jets >=2){//control region 2 good leptons + 1 fake le
 
 	hminMll_6->Fill( min_mass_2L,newweight );
 	if( min_mass_2L <= 4 ) { 
-	  //cout << "Not passing the mll>4 cut" << endl;
+	  cout << "Not passing the mll>4 cut" << endl;
 	  continue ;
 	}
 	else {
@@ -3094,7 +3258,7 @@ if(N_loose_e == 3 && ngood_jets >=2){//control region 2 good leptons + 1 fake le
 	  indexlep2Z1=pTcleanedgoodZ.at(i).ilept2;
 	}
       } 
-      
+cout << "massZ1 " << massZ1 << "index lepton 1 " << indexlep1Z1 << "index lepton 2 " << indexlep2Z1 << "\n";
       if (massZ1 < 40.) {
 	//cout << "The mass of Z1 is < 40 GeV...exiting" << endl;
 	continue;
@@ -3878,10 +4042,10 @@ if(N_loose_e == 3 && ngood_jets >=2){//control region 2 good leptons + 1 fake le
      for(int i=0;i<100;i++) jetfail[i]=0;
      
      for(int i=0;i<RECO_PFJET_N;i++){
-       cout<<i<<" Jet with pt= "<<RECO_PFJET_PT[i]<<" ETA "<<RECO_PFJET_ETA[i]<<" PUID "<<RECO_PFJET_PUID[i] << " PUID_MVA "<< RECO_PFJET_PUID_MVA[i]<<endl;
-       //if(RECO_PFJET_PUID[i]==1 && RECO_PFJET_PT[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){ // NO PU ID temporary
-       //if(RECO_PFJET_PT[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){       
-       if(RECO_PFJET_PT[i]>30. && fabs(RECO_PFJET_ETA[i])<2.4 ){       
+       cout<<i<<" Jet with pt= "<<RECO_PFJET_PT_UncUp[i]<<" ETA "<<RECO_PFJET_ETA[i]<<" PUID "<<RECO_PFJET_PUID[i] << " PUID_MVA "<< RECO_PFJET_PUID_MVA[i]<<endl;
+       //if(RECO_PFJET_PUID[i]==1 && RECO_PFJET_PT_UncUp[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){ // NO PU ID temporary
+       //if(RECO_PFJET_PT_UncUp[i]>30. && fabs(RECO_PFJET_ETA[i])<4.7 ){       
+       if(RECO_PFJET_PT_UncUp[i]>30. && fabs(RECO_PFJET_ETA[i])<2.4 ){       
 
 
 
@@ -3930,9 +4094,9 @@ if(N_loose_e == 3 && ngood_jets >=2){//control region 2 good leptons + 1 fake le
 	   njets_pass++;
 	   if (njets_pass==1){
 	     jet1=i;
-	     JET1.SetPtEtaPhiE(RECO_PFJET_PT[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
+	     JET1.SetPtEtaPhiE(RECO_PFJET_PT_UncUp[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
 	     
-	     f_jet1_highpt_pt = RECO_PFJET_PT[i];
+	     f_jet1_highpt_pt = RECO_PFJET_PT_UncUp[i];
 	     f_jet1_highpt_eta = RECO_PFJET_ETA[i];
 	     f_jet1_highpt_phi = RECO_PFJET_PHI[i];
 	     f_jet1_highpt_e = RECO_PFJET_ET[i];
@@ -3940,15 +4104,15 @@ if(N_loose_e == 3 && ngood_jets >=2){//control region 2 good leptons + 1 fake le
 	   }
 	   if (njets_pass==2){
 	     jet2=i;
-	     JET2.SetPtEtaPhiE(RECO_PFJET_PT[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
+	     JET2.SetPtEtaPhiE(RECO_PFJET_PT_UncUp[i],RECO_PFJET_ETA[i],RECO_PFJET_PHI[i],RECO_PFJET_ET[i]*TMath::CosH(RECO_PFJET_ETA[i]));
 
-	     f_jet2_highpt_pt = RECO_PFJET_PT[i];
+	     f_jet2_highpt_pt = RECO_PFJET_PT_UncUp[i];
 	     f_jet2_highpt_eta = RECO_PFJET_ETA[i];
 	     f_jet2_highpt_phi = RECO_PFJET_PHI[i];
 	     f_jet2_highpt_e = RECO_PFJET_ET[i];
 	   }
 	   if (njets_pass==3){
-	     f_jet3_highpt_pt = RECO_PFJET_PT[i];
+	     f_jet3_highpt_pt = RECO_PFJET_PT_UncUp[i];
 	     f_jet3_highpt_eta = RECO_PFJET_ETA[i];
 	     f_jet3_highpt_phi = RECO_PFJET_PHI[i];
 	     f_jet3_highpt_e = RECO_PFJET_ET[i];
@@ -4092,11 +4256,11 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
 
 //taking the histogram for the fake jet
     if(fabs (RECO_PFJET_ETA[i]) <= 1.2){ //barrel
-       PT_fakejet_loose_barrel->Fill(RECO_PFJET_PT[i], newweight);
+       PT_fakejet_loose_barrel->Fill(RECO_PFJET_PT_UncUp[i], newweight);
        MET_fakejet_loose_barrel->Fill(RECO_PFMET,newweight);
        Z1_fakejetmassloose_barrel->Fill(Zcandisolmassvector.at(index).massvalue, newweight);
        }else{//endcap
-         PT_fakejet_loose_endcap->Fill(RECO_PFJET_PT[i], newweight);
+         PT_fakejet_loose_endcap->Fill(RECO_PFJET_PT_UncUp[i], newweight);
          MET_fakejet_loose_endcap->Fill(RECO_PFMET,newweight);
          Z1_fakejetmassloose_endcap->Fill(Zcandisolmassvector.at(index).massvalue, newweight); 
          }
@@ -4105,11 +4269,11 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
 	 if( deltar_fakejet_1 > 0.3 || deltar_fakejet_2 > 0.3 ){
 
     if(fabs (RECO_PFJET_ETA[i]) <= 1.2){ //barrel
-       PT_fakejet_tight_barrel->Fill(RECO_PFJET_PT[i], newweight);
+       PT_fakejet_tight_barrel->Fill(RECO_PFJET_PT_UncUp[i], newweight);
        MET_fakejet_tight_barrel->Fill(RECO_PFMET,newweight);
        Z1_fakejetmasstight_barrel->Fill(Zcandisolmassvector.at(index).massvalue, newweight);
        }else{//endcap
-         PT_fakejet_tight_endcap->Fill(RECO_PFJET_PT[i], newweight);
+         PT_fakejet_tight_endcap->Fill(RECO_PFJET_PT_UncUp[i], newweight);
          MET_fakejet_tight_endcap->Fill(RECO_PFMET,newweight);
          Z1_fakejetmasstight_endcap->Fill(Zcandisolmassvector.at(index).massvalue, newweight); 
         }
@@ -4149,7 +4313,7 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
 	 for(int i=0;i<RECO_PFJET_N;i++){
 	   delta_R1_1 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],Zcandisolmassvector.at(indexgood).phi1),2) + pow(RECO_PFJET_ETA[i] - Zcandisolmassvector.at(indexgood).eta1,2)			      );
 	   delta_R1_2 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[i],Zcandisolmassvector.at(indexgood).phi2),2) + pow(RECO_PFJET_ETA[i] - Zcandisolmassvector.at(indexgood).eta2,2)			      );
-	   if(RECO_PFJET_PT[i] > 20 && fabs(RECO_PFJET_ETA[i]) < 2.4 && delta_R1_1 > 0.3 && delta_R1_2 > 0.3)
+	   if(RECO_PFJET_PT_UncUp[i] > 20 && fabs(RECO_PFJET_ETA[i]) < 2.4 && delta_R1_1 > 0.3 && delta_R1_2 > 0.3)
 	     {
 	       if(btag1 <  cSV_BTagJet_DISCR[i]){
 		 btag1 = cSV_BTagJet_DISCR[i];
@@ -4157,14 +4321,14 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
 	       }
 	     }
 	 }
-	 jet1ttZ.SetPtEtaPhiE(RECO_PFJET_PT[ibtag],RECO_PFJET_ETA[ibtag],RECO_PFJET_PHI[ibtag],RECO_PFJET_ET[ibtag]*TMath::CosH(RECO_PFJET_ETA[ibtag]));
-	 ptjet1 -> Fill(RECO_PFJET_PT[ibtag], newweight);
+	 jet1ttZ.SetPtEtaPhiE(RECO_PFJET_PT_UncUp[ibtag],RECO_PFJET_ETA[ibtag],RECO_PFJET_PHI[ibtag],RECO_PFJET_ET[ibtag]*TMath::CosH(RECO_PFJET_ETA[ibtag]));
+	 ptjet1 -> Fill(RECO_PFJET_PT_UncUp[ibtag], newweight);
 	 bdiscjet1 -> Fill(cSV_BTagJet_DISCR[ibtag],newweight);
 
 	 for(int j=0;j<RECO_PFJET_N;j++){
 	   delta_R2_1 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[j],Zcandisolmassvector.at(indexgood).phi1),2) + pow(RECO_PFJET_ETA[j] - Zcandisolmassvector.at(indexgood).eta1,2)			      );
 	   delta_R2_2 = sqrt( pow(DELTAPHI(RECO_PFJET_PHI[j],Zcandisolmassvector.at(indexgood).phi2),2) + pow(RECO_PFJET_ETA[j] - Zcandisolmassvector.at(indexgood).eta2,2)			      );
-	   if(ibtag != j && RECO_PFJET_PT[j] > 20 && fabs(RECO_PFJET_ETA[j]) < 2.4 && delta_R2_1 > 0.3 && delta_R2_2 > 0.3)
+	   if(ibtag != j && RECO_PFJET_PT_UncUp[j] > 20 && fabs(RECO_PFJET_ETA[j]) < 2.4 && delta_R2_1 > 0.3 && delta_R2_2 > 0.3)
 	     {
 	       if(btag2 <  cSV_BTagJet_DISCR[j]){
 		 btag2 = cSV_BTagJet_DISCR[j];
@@ -4172,8 +4336,8 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
 	       }
 	     }
 	 }
-	 jet2ttZ.SetPtEtaPhiE(RECO_PFJET_PT[jbtag],RECO_PFJET_ETA[jbtag],RECO_PFJET_PHI[jbtag],RECO_PFJET_ET[jbtag]*TMath::CosH(RECO_PFJET_ETA[jbtag]));
-	 ptjet2 -> Fill(RECO_PFJET_PT[jbtag], newweight);
+	 jet2ttZ.SetPtEtaPhiE(RECO_PFJET_PT_UncUp[jbtag],RECO_PFJET_ETA[jbtag],RECO_PFJET_PHI[jbtag],RECO_PFJET_ET[jbtag]*TMath::CosH(RECO_PFJET_ETA[jbtag]));
+	 ptjet2 -> Fill(RECO_PFJET_PT_UncUp[jbtag], newweight);
 	 bdiscjet2 -> Fill(cSV_BTagJet_DISCR[jbtag],newweight);
 
 	 massjet_12 = jet1ttZ + jet2ttZ;
@@ -4225,8 +4389,8 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
        n_jetpasscontrol++;
        hbdisccontrol->Fill(cSV_BTagJet_DISCR[i],newweight);
        
-       /*  if(flagbmicontrol < RECO_PFJET_PT[i]){
-	 flagbmicontrol = RECO_PFJET_PT[i];
+       /*  if(flagbmicontrol < RECO_PFJET_PT_UncUp[i]){
+	 flagbmicontrol = RECO_PFJET_PT_UncUp[i];
 	 flagicontrol = i;
 	 }*/
        if(flagbmicontrol < RECO_PFJET_PT[i]){
@@ -4372,6 +4536,10 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
      int flagjl= -1;
      int flagjt = -1;*/
 
+     int flagl = -999., flagll = -999.;
+     float flagil = -999., flagill = -999.;
+     TLorentzVector g1,g2,massprova;
+
      TLorentzVector masstot, masstotm, masstott, masstotl, masstottpm;
      double deltaphi = -999., deltaphim = -999., deltaphil = -999., deltaphit = -999., deltaphitpm = -999., deltar = -999., deltaphinpm = -999.;
      double deltarnpm = -99.;
@@ -4383,10 +4551,17 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
        }
      }
 
+   f_mass4l = mass4l;
+   f_weight = newweight;
+   cout << "4l " << f_run << ":" << f_lumi << ":" << f_event << ":" << f_mass4l << ":" << njets_pass << ":" << f_weight << "\n";
 
+   if(N_good >= 4 && abs(mass4l - 125.) <=10  && njets_pass >=1){
+     cout << "4l + |mass4l - 125| <= 10 >= 1jet " << f_run << ":" << f_lumi << ":" << f_event << ":" << f_mass4l << ":" << njets_pass << ":" << f_weight << "\n";
+     }
      hmass4l->Fill(mass4l,newweight);
      histoMETprima->Fill(RECO_PFMET,newweight);
      if(Ne_good >= 4 && abs(mass4l - 125.) <= 10 && njets_pass >= 2){
+         cout << "4l + |mass4l - 125| <= 10 >= 2jet " << f_run << ":" << f_lumi << ":" << f_event << ":" << f_mass4l << ":" << njets_pass << ":" << f_weight << "\n";
        hmass4lafter->Fill(mass4l,newweight);
        tot2jet4l++;
        hMETsel->Fill(RECO_PFMET,newweight);
@@ -4441,14 +4616,15 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
      kpt->Fill(RECO_PFJET_PT[flagk],newweight);
      */  
        
-       
-     int flagl = -999., flagll = -999., flagil = -999., flagill = -999.;
+     /*       
+     int flagl = -999., flagll = -999.;
+     float flagil = -999., flagill = -999.;
    TLorentzVector g1,g2,massprova;
-
+     */
    for(int l =0; l< RECO_PFJET_N; l++){
      if(jetfail[l]==0){
-       if(flagil < RECO_PFJET_PT[l]){
-       flagil = RECO_PFJET_PT[l];
+       if(flagil < cSV_BTagJet_DISCR[l]){
+       flagil = cSV_BTagJet_DISCR[l];
        flagl = l;
        }
      }
@@ -4456,14 +4632,21 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
 
    for(int ll =0; ll< RECO_PFJET_N; ll++){
      if(ll != flagl && jetfail[ll]==0){
-       if(flagill < RECO_PFJET_PT[ll]){
-       flagill = RECO_PFJET_PT[ll];
+       if(flagill < cSV_BTagJet_DISCR[ll]){
+       flagill = cSV_BTagJet_DISCR[ll];
        flagll = ll;
        }
      }
    }
 
+   if(flagi == flagl){//cout << "i due jet con piu alto b disc sono gli stessi" << "\n";
+     cout_jet_match_bdisc++;
+   }
 
+   if(flagj == flagll){//cout << "il jet con piu alto pt e quello con secondo piu alto b disc sono gli stessi" << "\n";
+     cout_jet_match++;
+   }
+//if(flagl < 0 || flagll < 0 || flagi < 0 || flagj < 0) continue;
    g1.SetPtEtaPhiE(RECO_PFJET_PT[flagl],RECO_PFJET_ETA[flagl],RECO_PFJET_PHI[flagl],RECO_PFJET_ET[flagl]*TMath::CosH(RECO_PFJET_ETA[flagl]));
    g2.SetPtEtaPhiE(RECO_PFJET_PT[flagll],RECO_PFJET_ETA[flagll],RECO_PFJET_PHI[flagll],RECO_PFJET_ET[flagll]*TMath::CosH(RECO_PFJET_ETA[flagll]));
 
@@ -4476,6 +4659,12 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
      hptmax->Fill(RECO_PFJET_PT[flagj],newweight);
      hptmin->Fill(RECO_PFJET_PT[flagi],newweight);
      
+     hbdiscmin_hbdisc->Fill(cSV_BTagJet_DISCR[flagll],newweight);
+     hbdiscmax_hbdisc->Fill(cSV_BTagJet_DISCR[flagl],newweight);
+     hptmax_hbdisc->Fill(RECO_PFJET_PT[flagl],newweight);
+     hptmin_hbdisc->Fill(RECO_PFJET_PT[flagll],newweight);
+
+
      k1.SetPtEtaPhiE(RECO_PFJET_PT[flagi],RECO_PFJET_ETA[flagi],RECO_PFJET_PHI[flagi],RECO_PFJET_ET[flagi]*TMath::CosH(RECO_PFJET_ETA[flagi])); 
      k2.SetPtEtaPhiE(RECO_PFJET_PT[flagj],RECO_PFJET_ETA[flagj],RECO_PFJET_PHI[flagj],RECO_PFJET_ET[flagj]*TMath::CosH(RECO_PFJET_ETA[flagj]));
      h2nobjet->Fill(RECO_PFJET_PT[flagj],cSV_BTagJet_DISCR[flagj],newweight);
@@ -4524,6 +4713,31 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
   f_etajet2 = RECO_PFJET_ETA[flagj];
   f_phijet1 = RECO_PFJET_PHI[flagi];
   f_phijet2 = RECO_PFJET_PHI[flagj];
+
+ //syst for MET
+
+   f_RECO_PFMET_JetEnUp = RECO_PFMET_JetEnUp;
+   f_RECO_PFMET_JetEnDn = RECO_PFMET_JetEnDn;
+   f_RECO_PFMET_ElectronEnUp = RECO_PFMET_ElectronEnUp;
+   f_RECO_PFMET_ElectronEnDn = RECO_PFMET_ElectronEnDn;
+   f_RECO_PFMET_MuonEnUp = RECO_PFMET_MuonEnUp;
+   f_RECO_PFMET_MuonEnDn = RECO_PFMET_MuonEnDn;
+   f_RECO_PFMET_JetResUp = RECO_PFMET_JetResUp;
+   f_RECO_PFMET_JetResDn = RECO_PFMET_JetResDn;
+   f_RECO_PFMET_UnclusteredEnUp = RECO_PFMET_UnclusteredEnUp;
+   f_RECO_PFMET_UnclusteredEnDn = RECO_PFMET_UnclusteredEnDn;
+   f_RECO_PFMET_PhotonEnUp = RECO_PFMET_PhotonEnUp;
+   f_RECO_PFMET_PhotonEnDn = RECO_PFMET_PhotonEnDn;
+
+
+   //jet syst
+
+   f_RECO_PFJET_PT_UncUp_jet1 = RECO_PFJET_PT_UncUp[flagi];
+   //f_RECO_PFJET_PT_jet1 = RECO_PFJET_PT[flagi];
+
+   f_RECO_PFJET_PT_UncUp_jet2 = RECO_PFJET_PT_UncUp[flagj];
+   //f_RECO_PFJET_PT_jet2 = RECO_PFJET_PT[flagj];
+
 
    f_totbjet = n_jetm;
    
@@ -4693,7 +4907,7 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
        if (jetfail[i]!=0) continue;
        for (int j=0;j<50;j++){
 	 if (cSV_BTagJet_PT[j]==RECO_PFJET_PT[i] && cSV_BTagJet_DISCR[j]>0.8484 && cSV_BTagJet_PT[j]>30. && fabs(cSV_BTagJet_ETA[j])<4.7) {
-	   //if (cSV_BTagJet_PT[j]==RECO_PFJET_PT[i] && cSV_BTagJet_DISCR[j]>0.460 && cSV_BTagJet_PT[j]>30. && fabs(cSV_BTagJet_ETA[j])<4.7) {
+	   //if (cSV_BTagJet_PT[j]==RECO_PFJET_PT_UncUp[i] && cSV_BTagJet_DISCR[j]>0.460 && cSV_BTagJet_PT[j]>30. && fabs(cSV_BTagJet_ETA[j])<4.7) {
 	   //if (cSV_BTagJet_DISCR[j]>0.8484 && cSV_BTagJet_PT[j]>30. && fabs(cSV_BTagJet_ETA[j])<4.7) {
 	   n_match_bjets++;
 	   //if (n_match_bjets==1) jet1=i;
@@ -4711,7 +4925,7 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
      for(int j=0;j<RECO_PFJET_N;j++){
         if (jetfail[j]!=0) continue;
         if(RECO_PFJET_PT[j]>40. && fabs(RECO_PFJET_ETA[j])<2.4){
-	  //cout << "Possible jet for VH categories with pT= " << RECO_PFJET_PT[j] << endl;
+	  //cout << "Possible jet for VH categories with pT= " << RECO_PFJET_PT_UncUp[j] << endl;
 	 for (int k=j+1;k<RECO_PFJET_N; k++){
 	   if (jetfail[k]!=0) continue;
 	   if(RECO_PFJET_PT[k]>40. && fabs(RECO_PFJET_ETA[k])<2.4){	     
@@ -4720,7 +4934,7 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
 	     mJJ_VH=JET1_VH+JET2_VH;
 	     
 	     if (mJJ_VH.M()>60. && mJJ_VH.M()<120.) {
-	       //cout << "Jets for VH categories passing, pT>40, |eta|<2.4 and 60<mjj<120 with pT= " << RECO_PFJET_PT[j] << " " << RECO_PFJET_PT[k] << endl;
+	       //cout << "Jets for VH categories passing, pT>40, |eta|<2.4 and 60<mjj<120 with pT= " << RECO_PFJET_PT_UncUp[j] << " " << RECO_PFJET_PT_UncUp[k] << endl;
 	       n_jets_mjj_VH++ ;
 	       if (n_jets_mjj_VH==1) { // always the pair with highest pT jets
 		 index_VHjets[0]=j;
@@ -4824,6 +5038,9 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
      f_lept1_pt = RECOELE_PT[iptcorr[0]] ;
      f_lept1_eta = RECOELE_ETA[iptcorr[0]] ;
      f_lept1_phi = RECOELE_PHI[iptcorr[0]];
+     //syst lept 1
+     f_RECOELE_PT_uncorr_lept1 = RECOELE_PT_uncorr[iptcorr[0]];
+
      f_lept1_charge = RECOELE_CHARGE[iptcorr[0]];
      f_lept1_pfx = RECOELE_PFX_rho_new[iptcorr[0]];
      f_lept1_sip = RECOELE_SIP[iptcorr[0]];
@@ -4835,6 +5052,10 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
      f_lept2_pfx = RECOELE_PFX_rho_new[iptcorr[1]];
      f_lept2_sip = RECOELE_SIP[iptcorr[1]];
      f_lept2_mvaid = RECOELE_mvaNonTrigV0[iptcorr[1]];
+
+    //syst lept 2
+     f_RECOELE_PT_uncorr_lept2 = RECOELE_PT_uncorr[iptcorr[1]];
+
      f_lept3_pt = RECOELE_PT[iptcorr[2]] ;
      f_lept3_eta = RECOELE_ETA[iptcorr[2]] ;
      f_lept3_phi = RECOELE_PHI[iptcorr[2]];
@@ -4842,6 +5063,9 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
      f_lept3_pfx = RECOELE_PFX_rho_new[iptcorr[2]];
      f_lept3_sip = RECOELE_SIP[iptcorr[2]];
      f_lept3_mvaid = RECOELE_mvaNonTrigV0[iptcorr[2]];
+
+    //syst lept 3
+     f_RECOELE_PT_uncorr_lept3 = RECOELE_PT_uncorr[iptcorr[2]];
      f_lept4_pt = RECOELE_PT[iptcorr[3]] ;
      f_lept4_eta = RECOELE_ETA[iptcorr[3]] ;
      f_lept4_phi = RECOELE_PHI[iptcorr[3]];
@@ -4849,6 +5073,9 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
      f_lept4_pfx = RECOELE_PFX_rho_new[iptcorr[3]];
      f_lept4_sip = RECOELE_SIP[iptcorr[3]];
      f_lept4_mvaid = RECOELE_mvaNonTrigV0[iptcorr[3]];
+
+    //syst lept 4
+     f_RECOELE_PT_uncorr_lept4 = RECOELE_PT_uncorr[iptcorr[3]];
      //     f_iso_max = Iso_max;
      //f_sip_max = Sip_max;
      f_Z1mass = massZ1;
@@ -4907,6 +5134,7 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
      f_category=category;
      f_Ngood=Ne_good;
      f_Nbjets=n_bjets;
+
 
      //MELA discriminant - Leoton kinematics already corrected for FSR
      TLorentzVector L11P4,L12P4,L21P4,L22P4;
@@ -5092,12 +5320,12 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
        
        // cout << "Njets=" << njets_pass << " VD= " << VD << endl;
        // if (njets_pass>=2) {
-       // 	 bnn_file << RECO_PFJET_PT[jet1] << " " << RECO_PFJET_ETA[jet1] << " " << RECO_PFJET_PHI[jet1] << " " << RECO_PFJET_ET[jet1] << " ";
-       // 	 bnn_file << RECO_PFJET_PT[jet2] << " " << RECO_PFJET_ETA[jet2] << " " << RECO_PFJET_PHI[jet2] << " " << RECO_PFJET_ET[jet2] << " " 
+       // 	 bnn_file << RECO_PFJET_PT_UncUp[jet1] << " " << RECO_PFJET_ETA[jet1] << " " << RECO_PFJET_PHI[jet1] << " " << RECO_PFJET_ET[jet1] << " ";
+       // 	 bnn_file << RECO_PFJET_PT_UncUp[jet2] << " " << RECO_PFJET_ETA[jet2] << " " << RECO_PFJET_PHI[jet2] << " " << RECO_PFJET_ET[jet2] << " " 
        // 		  << deltajj << " " << massjj << " " << VD  << " " << njets_pass << endl;
        // }
        // else {
-       // 	 bnn_file << RECO_PFJET_PT[jet1] << " " << RECO_PFJET_ETA[jet1] << " " << RECO_PFJET_PHI[jet1] << " " << RECO_PFJET_ET[jet1] << " ";
+       // 	 bnn_file << RECO_PFJET_PT_UncUp[jet1] << " " << RECO_PFJET_ETA[jet1] << " " << RECO_PFJET_PHI[jet1] << " " << RECO_PFJET_ET[jet1] << " ";
        // 	 bnn_file << "0. 0. 0. 0. 0. 0. 0. " << njets_pass << endl;
        // }
        
@@ -5321,8 +5549,9 @@ if(Ne_good >= 4 && njets_pass >= 1 && fabs(RECO_PFJET_ETA[i]) < 4.7){//jets insi
 	       << "Numero eventi |...| <= 10 && nlept ==4 && nbjet >=1 "<<atleast4leptons2bjets<<"\n"
 
 	       << "Numero eventi |...| <= 10 && nlept ==4 && nbjet >=1 && 3 jet <= 50 "<<contatore2<<"\n"
-	       << "Numero eventi |...| <= 10 && nlept >=4 && nbjet >=1 && 3 jet <= 50 "<<contatore;
-
+	      << "Numero eventi |...| <= 10 && nlept >=4 && nbjet >=1 && 3 jet <= 50 "<<contatore << "\n"
+	      << "cout_jet_match_bdisc " << cout_jet_match_bdisc << "\n"
+	      << "cout_jet_match " << cout_jet_match << "\n";
    
    
    
